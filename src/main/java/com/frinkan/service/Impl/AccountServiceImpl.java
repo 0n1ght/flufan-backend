@@ -21,12 +21,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Account> account = accountRepo.findByUsername(username);
+        Optional<Account> account = accountRepo.findByEmail(username);
         if (account.isPresent()) {
 
             var accountObj = account.get();
             return User.builder()
-                    .username(accountObj.getUsername())
+                    .username(accountObj.getEmail())
                     .password(accountObj.getPassword())
                     .build();
         }
@@ -35,6 +35,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void saveAccount(RegisterDto accountDto) {
+        Optional<Account> existingAccount = accountRepo.findByEmail(accountDto.getEmail());
+        if (existingAccount.isPresent()) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
         accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), accountDto.getPassword()));
     }
 }
