@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Gidugu&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+h2 {
+    color: BLACK;
+    font-size: 35px;
+    margin-bottom: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid rgb(85, 85, 85);
+    width: 300px;
+    height: 40px;
+    font-size: 16px;
+    color: BLACK;
+    margin-bottom: 20px;
+}
+
+input::placeholder {
+    color: rgb(156, 156, 156);
+}
+
+form label {
+    font-size: 15px;
+}
+
+a {
+    text-decoration: none;
+    color: rgb(58, 135, 207);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#logo {
+    margin-bottom: 5px;
+    font-family: "Tilt Warp", sans-serif;
+    font-size: 60px;
+    font-weight: 400;
+    font-style: normal;
+    color: rgb(58, 135, 207);
+    user-select: none;
+}
+
+#mainFrame {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: WHITE;
+    width: 400px;
+    height: 540px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+}
+
+#email:focus, #password:focus, #confirmPassword:focus {
+    border-width: 2px;
+}
+
+#submit {
+    margin-top: 10px;
+    background-color: rgb(58, 135, 207);
+    color: WHITE;
+    font-weight: bold;
+    border-style: none;
+    border-radius: 10px;
+    height: 40px;
+}
+
+#submit:hover {
+    transition: 0.2s;
+    background-color: rgb(33, 128, 218);
+    cursor: pointer;
+}
+
+#termsAccept {
+    width: 20px;
+}
+
+@media screen and (max-width: 767px) {
+
+    body {
+        background-color: WHITE;
+    }
+
+    input {
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 5px;
+    }
+
+    #mainFrame {
+        box-shadow: none;
+    }
+}

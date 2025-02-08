@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Gidugu&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+h2 {
+    color: BLACK;
+    font-size: 35px;
+    margin-bottom: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+input {
+    padding: 10px;
+    border-style: none;
+    outline: none;
+    border-bottom: 1px solid rgb(85, 85, 85);
+    width: 300px;
+    height: 40px;
+    font-size: 16px;
+    color: BLACK;
+    margin-bottom: 20px;
+}
+
+input::placeholder {
+    color: rgb(156, 156, 156);
+}
+
+a {
+    text-decoration: none;
+    color: rgb(58, 135, 207);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    background-color: rgba(25, 150, 42, 0.705);
+    color: WHITE;
+    font-weight: bold;
+    border-style: none;
+    border-radius: 10px;
+    height: 40px;
+    width: 350px;
+    transform: translateY(35px);
+}
+
+button:hover {
+    transition: 0.2s;
+    background-color: rgba(0, 145, 19, 0.705);
+    cursor: pointer;
+}
+
+#logo {
+    margin-top: 5vh;
+    margin-bottom: 5px;
+    font-family: "Tilt Warp", sans-serif;
+    font-size: 60px;
+    font-weight: 400;
+    font-style: normal;
+    color: rgb(58, 135, 207);
+    user-select: none;
+}
+
+#mainFrame {
+    height: 350px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: WHITE;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+}
+
+#password {
+    padding-right: 30px;
+}
+
+#email:focus, #password:focus {
+    border-width: 2px;
+    padding-bottom: 8px;
+}
+
+#togglePassword {
+    width: 4px;
+    transform: translateX(-30px);
+}
+
+#submit {
+    margin-top: 10px;
+    height: 40px;
+    font-weight: bold;
+    border-style: none;
+    border-radius: 10px;
+    background-color: rgb(58, 135, 207);
+    color: WHITE;
+}
+
+#submit:hover {
+    transition: 0.2s;
+    background-color: rgb(33, 128, 218);
+    cursor: pointer;
+}
+
+#breakLine {
+    display: flex;
+    justify-content: center;
+    transform: translateY(30px);
+    color: rgb(110, 110, 110);
+}
+
+#breakLine hr {
+    margin: 10px;
+    height: 1px;
+    width: 100px;
+    border-style: solid;
+    color: rgb(110, 110, 110);
+}
+
+@media screen and (max-width: 767px) {
+
+    body {
+        background-color: WHITE;
+        justify-content: unset;
+    }
+
+    input {
+        border-style: solid;
+        border-color: BLACK;
+        border-width: 1px;
+        border-radius: 5px;
+    }
+
+    #mainFrame {
+        box-shadow: none;
+    }
+
+    #breakLine {
+        margin-top: -20px;
+    }
+
+    #breakLine hr {
+        width: 72px;
+    }
+
+    #createAccBt {
+        width: 300px;
+        margin-bottom: 80px;
+    }
+}

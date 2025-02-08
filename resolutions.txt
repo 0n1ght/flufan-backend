@@ -1,0 +1,14 @@
+1) Accounts, Login and Registration
+2) Profiles
+3) API
+4) Payments
+5) Frontend
+
+
+todo w produkcji:
++obsluga wyjatkow
++wywalic linijki
+.csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+z SecurityConfig
++Zmienic baze danych H2 -> PostgreSQL

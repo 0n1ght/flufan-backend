@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frinkan- Login</title>
+    <link rel="stylesheet" href="../static/css/login.css" th:href="@{/css/login.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+</head>
+
+<body>
+<h1 id="logo"><a href="/" style="text-decoration: none">Frinkan</a></h1>
+<div id="mainFrame">
+    <h2>Login</h2>
+    <form action="/login" method="post">
+        <input type="email" name="email" id="email" placeholder="Email" required>
+        <div>
+            <input type="password" name="password" id="password" placeholder="Password" required>
+            <i class="far fa-eye" id="togglePassword"></i>
+        </div>
+        <br>
+        <input type="submit" name="submit" id="submit" value="Submit">
+    </form>
+    <a href="">Forgot password?</a>
+</div>
+<div id="breakLine">
+    <hr>
+    <p style="white-space: nowrap;">New to Frinkan?</p>
+    <hr>
+</div>
+<button onclick="window.location.href='/req/signup'" id="createAccBt">Create an account</button>
+<div style="height: 80px"></div>
+
+<script src="../static/js/toggle_password.js" th:src="@{/js/toggle_password.js}"></script>
+</body>
+</html>
