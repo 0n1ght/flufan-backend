@@ -1,3 +1,12 @@
+mappery
+profil {
+-stworzenie klasy
+-przypisanie do klasy Account
+-ProfileService i funkcjonalnosci
+}
+account: zmiana danych, forgot password, 2FA
+
+
 1) Accounts, Login and Registration
 2) Profiles
 3) API
