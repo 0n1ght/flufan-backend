@@ -1,0 +1,6 @@
+Profile class
+add Profile object to Account
+Create ProfileService with methods:
+createProfile()
+removeProfile()
+updateProfile()
