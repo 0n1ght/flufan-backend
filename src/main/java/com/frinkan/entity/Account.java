@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Account {
@@ -14,6 +15,9 @@ public class Account {
     private String username;
     private String email;
     private String password;
+
+    @OneToOne
+    private Profile profile; // Powiązanie z Profile
 
     public Account(String username, String email, String password) {
         this.username = username;
@@ -54,5 +58,13 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 }

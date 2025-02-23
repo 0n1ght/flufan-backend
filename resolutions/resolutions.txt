@@ -1,3 +1,10 @@
+todo
+ProfileService i ProfileServiceImpl
+controller
+
+chat and payments
+
+
 mappery
 profil {
 -stworzenie klasy
@@ -13,6 +20,10 @@ account: zmiana danych, forgot password, 2FA
 4) Payments
 5) Frontend
 
+todo later
+zawieszanie/usuwanie konta
+zmiana danych account np. maila ; resetowanie danych logowania
+unit testing
 
 todo w produkcji:
 +obsluga wyjatkow

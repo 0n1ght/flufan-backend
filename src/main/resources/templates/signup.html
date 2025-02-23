@@ -18,7 +18,7 @@
         <input type="email" name="email" placeholder="Email" id="email" required>
         <input type="password" name="password" placeholder="Password" id="password" required>
         <input type="password" name="confirmPassword" placeholder="Repeat password" id="confirmPassword" required>
-        <div id="errors" style="color: red">
+        <div id="errors" style="color: rgb(255, 80, 80)">
             <div th:if="${emailExists}" id="emailInUsePrompt">
                 <p>🥶 Email already in use. Try to sign in</p>
             </div>
@@ -33,7 +33,7 @@
         <br>
         <input type="submit" id="submit" value="Submit">
     </form>
-    <p>Already have an account? <a href="/login">Sign in</a></p>
+    <label>Already have an account? <a href="/login">Sign in</a></label>
 </div>
 <div style="height: 40px"></div>
 </body>

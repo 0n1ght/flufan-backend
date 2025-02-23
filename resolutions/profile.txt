@@ -1,6 +1,2 @@
-Profile class
-add Profile object to Account
-Create ProfileService with methods:
-createProfile()
-removeProfile()
-updateProfile()
+2 profile do zakladania/edytowania oraz otrzymywania
+serwis z profilami

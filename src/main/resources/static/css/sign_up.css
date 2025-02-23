@@ -18,7 +18,7 @@ body {
 }
 
 h2 {
-    color: BLACK;
+    color: #333;
     font-size: 35px;
     margin-bottom: 30px;
 }
@@ -34,25 +34,26 @@ input {
     padding: 10px;
     border: none;
     outline: none;
-    border-bottom: 1px solid rgb(85, 85, 85);
+    border-bottom: 1px solid rgb(150, 150, 150);
     width: 300px;
     height: 40px;
     font-size: 16px;
-    color: BLACK;
+    color: #1d2129;
     margin-bottom: 20px;
 }
 
 input::placeholder {
-    color: rgb(156, 156, 156);
+    color: rgb(150, 150, 150);
 }
 
 form label {
     font-size: 15px;
+    color: #1d2129;
 }
 
 a {
     text-decoration: none;
-    color: rgb(58, 135, 207);
+    color: #0866ff;
 }
 
 a:hover {
@@ -65,7 +66,7 @@ a:hover {
     font-size: 60px;
     font-weight: 400;
     font-style: normal;
-    color: rgb(58, 135, 207);
+    color: #0866ff;
     user-select: none;
 }
 
@@ -87,7 +88,7 @@ a:hover {
 
 #submit {
     margin-top: 10px;
-    background-color: rgb(58, 135, 207);
+    background-color: #0866ff;
     color: WHITE;
     font-weight: bold;
     border-style: none;
@@ -97,7 +98,7 @@ a:hover {
 
 #submit:hover {
     transition: 0.2s;
-    background-color: rgb(33, 128, 218);
+    background-color: #0866ff;
     cursor: pointer;
 }
 
