@@ -11,14 +11,24 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     private String nick;
+    private boolean verified;
+    private boolean active;
     private String firstName;
     private String lastName;
+
     private int interactionCounter;
-    private String respondTime;
+    private double rating; // Średnia ocena z opinii
+    private int respondTime; // Czas odpowiedzi w godzinach
+
     private int messagePrice;
     private int callPrice;
     private String profilePicturePath;  // Ścieżka do zdjęcia profilowego
+
+    @ElementCollection
+    @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
+    private List<String> linkedAccounts; // Konta social media
 
     @ElementCollection
     @CollectionTable(name = "user_reviews", joinColumns = @JoinColumn(name = "profile_id"))
@@ -28,25 +38,9 @@ public class Profile {
     @JoinColumn(name = "profile_id")
     private List<Service> menu; // Lista usług
 
-    @OneToOne(mappedBy = "profile") // Powiązanie z klasą Account
+    @OneToOne(mappedBy = "profile")
     private Account account;
 
-    public Profile(String nick, String firstName, String lastName, int interactionCounter, String respondTime,
-                   int messagePrice, int callPrice, String profilePicturePath, List<UserReview> reviews, List<Service> menu) {
-        this.nick = nick;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.interactionCounter = interactionCounter;
-        this.respondTime = respondTime;
-        this.messagePrice = messagePrice;
-        this.callPrice = callPrice;
-        this.profilePicturePath = profilePicturePath;
-        this.reviews = reviews;
-        this.menu = menu;
-    }
-
-    public Profile() {
-    }
 
     public Long getId() {
         return id;
@@ -62,6 +56,22 @@ public class Profile {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getFirstName() {
@@ -88,11 +98,19 @@ public class Profile {
         this.interactionCounter = interactionCounter;
     }
 
-    public String getRespondTime() {
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getRespondTime() {
         return respondTime;
     }
 
-    public void setRespondTime(String respondTime) {
+    public void setRespondTime(int respondTime) {
         this.respondTime = respondTime;
     }
 
@@ -120,6 +138,14 @@ public class Profile {
         this.profilePicturePath = profilePicturePath;
     }
 
+    public List<String> getLinkedAccounts() {
+        return linkedAccounts;
+    }
+
+    public void setLinkedAccounts(List<String> linkedAccounts) {
+        this.linkedAccounts = linkedAccounts;
+    }
+
     public List<UserReview> getReviews() {
         return reviews;
     }
@@ -134,5 +160,13 @@ public class Profile {
 
     public void setMenu(List<Service> menu) {
         this.menu = menu;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }
