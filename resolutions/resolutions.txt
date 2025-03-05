@@ -1,8 +1,10 @@
 todo
-ProfileService i ProfileServiceImpl
-controller
+wiadomosci,
+platnosci
 
-chat and payments
+system logowania
+
+w trakcie wyslania mozna dolaczyc zdjecie za +30% ceny
 
 
 mappery
