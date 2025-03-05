@@ -1,4 +1,4 @@
-package com.frinkan.config.security;
+package com.frinkan.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
