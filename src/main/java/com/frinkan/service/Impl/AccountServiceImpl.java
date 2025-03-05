@@ -1,14 +1,21 @@
 package com.frinkan.service.Impl;
 
+import com.frinkan.dto.LoginDto;
 import com.frinkan.entity.Account;
 import com.frinkan.repo.AccountRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.dto.RegisterDto;
+import com.frinkan.service.JWTService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,9 +24,14 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepo accountRepo;
+    private final AuthenticationManager authManager;
+    private final JWTService jwtService;
 
-    public AccountServiceImpl(AccountRepo accountRepo) {
+    @Autowired
+    public AccountServiceImpl(AccountRepo accountRepo, @Lazy AuthenticationManager authManager, JWTService jwtService) {
         this.accountRepo = accountRepo;
+        this.authManager = authManager;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -30,6 +42,7 @@ public class AccountServiceImpl implements AccountService {
             return User.builder()
                     .username(accountObj.getEmail())
                     .password(accountObj.getPassword())
+                    .roles("USER")
                     .build();
         }
         throw new UsernameNotFoundException(username);
@@ -51,5 +64,14 @@ public class AccountServiceImpl implements AccountService {
 
         return accountRepo.findByEmail(username)
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono zalogowanego użytkownika"));
+    }
+
+    @Override
+    public String verify(LoginDto loginDto) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        if (authentication.isAuthenticated()) {
+            return jwtService.generateToken();
+        }
+        return "Fail";
     }
 }
