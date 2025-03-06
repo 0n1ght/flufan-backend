@@ -37,8 +37,9 @@ public class ProfileServiceImpl implements ProfileService {
             throw new RuntimeException("Your profile is already created");
         }
 
+        profileDto.setAccountId(account.getId());
         Profile profile = profileMapper.toProfile(profileDto);
-        profile.setAccount(account);
+//        profile.setAccount(account);
 
         profileRepo.save(profile);
         account.setProfile(profile);
