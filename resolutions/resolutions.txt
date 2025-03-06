@@ -1,8 +1,7 @@
 todo
-system logowania JWT
-przetestuj Profile api, czy service dobrze diala
+logowanie z google, facebook, apple
 system konwersacji i wiadomosci
-platnosci
+platnosci (blik, przelewy24, paysafecard, paypal, applepay ...) / firma posredniczaca
 
 
 wiadomosci,
@@ -18,13 +17,6 @@ profil {
 -ProfileService i funkcjonalnosci
 }
 account: zmiana danych, forgot password, 2FA
-
-
-1) Accounts, Login and Registration
-2) Profiles
-3) API
-4) Payments
-5) Frontend
 
 todo later
 zawieszanie/usuwanie konta
