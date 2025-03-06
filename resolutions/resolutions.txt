@@ -1,21 +1,17 @@
 todo
 logowanie z google, facebook, apple
 system konwersacji i wiadomosci
-platnosci (blik, przelewy24, paysafecard, paypal, applepay ...) / firma posredniczaca
+platnosci (blik, przelewy24, paysafecard, paypal, applepay ...) + doladowane srodki
 
 
 wiadomosci,
 platnosci
 
-w trakcie wyslania mozna dolaczyc zdjecie za +30% ceny
-
+w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 
 mappery
-profil {
--stworzenie klasy
--przypisanie do klasy Account
--ProfileService i funkcjonalnosci
-}
+
+logi
 account: zmiana danych, forgot password, 2FA
 
 todo later
