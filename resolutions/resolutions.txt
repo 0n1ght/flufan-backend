@@ -1,8 +1,12 @@
 todo
-wiadomosci,
+system logowania JWT
+przetestuj Profile api, czy service dobrze diala
+system konwersacji i wiadomosci
 platnosci
 
-system logowania
+
+wiadomosci,
+platnosci
 
 w trakcie wyslania mozna dolaczyc zdjecie za +30% ceny
 

@@ -63,15 +63,23 @@ public class AccountServiceImpl implements AccountService {
         String username = authentication.getName(); // Pobranie emaila zalogowanego użytkownika
 
         return accountRepo.findByEmail(username)
-                .orElseThrow(() -> new RuntimeException("Nie znaleziono zalogowanego użytkownika"));
+                .orElseThrow(() -> new RuntimeException("Logged in user not found"));
     }
 
     @Override
     public String verify(LoginDto loginDto) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+        Authentication authentication =
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken();
+            return jwtService.generateToken(loginDto.getEmail());
         }
+
         return "Fail";
+    }
+
+    @Override
+    public Account getById(Long id) {
+        return accountRepo.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
     }
 }

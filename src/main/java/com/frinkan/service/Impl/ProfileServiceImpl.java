@@ -3,10 +3,12 @@ package com.frinkan.service.Impl;
 import com.frinkan.dto.ProfileDto;
 import com.frinkan.entity.Account;
 import com.frinkan.entity.Profile;
+import com.frinkan.mapper.ProfileMapper;
 import com.frinkan.repo.AccountRepo;
 import com.frinkan.repo.ProfileRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.ProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,7 +16,10 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepo profileRepo;
     private final AccountRepo accountRepo;
-    private final AccountService authService; // Serwis do pobierania zalogowanego użytkownika
+    private final AccountService authService;
+
+    @Autowired
+    private ProfileMapper profileMapper;
 
     public ProfileServiceImpl(ProfileRepo profileRepo, AccountRepo accountRepo, AccountService authService) {
         this.profileRepo = profileRepo;
@@ -29,26 +34,14 @@ public class ProfileServiceImpl implements ProfileService {
 
         // Sprawdzamy, czy konto już ma profil
         if (account.getProfile() != null) {
-            throw new RuntimeException("Masz już utworzony profil!");
+            throw new RuntimeException("Your profile is already created");
         }
 
-        Profile profile = new Profile();
-        profile.setNick(profileDto.getNick());
-        profile.setVerified(false);
-        profile.setActive(true);
-        profile.setFirstName(profileDto.getFirstName());
-        profile.setLastName(profileDto.getLastName());
-        profile.setInteractionCounter(0);
-        profile.setRating(0.0);
-        profile.setRespondTime(profileDto.getRespondTime());
-        profile.setMessagePrice(profileDto.getMessagePrice());
-        profile.setCallPrice(profileDto.getCallPrice());
-        profile.setProfilePicturePath(profileDto.getProfilePicturePath());
-        profile.setLinkedAccounts(profileDto.getLinkedAccounts());
+        Profile profile = profileMapper.toProfile(profileDto);
         profile.setAccount(account);
 
         profileRepo.save(profile);
-        account.setProfile(profile); // Przypisujemy profil do konta
+        account.setProfile(profile);
         accountRepo.save(account);
     }
 
@@ -56,11 +49,11 @@ public class ProfileServiceImpl implements ProfileService {
     public void removeProfile(String nick) {
         Account account = authService.getAuthenticatedAccount();
         Profile profile = profileRepo.findByNick(nick)
-                .orElseThrow(() -> new RuntimeException("Profil nie znaleziony"));
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
 
         // Sprawdzamy, czy użytkownik chce usunąć SWÓJ profil
         if (!profile.getAccount().equals(account)) {
-            throw new RuntimeException("Nie masz uprawnień do usunięcia tego profilu!");
+            throw new RuntimeException("You can not delete this profile");
         }
 
         profileRepo.delete(profile);
@@ -72,11 +65,10 @@ public class ProfileServiceImpl implements ProfileService {
     public void editProfile(ProfileDto profileDto) {
         Account account = authService.getAuthenticatedAccount();
         Profile profile = profileRepo.findByNick(profileDto.getNick())
-                .orElseThrow(() -> new RuntimeException("Profil nie znaleziony"));
+                .orElseThrow(() -> new RuntimeException("Profile not found"));
 
-        // Sprawdzamy, czy użytkownik edytuje SWÓJ profil
         if (!profile.getAccount().equals(account)) {
-            throw new RuntimeException("Nie masz uprawnień do edycji tego profilu!");
+            throw new RuntimeException("You can not edit this profile");
         }
 
         profile.setFirstName(profileDto.getFirstName());

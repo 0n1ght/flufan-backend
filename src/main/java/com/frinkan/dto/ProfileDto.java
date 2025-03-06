@@ -13,7 +13,6 @@ public class ProfileDto {
     private List<String> linkedAccounts; // Konta social media
     private Long accountId; // ID konta powiązanego z profilem
 
-    // Gettery i Settery
     public String getNick() {
         return nick;
     }
