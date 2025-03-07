@@ -26,12 +26,15 @@ public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AccountServiceImpl(AccountRepo accountRepo, @Lazy AuthenticationManager authManager, JWTService jwtService) {
+    public AccountServiceImpl(AccountRepo accountRepo, @Lazy AuthenticationManager authManager,
+                              JWTService jwtService, PasswordEncoder passwordEncoder) {
         this.accountRepo = accountRepo;
         this.authManager = authManager;
         this.jwtService = jwtService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
         if (existingAccount.isPresent()) {
             throw new IllegalArgumentException("Email is already in use");
         }
-        accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), accountDto.getPassword()));
+        accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), passwordEncoder.encode(accountDto.getPassword())));
     }
 
     @Override
@@ -81,5 +84,28 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getById(Long id) {
         return accountRepo.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
+    }
+
+    @Override
+    public void changeLoginData(LoginDto loginDto) {
+        // Sprawdzam czy nowy email jest już w repozytorium przypisany do innego konta niż użytkownika
+        Optional<Account> existingAccount = accountRepo.findByEmail(loginDto.getEmail());
+        Account authenticatedAccount = getAuthenticatedAccount(); // Pobieram aktualnie zalogowanego użytkownika
+
+        if (existingAccount.isPresent() && !existingAccount.get().getId().equals(authenticatedAccount.getId())) {
+            // Jeśli email już istnieje i nie należy do aktualnie zalogowanego użytkownika
+            throw new IllegalArgumentException("Email is already in use");
+        }
+
+        // Pobieram konto z bazy danych, które chcemy zaktualizować
+        Account accountToUpdate = accountRepo.findByEmail(authenticatedAccount.getEmail())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        // Podmieniam email i hasło na nowe dane z LoginDto
+        accountToUpdate.setEmail(loginDto.getEmail());
+        accountToUpdate.setPassword(passwordEncoder.encode(loginDto.getPassword())); // Pamiętaj o zakodowaniu hasła
+
+        // Zapisuję zmodyfikowane konto spowrotem do bazy danych
+        accountRepo.save(accountToUpdate);
     }
 }

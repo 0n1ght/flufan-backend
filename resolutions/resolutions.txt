@@ -1,26 +1,27 @@
 todo now:
-platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
-/ cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
+account: zmiana danych, forgot password, 2FA {
+zmiana danych: zalogowany uzytkownik zmienia dane wysylajac LoginDto z nowymi
+forgot password: link resetujacy zawiera link do strony z tokenem
+2FA (optional option)
+}
+
+logowanie z google, facebook, apple
 
 
 todo
+platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
+/ cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
 osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
-logowanie z google, facebook, apple
 panel administracyjny do zarzadzania uzytkownikami i platnosciami
 
-wiadomosci,
 platnosci
 
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 
-mappery
-
 logi
-account: zmiana danych, forgot password, 2FA
 
 todo later
-zawieszanie/usuwanie konta
-zmiana danych account np. maila ; resetowanie danych logowania
+zawieszanie/usowanie konta
 unit testing
 
 todo w produkcji:
@@ -29,4 +30,4 @@ todo w produkcji:
 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 z SecurityConfig
-+Zmienic baze danych H2 -> PostgreSQL
++Zamienic baze danych H2 na PostgreSQL
