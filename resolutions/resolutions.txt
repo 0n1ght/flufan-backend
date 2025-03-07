@@ -2,6 +2,7 @@ todo now:
 system konwersacji i wiadomosci
 
 todo
+osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
 logowanie z google, facebook, apple
 platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
 / cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
