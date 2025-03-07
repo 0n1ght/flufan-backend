@@ -88,24 +88,19 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void changeLoginData(LoginDto loginDto) {
-        // Sprawdzam czy nowy email jest już w repozytorium przypisany do innego konta niż użytkownika
         Optional<Account> existingAccount = accountRepo.findByEmail(loginDto.getEmail());
-        Account authenticatedAccount = getAuthenticatedAccount(); // Pobieram aktualnie zalogowanego użytkownika
+        Account authenticatedAccount = getAuthenticatedAccount();
 
         if (existingAccount.isPresent() && !existingAccount.get().getId().equals(authenticatedAccount.getId())) {
-            // Jeśli email już istnieje i nie należy do aktualnie zalogowanego użytkownika
             throw new IllegalArgumentException("Email is already in use");
         }
 
-        // Pobieram konto z bazy danych, które chcemy zaktualizować
         Account accountToUpdate = accountRepo.findByEmail(authenticatedAccount.getEmail())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        // Podmieniam email i hasło na nowe dane z LoginDto
         accountToUpdate.setEmail(loginDto.getEmail());
-        accountToUpdate.setPassword(passwordEncoder.encode(loginDto.getPassword())); // Pamiętaj o zakodowaniu hasła
+        accountToUpdate.setPassword(passwordEncoder.encode(loginDto.getPassword()));
 
-        // Zapisuję zmodyfikowane konto spowrotem do bazy danych
         accountRepo.save(accountToUpdate);
     }
 }
