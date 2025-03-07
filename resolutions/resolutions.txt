@@ -1,8 +1,11 @@
+todo now:
+system konwersacji i wiadomosci
+
 todo
 logowanie z google, facebook, apple
-system konwersacji i wiadomosci
-platnosci (blik, przelewy24, paysafecard, paypal, applepay ...) + doladowane srodki
-
+platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
+/ cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
+panel administracyjny do zarzadzania uzytkownikami i platnosciami
 
 wiadomosci,
 platnosci
