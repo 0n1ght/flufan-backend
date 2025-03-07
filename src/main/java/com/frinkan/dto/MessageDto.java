@@ -1,5 +1,7 @@
 package com.frinkan.dto;
 
+import com.frinkan.enums.MessageType;
+
 import java.util.Date;
 
 public class MessageDto {
@@ -9,6 +11,7 @@ public class MessageDto {
     private String content;
     private boolean readStatus;
     private Date sentAt;
+    private MessageType messageType;
 
     public Long getId() {
         return id;
@@ -56,5 +59,13 @@ public class MessageDto {
 
     public void setSentAt(Date sentAt) {
         this.sentAt = sentAt;
+    }
+
+    public MessageType getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
     }
 }

@@ -2,6 +2,7 @@ package com.frinkan.controller;
 
 import com.frinkan.dto.MessageDto;
 import com.frinkan.entity.Message;
+import com.frinkan.enums.MessageType;
 import com.frinkan.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class MessageController {
     }
 
     @PostMapping("/send/{receiverId}")
-    public ResponseEntity<String> sendMessage(@PathVariable Long receiverId, @RequestBody String content) {
-        messageService.sendMessage(receiverId, content);
+    public ResponseEntity<String> sendMessage(@PathVariable Long receiverId, @RequestBody MessageDto messageDto) {
+        messageService.sendMessage(receiverId, messageDto.getContent(), messageDto.getMessageType());
         return ResponseEntity.ok("Message sent");
     }
 

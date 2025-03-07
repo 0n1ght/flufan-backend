@@ -3,6 +3,7 @@ package com.frinkan.service.Impl;
 import com.frinkan.dto.MessageDto;
 import com.frinkan.entity.Account;
 import com.frinkan.entity.Message;
+import com.frinkan.enums.MessageType;
 import com.frinkan.mapper.AccountMapper;
 import com.frinkan.repo.MessageRepo;
 import com.frinkan.service.AccountService;
@@ -25,7 +26,7 @@ public class MessageServiceImpl implements MessageService {
         this.accountService = accountService;
     }
 
-    public void sendMessage(Long receiverId, String content) {
+    public void sendMessage(Long receiverId, String content, MessageType messageType) {
         Account sender = accountService.getAuthenticatedAccount();
         Account receiver = accountService.getById(receiverId);
 
@@ -33,6 +34,7 @@ public class MessageServiceImpl implements MessageService {
         message.setSender(sender);
         message.setReceiver(receiver);
         message.setContent(content);
+        message.setMessageType(messageType);
         messageRepo.save(message);
     }
 
@@ -49,6 +51,7 @@ public class MessageServiceImpl implements MessageService {
             messageDto.setContent(message.getContent());
             messageDto.setSentAt(message.getSentAt());
             messageDto.setReadStatus(message.isReadStatus());
+            messageDto.setMessageType(message.getMessageType());
             return messageDto;
         }).collect(Collectors.toList());
 

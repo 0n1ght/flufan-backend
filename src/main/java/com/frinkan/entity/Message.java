@@ -1,5 +1,6 @@
 package com.frinkan.entity;
 
+import com.frinkan.enums.MessageType;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -23,6 +24,8 @@ public class Message {
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date sentAt = new Date();
+
+    private MessageType messageType;
 
 
     public Message() {
@@ -83,5 +86,13 @@ public class Message {
 
     public void setSentAt(Date sentAt) {
         this.sentAt = sentAt;
+    }
+
+    public MessageType getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(MessageType messageType) {
+        this.messageType = messageType;
     }
 }
