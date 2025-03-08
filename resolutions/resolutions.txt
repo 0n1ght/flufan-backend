@@ -1,8 +1,4 @@
 todo now:
-account: zmiana danych, forgot password, 2FA {
-forgot password: link resetujacy zawiera link do strony z tokenem
-2FA (optional option)
-}
 
 logowanie z google, facebook, apple
 
@@ -20,7 +16,7 @@ w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 logi
 
 todo later
-zawieszanie/usowanie konta
+zawieszanie profilu/usowanie konta
 unit testing
 
 todo w produkcji:
