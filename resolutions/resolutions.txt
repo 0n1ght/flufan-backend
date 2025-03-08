@@ -1,6 +1,5 @@
 todo now:
 account: zmiana danych, forgot password, 2FA {
-zmiana danych: zalogowany uzytkownik zmienia dane wysylajac LoginDto z nowymi
 forgot password: link resetujacy zawiera link do strony z tokenem
 2FA (optional option)
 }
