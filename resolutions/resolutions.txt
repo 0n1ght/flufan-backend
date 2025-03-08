@@ -1,20 +1,23 @@
 todo now:
+Dzien 1.
 dodawanie opinii {
 -osobne repository na reviews i przypisywane do konta id List<UserReview>
 -metoda w serwisie profili i zwracanie opinii o jakims uzytkowniku (3 pierwsze, 100 kolejnych, itd)
 -kontroler zarzadzajacy opiniami
 }
 
+Dzien 2.
 AccountId jest w ProfileDto jakis uzytkownik moze przypisac swoj profil do czyjegos konta !!!!!!!!!!!!!!!
 zawieszanie profilu (active) /usowanie konta
 wiadomosci tekstowe i dzwonienie jako opcjonalne
 
+Dzien 3.
 logowanie z google, facebook, apple
-
 unit testing
 
 
 todo later:
+Dzien 4,5,6.
 platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
 / cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
 osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
@@ -23,7 +26,7 @@ panel administracyjny do zarzadzania uzytkownikami i platnosciami
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 
 
-todo w produkcji:
+todo last:
 +wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
