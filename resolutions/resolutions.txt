@@ -1,21 +1,23 @@
 todo now:
-AccountId jest w ProfileDto !!!!!!!!!!!!!!!
-zawieszanie profilu (active) /usowanie konta
+-dodawanie opinii
 
+AccountId jest w ProfileDto jakis uzytkownik moze przypisac swoj profil do czyjegos konta !!!!!!!!!!!!!!!
+zawieszanie profilu (active) /usowanie konta
 wiadomosci tekstowe i dzwonienie jako opcjonalne
+
 logowanie z google, facebook, apple
-dodawanie opinii
 
 unit testing
 
 
-todo
+todo later:
 platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
 / cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
 osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
 panel administracyjny do zarzadzania uzytkownikami i platnosciami
 
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
+
 
 todo w produkcji:
 +wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
