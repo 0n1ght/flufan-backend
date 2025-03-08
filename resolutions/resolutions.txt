@@ -1,5 +1,9 @@
 todo now:
--dodawanie opinii
+dodawanie opinii {
+-osobne repository na reviews i przypisywane do konta id List<UserReview>
+-metoda w serwisie profili i zwracanie opinii o jakims uzytkowniku (3 pierwsze, 100 kolejnych, itd)
+-kontroler zarzadzajacy opiniami
+}
 
 AccountId jest w ProfileDto jakis uzytkownik moze przypisac swoj profil do czyjegos konta !!!!!!!!!!!!!!!
 zawieszanie profilu (active) /usowanie konta
