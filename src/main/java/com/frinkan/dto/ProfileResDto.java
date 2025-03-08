@@ -1,15 +1,12 @@
-package com.frinkan.entity;
+package com.frinkan.dto;
 
-import com.frinkan.model.UserReview;
+import com.frinkan.entity.Account;
 import com.frinkan.model.Service;
-import jakarta.persistence.*;
+import com.frinkan.model.UserReview;
+
 import java.util.List;
 
-@Entity
-public class Profile {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+public class ProfileResDto {
     private Long id;
 
     private String nick;
@@ -25,22 +22,32 @@ public class Profile {
     private int messagePrice;
     private int callPrice;
     private String profilePicturePath;
-
-    @ElementCollection
-    @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
     private List<String> linkedAccounts;
-
-    @ElementCollection
-    @CollectionTable(name = "user_reviews", joinColumns = @JoinColumn(name = "profile_id"))
     private List<UserReview> reviews;
-
-    @OneToMany
-    @JoinColumn(name = "profile_id")
     private List<Service> menu;
+    private Long accountId;
 
-    @OneToOne(mappedBy = "profile")
-    private Account account;
-
+    public ProfileResDto(Long id, String nick, boolean verified, boolean active, String firstName,
+                         String lastName, int interactionCounter, double rating, int respondTime, int messagePrice,
+                         int callPrice, String profilePicturePath, List<String> linkedAccounts, List<UserReview> reviews,
+                         List<Service> menu, Long accountId) {
+        this.id = id;
+        this.nick = nick;
+        this.verified = verified;
+        this.active = active;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.interactionCounter = interactionCounter;
+        this.rating = rating;
+        this.respondTime = respondTime;
+        this.messagePrice = messagePrice;
+        this.callPrice = callPrice;
+        this.profilePicturePath = profilePicturePath;
+        this.linkedAccounts = linkedAccounts;
+        this.reviews = reviews;
+        this.menu = menu;
+        this.accountId = accountId;
+    }
 
     public Long getId() {
         return id;
@@ -162,11 +169,11 @@ public class Profile {
         this.menu = menu;
     }
 
-    public Account getAccount() {
-        return account;
+    public Long getAccountId() {
+        return accountId;
     }
 
-    public void setAccount(Account account) {
-        this.account = account;
+    public void setAccountId(Long accountId) {
+        this.accountId = accountId;
     }
 }

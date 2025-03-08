@@ -1,9 +1,12 @@
 package com.frinkan.controller;
 
 import com.frinkan.dto.ProfileDto;
+import com.frinkan.dto.ProfileResDto;
 import com.frinkan.service.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/profiles")
@@ -31,5 +34,10 @@ public class ProfileController {
     public ResponseEntity<String> removeProfile(@PathVariable String nick) {
         profileService.removeProfile(nick);
         return ResponseEntity.ok("Profile deleted successfully");
+    }
+
+    @GetMapping("/search/{searchVal}")
+    public List<ProfileResDto> searchProfiles(@PathVariable String searchVal) {
+        return profileService.searchProfiles(searchVal);
     }
 }

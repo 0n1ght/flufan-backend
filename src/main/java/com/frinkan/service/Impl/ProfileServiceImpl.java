@@ -1,6 +1,7 @@
 package com.frinkan.service.Impl;
 
 import com.frinkan.dto.ProfileDto;
+import com.frinkan.dto.ProfileResDto;
 import com.frinkan.entity.Account;
 import com.frinkan.entity.Profile;
 import com.frinkan.mapper.ProfileMapper;
@@ -11,20 +12,23 @@ import com.frinkan.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepo profileRepo;
     private final AccountRepo accountRepo;
     private final AccountService authService;
+    private final ProfileMapper profileMapper;
 
     @Autowired
-    private ProfileMapper profileMapper;
-
-    public ProfileServiceImpl(ProfileRepo profileRepo, AccountRepo accountRepo, AccountService authService) {
+    public ProfileServiceImpl(ProfileRepo profileRepo, AccountRepo accountRepo,
+                              AccountService authService, ProfileMapper profileMapper) {
         this.profileRepo = profileRepo;
         this.accountRepo = accountRepo;
         this.authService = authService;
+        this.profileMapper = profileMapper;
     }
 
     @Override
@@ -81,5 +85,11 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
 
         profileRepo.save(profile);
+    }
+
+    @Override
+    public List<ProfileResDto> searchProfiles(String searchVal) {
+        return profileRepo.searchByNickOrName(searchVal).stream()
+                .map(profileMapper::toProfileResDto).toList();
     }
 }

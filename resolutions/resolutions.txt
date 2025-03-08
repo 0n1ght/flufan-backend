@@ -1,6 +1,12 @@
 todo now:
+AccountId jest w ProfileDto !!!!!!!!!!!!!!!
+zawieszanie profilu (active) /usowanie konta
 
+wiadomosci tekstowe i dzwonienie jako opcjonalne
 logowanie z google, facebook, apple
+dodawanie opinii
+
+unit testing
 
 
 todo
@@ -9,20 +15,10 @@ platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24,
 osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
 panel administracyjny do zarzadzania uzytkownikami i platnosciami
 
-platnosci
-
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 
-logi
-
-todo later
-zawieszanie profilu/usowanie konta
-unit testing
-
 todo w produkcji:
-+obsluga wyjatkow
-+wywalic linijki
++wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-z SecurityConfig
 +Zamienic baze danych H2 na PostgreSQL
