@@ -3,13 +3,9 @@ package com.frinkan.mapper;
 import com.frinkan.dto.ProfileDto;
 import com.frinkan.dto.ProfileResDto;
 import com.frinkan.entity.Profile;
-import com.frinkan.model.Service;
-import com.frinkan.model.UserReview;
 import com.frinkan.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class ProfileMapper {

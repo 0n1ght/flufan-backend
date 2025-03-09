@@ -1,23 +1,24 @@
 todo now:
-Dzien 1.
 dodawanie opinii {
--osobne repository na reviews i przypisywane do konta id List<UserReview>
--metoda w serwisie profili i zwracanie opinii o jakims uzytkowniku (3 pierwsze, 100 kolejnych, itd)
--kontroler zarzadzajacy opiniami
+-Uporzadkowanie modeli
+
+-UserReviewRepo
+-UserReviewService
+-UserReviewController
 }
 
-Dzien 2.
+Dzien 1.
 AccountId jest w ProfileDto jakis uzytkownik moze przypisac swoj profil do czyjegos konta !!!!!!!!!!!!!!!
 zawieszanie profilu (active) /usowanie konta
 wiadomosci tekstowe i dzwonienie jako opcjonalne
-
-Dzien 3.
-logowanie z google, facebook, apple
+--
+logowanie z facebook, google, apple
 unit testing
 
 
 todo later:
-Dzien 4,5,6.
+enumy na serwisy
+Dzien 2,3.
 platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
 / cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
 osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
