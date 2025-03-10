@@ -1,3 +1,10 @@
+otworz:
+UserReviewController
+UserReviewServiceImpl /nimpl
+UserReviewRepo
+UserReviewDto
+UserReview
+
 todo now:
 dodawanie opinii {
 -Uporzadkowanie modeli

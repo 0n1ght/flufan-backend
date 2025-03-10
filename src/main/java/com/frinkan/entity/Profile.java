@@ -1,6 +1,5 @@
 package com.frinkan.entity;
 
-import com.frinkan.model.UserReview;
 import com.frinkan.model.Service;
 import jakarta.persistence.*;
 import java.util.List;
@@ -30,8 +29,7 @@ public class Profile {
     @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
     private List<String> linkedAccounts;
 
-    @ElementCollection
-    @CollectionTable(name = "user_reviews", joinColumns = @JoinColumn(name = "profile_id"))
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserReview> reviews;
 
     @OneToMany

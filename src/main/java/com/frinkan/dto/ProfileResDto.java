@@ -1,8 +1,6 @@
 package com.frinkan.dto;
 
-import com.frinkan.entity.Account;
 import com.frinkan.model.Service;
-import com.frinkan.model.UserReview;
 
 import java.util.List;
 
@@ -23,13 +21,12 @@ public class ProfileResDto {
     private int callPrice;
     private String profilePicturePath;
     private List<String> linkedAccounts;
-    private List<UserReview> reviews;
     private List<Service> menu;
     private Long accountId;
 
     public ProfileResDto(Long id, String nick, boolean verified, boolean active, String firstName,
                          String lastName, int interactionCounter, double rating, int respondTime, int messagePrice,
-                         int callPrice, String profilePicturePath, List<String> linkedAccounts, List<UserReview> reviews,
+                         int callPrice, String profilePicturePath, List<String> linkedAccounts,
                          List<Service> menu, Long accountId) {
         this.id = id;
         this.nick = nick;
@@ -44,7 +41,6 @@ public class ProfileResDto {
         this.callPrice = callPrice;
         this.profilePicturePath = profilePicturePath;
         this.linkedAccounts = linkedAccounts;
-        this.reviews = reviews;
         this.menu = menu;
         this.accountId = accountId;
     }
@@ -151,14 +147,6 @@ public class ProfileResDto {
 
     public void setLinkedAccounts(List<String> linkedAccounts) {
         this.linkedAccounts = linkedAccounts;
-    }
-
-    public List<UserReview> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<UserReview> reviews) {
-        this.reviews = reviews;
     }
 
     public List<Service> getMenu() {

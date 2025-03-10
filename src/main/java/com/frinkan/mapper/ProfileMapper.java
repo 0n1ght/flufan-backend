@@ -51,7 +51,6 @@ public class ProfileMapper {
                 profile.getCallPrice(),
                 profile.getProfilePicturePath(),
                 profile.getLinkedAccounts(),
-                profile.getReviews(),
                 profile.getMenu(),
                 profile.getAccount().getId()
                 );
