@@ -1,4 +1,4 @@
-package com.frinkan.service.Impl;
+package com.frinkan.service.impl;
 
 import com.frinkan.dto.MessageDto;
 import com.frinkan.entity.Account;

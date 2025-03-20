@@ -30,9 +30,9 @@ public class ProfileController {
         return ResponseEntity.ok("Profile updated successfully");
     }
 
-    @DeleteMapping("/remove/{nick}")
-    public ResponseEntity<String> removeProfile(@PathVariable String nick) {
-        profileService.removeProfile(nick);
+    @DeleteMapping("/remove")
+    public ResponseEntity<String> removeProfile() {
+        profileService.removeProfile();
         return ResponseEntity.ok("Profile deleted successfully");
     }
 

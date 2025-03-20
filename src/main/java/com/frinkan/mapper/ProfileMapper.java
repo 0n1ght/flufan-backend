@@ -16,7 +16,7 @@ public class ProfileMapper {
         Profile profile = new Profile();
         profile.setNick(profileDto.getNick());
         profile.setVerified(false);
-        profile.setActive(true);
+        profile.setActive(profileDto.getActive());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());
         profile.setInteractionCounter(0);
@@ -26,7 +26,6 @@ public class ProfileMapper {
         profile.setCallPrice(profileDto.getCallPrice());
         profile.setProfilePicturePath(profileDto.getProfilePicturePath());
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
-        profile.setAccount(accountService.getById(profileDto.getAccountId()));
 
         return profile;
     }

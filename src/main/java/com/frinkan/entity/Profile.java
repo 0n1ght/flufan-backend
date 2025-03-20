@@ -29,9 +29,6 @@ public class Profile {
     @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
     private List<String> linkedAccounts;
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserReview> reviews;
-
     @OneToMany
     @JoinColumn(name = "profile_id")
     private List<Service> menu;
@@ -142,14 +139,6 @@ public class Profile {
 
     public void setLinkedAccounts(List<String> linkedAccounts) {
         this.linkedAccounts = linkedAccounts;
-    }
-
-    public List<UserReview> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(List<UserReview> reviews) {
-        this.reviews = reviews;
     }
 
     public List<Service> getMenu() {

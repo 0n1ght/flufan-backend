@@ -1,9 +1,6 @@
-otworz:
-UserReviewController
-UserReviewServiceImpl /nimpl
-UserReviewRepo
-UserReviewDto
-UserReview
+password reset link and working
+w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link powinien moc tu byc
+Service system, w ProfileMapper nie przekazywane jest menu
 
 todo now:
 dodawanie opinii {
@@ -15,7 +12,6 @@ dodawanie opinii {
 }
 
 Dzien 1.
-AccountId jest w ProfileDto jakis uzytkownik moze przypisac swoj profil do czyjegos konta !!!!!!!!!!!!!!!
 zawieszanie profilu (active) /usowanie konta
 wiadomosci tekstowe i dzwonienie jako opcjonalne
 --

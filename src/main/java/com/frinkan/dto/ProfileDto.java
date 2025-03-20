@@ -4,14 +4,14 @@ import java.util.List;
 
 public class ProfileDto {
     private String nick;
+    private boolean active;
     private String firstName;
     private String lastName;
-    private int respondTime; // Zmienione na int (godziny)
+    private int respondTime;
     private int messagePrice;
     private int callPrice;
     private String profilePicturePath;
     private List<String> linkedAccounts; // Konta social media
-    private Long accountId; // ID konta powiązanego z profilem
 
     public String getNick() {
         return nick;
@@ -19,6 +19,14 @@ public class ProfileDto {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getFirstName() {
@@ -75,13 +83,5 @@ public class ProfileDto {
 
     public void setLinkedAccounts(List<String> linkedAccounts) {
         this.linkedAccounts = linkedAccounts;
-    }
-
-    public Long getAccountId() {
-        return accountId;
-    }
-
-    public void setAccountId(Long accountId) {
-        this.accountId = accountId;
     }
 }

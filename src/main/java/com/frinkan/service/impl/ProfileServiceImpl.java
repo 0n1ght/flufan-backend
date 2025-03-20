@@ -1,4 +1,4 @@
-package com.frinkan.service.Impl;
+package com.frinkan.service.impl;
 
 import com.frinkan.dto.ProfileDto;
 import com.frinkan.dto.ProfileResDto;
@@ -41,9 +41,8 @@ public class ProfileServiceImpl implements ProfileService {
             throw new RuntimeException("Your profile is already created");
         }
 
-        profileDto.setAccountId(account.getId());
         Profile profile = profileMapper.toProfile(profileDto);
-//        profile.setAccount(account);
+        profile.setAccount(account);
 
         profileRepo.save(profile);
         account.setProfile(profile);
@@ -51,17 +50,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public void removeProfile(String nick) {
+    public void removeProfile() {
         Account account = authService.getAuthenticatedAccount();
-        Profile profile = profileRepo.findByNick(nick)
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
-
-        // Sprawdzamy, czy użytkownik chce usunąć SWÓJ profil
-        if (!profile.getAccount().equals(account)) {
-            throw new RuntimeException("You can not delete this profile");
-        }
-
-        profileRepo.delete(profile);
+        profileRepo.delete(account.getProfile());
         account.setProfile(null);
         accountRepo.save(account);
     }

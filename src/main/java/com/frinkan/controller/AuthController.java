@@ -26,13 +26,13 @@ public class AuthController {
         this.passwordResetService = passwordResetService;
     }
 
-    @PostMapping("/forgot-password")
+    @GetMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         passwordResetService.requestPasswordReset(email);
         return ResponseEntity.ok("Reset link sent to your email");
     }
 
-    @PostMapping("/reset-password")
+    @PutMapping("/reset-password") // Bylo postmapping
     public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
         passwordResetService.resetPassword(token, newPassword);
         return ResponseEntity.ok("Password successfully reset");

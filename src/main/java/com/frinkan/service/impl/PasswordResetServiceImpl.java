@@ -1,4 +1,4 @@
-package com.frinkan.service.Impl;
+package com.frinkan.service.impl;
 
 import com.frinkan.entity.Account;
 import com.frinkan.entity.PasswordResetToken;
