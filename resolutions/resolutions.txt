@@ -1,28 +1,39 @@
 todo now:
+21.
 logowanie z facebook, google, apple
-w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
 
 --
+22.
+testy
 unit testing
 
 
 todo later:
+23-24
+wysylanie wiadomosci tylko po platnosciach
+
 platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
 / cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
 osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
 panel administracyjny do zarzadzania uzytkownikami i platnosciami
 
+25
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 
+26
 wiadomosci tekstowe i dzwonienie jako opcjonalne (jezeli cena wynosi -1 to blokowana jest mozliwosc wykupienia tej uslugi)
 Kupowanie zawieszone gdy w Profilu pole active=false
 
 todo poprawki:
+27-28
+w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
 password reset link and working (zadanie dla frontendu)
 
 
 todo last:
+29-30
 +wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 +Zamienic baze danych H2 na PostgreSQL
+testy manualne + jednostkowe
