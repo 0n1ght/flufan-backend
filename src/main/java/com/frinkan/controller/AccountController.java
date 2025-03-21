@@ -3,8 +3,10 @@ package com.frinkan.controller;
 import com.frinkan.dto.LoginDto;
 import com.frinkan.dto.RegisterDto;
 import com.frinkan.service.AccountService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,5 +31,11 @@ public class AccountController {
         } catch (Exception e) {
             return ResponseEntity.status(400).body("Failed to update login data: " + e.getMessage());
         }
+    }
+
+    @DeleteMapping("/req/delete-account")
+    public ResponseEntity<String> deleteAccount(@RequestBody LoginDto loginDto) {
+        accountService.deleteAccount(loginDto);
+        return ResponseEntity.ok("Account deleted successfully");
     }
 }

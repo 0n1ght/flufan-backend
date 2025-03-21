@@ -26,6 +26,7 @@ public class ProfileMapper {
         profile.setCallPrice(profileDto.getCallPrice());
         profile.setProfilePicturePath(profileDto.getProfilePicturePath());
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
+        profile.setMenu(profileDto.getMenu());
 
         return profile;
     }

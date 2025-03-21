@@ -1,28 +1,24 @@
 todo now:
-
-
-todo poprawki:
-password reset link and working (zadanie dla frontendu)
-w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link powinien moc tu byc
-Service system, w ProfileMapper nie przekazywane jest menu
-
-Dzien 1.
-zawieszanie profilu (active) /usowanie konta
-wiadomosci tekstowe i dzwonienie jako opcjonalne
---
 logowanie z facebook, google, apple
+w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
+
+--
 unit testing
 
 
 todo later:
-enumy na serwisy
-Dzien 2,3.
 platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
 / cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
 osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
 panel administracyjny do zarzadzania uzytkownikami i platnosciami
 
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
+
+wiadomosci tekstowe i dzwonienie jako opcjonalne (jezeli cena wynosi -1 to blokowana jest mozliwosc wykupienia tej uslugi)
+Kupowanie zawieszone gdy w Profilu pole active=false
+
+todo poprawki:
+password reset link and working (zadanie dla frontendu)
 
 
 todo last:

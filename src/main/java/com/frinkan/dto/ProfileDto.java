@@ -1,5 +1,7 @@
 package com.frinkan.dto;
 
+import com.frinkan.model.Service;
+
 import java.util.List;
 
 public class ProfileDto {
@@ -12,6 +14,7 @@ public class ProfileDto {
     private int callPrice;
     private String profilePicturePath;
     private List<String> linkedAccounts; // Konta social media
+    private List<Service> menu;
 
     public String getNick() {
         return nick;
@@ -83,5 +86,17 @@ public class ProfileDto {
 
     public void setLinkedAccounts(List<String> linkedAccounts) {
         this.linkedAccounts = linkedAccounts;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public List<Service> getMenu() {
+        return menu;
+    }
+
+    public void setMenu(List<Service> menu) {
+        this.menu = menu;
     }
 }

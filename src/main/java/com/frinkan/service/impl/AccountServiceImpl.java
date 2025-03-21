@@ -2,12 +2,14 @@ package com.frinkan.service.impl;
 
 import com.frinkan.dto.LoginDto;
 import com.frinkan.entity.Account;
+import com.frinkan.exception.ResourceNotFoundException;
 import com.frinkan.repo.AccountRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.dto.RegisterDto;
 import com.frinkan.service.JWTService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +61,27 @@ public class AccountServiceImpl implements AccountService {
             throw new IllegalArgumentException("Email is already in use");
         }
         accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), passwordEncoder.encode(accountDto.getPassword())));
+    }
+
+    @Override
+    public void deleteAccount(LoginDto loginDto) {
+        Optional<Account> account = accountRepo.findByEmail(loginDto.getEmail());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (account.isEmpty()) {
+            throw new ResourceNotFoundException("Account with the given email not found");
+        }
+
+        if (!authentication.getName().equals(account.get().getEmail())) {
+            throw new AccessDeniedException("You are not authorized to delete this account");
+        }
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(loginDto.getPassword(), account.get().getPassword())) {
+            throw new AccessDeniedException("Incorrect password");
+        }
+
+        accountRepo.delete(account.get());
     }
 
     @Override
