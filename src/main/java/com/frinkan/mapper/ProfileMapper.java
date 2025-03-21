@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProfileMapper {
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
 
     public Profile toProfile(ProfileDto profileDto) {
         Profile profile = new Profile();

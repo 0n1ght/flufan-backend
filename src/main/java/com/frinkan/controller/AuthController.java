@@ -32,7 +32,7 @@ public class AuthController {
         return ResponseEntity.ok("Reset link sent to your email");
     }
 
-    @PutMapping("/reset-password") // Bylo postmapping
+    @PutMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
         passwordResetService.resetPassword(token, newPassword);
         return ResponseEntity.ok("Password successfully reset");

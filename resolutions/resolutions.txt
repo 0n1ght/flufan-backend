@@ -1,16 +1,8 @@
 todo now:
-Opinie {
-UserReview
-UserReviewRepo
-UserReviewService
-
-UserReviewDto
-UserReviewController
-}
 
 
 todo poprawki:
-password reset link and working
+password reset link and working (zadanie dla frontendu)
 w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link powinien moc tu byc
 Service system, w ProfileMapper nie przekazywane jest menu
 
