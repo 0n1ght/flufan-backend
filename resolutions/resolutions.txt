@@ -1,11 +1,7 @@
 todo now:
-21.
-logowanie z facebook, google, apple
-
---
-22.
-testy
-unit testing
+-- podsumowanie
+testy manualne
+testy jednostkowe
 
 
 todo later:
@@ -20,20 +16,23 @@ panel administracyjny do zarzadzania uzytkownikami i platnosciami
 25
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 
-26
 wiadomosci tekstowe i dzwonienie jako opcjonalne (jezeli cena wynosi -1 to blokowana jest mozliwosc wykupienia tej uslugi)
 Kupowanie zawieszone gdy w Profilu pole active=false
 
 todo poprawki:
-27-28
+26
 w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
 password reset link and working (zadanie dla frontendu)
 
+panel administracyjny, reczne akceptowanie nowo tworzonych profili
+
 
 todo last:
-29-30
+27-28
+logowanie z facebook, google, apple
+email, uzywany np. do linka z resetem hasla
 +wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
 +Zamienic baze danych H2 na PostgreSQL
-testy manualne + jednostkowe
+koncowe testy manualne + jednostkowe
