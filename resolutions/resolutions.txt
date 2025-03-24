@@ -1,40 +1,49 @@
-todo now:
-rodzaj profilu (youtuber/tiktoker/businessman etc.)
-testy manualne
-testy jednostkowe
-podsumowanie co mam do tej pory
-
-
-todo later:
-23-24
-wysylanie wiadomosci tylko po platnosciach
-
-platnosci (paypal/stripe) METODY: doladowane srodki + (metody: blik, przelewy24, applepay i googlepay, paypal, paysafecard ...)
-/ cryptoplatnosci dla anonimowych uzytkownikow? czy to bedzie bezpieczne; moga byc masowe ilosci hateu i grozb.
-osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
-panel administracyjny do zarzadzania uzytkownikami i platnosciami
-
-25
-w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
+todo NOW
+platnosci (wysylanie wiadomosci tylko po platnosciach):
+-Blik
+-Przelewy24
+-Apple Pay
+-Google Pay
+-Karta Kredytowa
+-PayPal
+-Paysafecard
 
 wiadomosci tekstowe i dzwonienie jako opcjonalne (jezeli cena wynosi -1 to blokowana jest mozliwosc wykupienia tej uslugi)
 Kupowanie zawieszone gdy w Profilu pole active=false
 
+w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
+
 todo poprawki:
-26
-w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
-password reset link and working (zadanie dla frontendu)
+-popraw wyszukiwanie profili
+-w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
+-password reset link and working (zadanie dla frontendu)
+todo later:
+-osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
+-panel administracyjny do zarzadzania wszystkim, baza danych, recznie akceptowanie nowo tworzonych profili
 
-popraw wyszukiwanie profili
-
-panel administracyjny, reczne akceptowanie nowo tworzonych profili
+todo By ChatGPT..
+System płatności to kluczowy brakujący element, ale warto dodać jeszcze kilka rzeczy:
+1. Płatności i rozliczenia
+Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
+Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
+Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
+System prowizji platformy.
+2. Rezerwacje wideorozmów
+Kalendarz dostępności influencera.
+Rezerwacja terminu, potwierdzenie płatności.
+Link do wideorozmowy (np. integracja z Twilio, Zoom API).
+3. Powiadomienia i UX
+Powiadomienia e-mail/SMS o nowej wiadomości, płatności itp.
+System ocen i opinii dla influencerów.
+Historia transakcji dla użytkownika i influencera.
+Jeśli chcesz szybko uruchomić MVP, skup się na płatnościach i podstawowej wersji wideorozmów.
 
 todo last:
 27-28
-logowanie z facebook, google, apple
-email, uzywany np. do linka z resetem hasla
-+wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
-.csrf(AbstractHttpConfigurer::disable)
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-+Zamienic baze danych H2 na PostgreSQL
-koncowe testy manualne + jednostkowe
+-logowanie z facebook, google, apple
+-email dla aplikacji, uzywany np. do wysylania linka z resetem hasla
+-wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
+    .csrf(AbstractHttpConfigurer::disable)
+            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+-Zamienic baze danych z H2 na PostgreSQL
+-testy manualne + jednostkowe
