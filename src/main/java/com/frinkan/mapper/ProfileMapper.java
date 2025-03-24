@@ -15,6 +15,7 @@ public class ProfileMapper {
     public Profile toProfile(ProfileDto profileDto) {
         Profile profile = new Profile();
         profile.setNick(profileDto.getNick());
+        profile.setTitle(profileDto.getTitle());
         profile.setVerified(false);
         profile.setActive(profileDto.getActive());
         profile.setFirstName(profileDto.getFirstName());
@@ -40,6 +41,7 @@ public class ProfileMapper {
         return new ProfileResDto(
                 profile.getId(),
                 profile.getNick(),
+                profile.getTitle(),
                 profile.isVerified(),
                 profile.isActive(),
                 profile.getFirstName(),

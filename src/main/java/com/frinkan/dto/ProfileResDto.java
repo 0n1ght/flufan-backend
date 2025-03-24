@@ -8,6 +8,7 @@ public class ProfileResDto {
     private Long id;
 
     private String nick;
+    private String title;
     private boolean verified;
     private boolean active;
     private String firstName;
@@ -24,12 +25,13 @@ public class ProfileResDto {
     private List<Service> menu;
     private Long accountId;
 
-    public ProfileResDto(Long id, String nick, boolean verified, boolean active, String firstName,
+    public ProfileResDto(Long id, String nick, String title, boolean verified, boolean active, String firstName,
                          String lastName, int interactionCounter, double rating, int respondTime, int messagePrice,
                          int callPrice, String profilePicturePath, List<String> linkedAccounts,
                          List<Service> menu, Long accountId) {
         this.id = id;
         this.nick = nick;
+        this.title = title;
         this.verified = verified;
         this.active = active;
         this.firstName = firstName;
@@ -59,6 +61,14 @@ public class ProfileResDto {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public boolean isVerified() {

@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
+    public ResponseEntity<String> resetPassword(@RequestBody String token, @RequestBody String newPassword) {
         passwordResetService.resetPassword(token, newPassword);
         return ResponseEntity.ok("Password successfully reset");
     }

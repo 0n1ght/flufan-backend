@@ -12,6 +12,7 @@ public class Profile {
     private Long id;
 
     private String nick;
+    private String title;
     private boolean verified;
     private boolean active;
     private String firstName;
@@ -51,6 +52,14 @@ public class Profile {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public boolean isVerified() {

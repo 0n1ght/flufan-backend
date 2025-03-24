@@ -6,6 +6,7 @@ import java.util.List;
 
 public class ProfileDto {
     private String nick;
+    private String title;
     private boolean active;
     private String firstName;
     private String lastName;
@@ -22,6 +23,14 @@ public class ProfileDto {
 
     public void setNick(String nick) {
         this.nick = nick;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public boolean getActive() {

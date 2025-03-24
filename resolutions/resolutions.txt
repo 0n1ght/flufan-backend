@@ -1,7 +1,8 @@
 todo now:
--- podsumowanie
+rodzaj profilu (youtuber/tiktoker/businessman etc.)
 testy manualne
 testy jednostkowe
+podsumowanie co mam do tej pory
 
 
 todo later:
@@ -24,8 +25,9 @@ todo poprawki:
 w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
 password reset link and working (zadanie dla frontendu)
 
-panel administracyjny, reczne akceptowanie nowo tworzonych profili
+popraw wyszukiwanie profili
 
+panel administracyjny, reczne akceptowanie nowo tworzonych profili
 
 todo last:
 27-28

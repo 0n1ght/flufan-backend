@@ -1,5 +1,6 @@
 package com.frinkan.service.impl;
 
+import com.frinkan.dto.AccountDto;
 import com.frinkan.dto.MessageDto;
 import com.frinkan.entity.Account;
 import com.frinkan.entity.Message;
@@ -42,20 +43,21 @@ public class MessageServiceImpl implements MessageService {
         Account currentUser = accountService.getAuthenticatedAccount(); // Pobierz obecnego użytkownika
         List<Message> messages = messageRepo.findConversation(currentUser.getId(), userId); // Pobierz wiadomości
 
-        // Mapowanie listy wiadomości na listę DTO
-        List<MessageDto> messageDtos = messages.stream().map(message -> {
+        return messages.stream().map(message -> {
+            AccountDto sender = accountMapper.toAccountDto(message.getSender());
+            sender.setEmail("");
+            AccountDto receiver = accountMapper.toAccountDto(message.getReceiver());
+            receiver.setEmail("");
             MessageDto messageDto = new MessageDto();
             messageDto.setId(message.getId());
-            messageDto.setSender(accountMapper.toAccountDto(message.getSender())); // Mapuj nadawcę na AccountDto
-            messageDto.setReceiver(accountMapper.toAccountDto(message.getReceiver())); // Mapuj odbiorcę na AccountDto
+            messageDto.setSender(sender);
+            messageDto.setReceiver(receiver);
             messageDto.setContent(message.getContent());
             messageDto.setSentAt(message.getSentAt());
             messageDto.setReadStatus(message.isReadStatus());
             messageDto.setMessageType(message.getMessageType());
             return messageDto;
         }).collect(Collectors.toList());
-
-        return messageDtos;
     }
 
     public void markAsRead(Long messageId) {

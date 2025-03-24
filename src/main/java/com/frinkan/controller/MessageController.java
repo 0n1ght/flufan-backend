@@ -1,8 +1,6 @@
 package com.frinkan.controller;
 
 import com.frinkan.dto.MessageDto;
-import com.frinkan.entity.Message;
-import com.frinkan.enums.MessageType;
 import com.frinkan.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
