@@ -1,5 +1,8 @@
-todo NOW
-platnosci (wysylanie wiadomosci tylko po platnosciach):
+TODO (DONE)
+<summary>
+
+TODO platnosci
+wysylanie wiadomosci tylko po platnosciach:
 -Blik
 -Przelewy24
 -Apple Pay
@@ -13,15 +16,16 @@ Kupowanie zawieszone gdy w Profilu pole active=false
 
 w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 
-todo poprawki:
+TODO poprawki:
 -popraw wyszukiwanie profili
 -w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
 -password reset link and working (zadanie dla frontendu)
-todo later:
+-Service ma pole type typu String, umozliwiajac customowe oferty
+TODO later:
 -osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
 -panel administracyjny do zarzadzania wszystkim, baza danych, recznie akceptowanie nowo tworzonych profili
 
-todo By ChatGPT..
+TODO By ChatGPT..
 System płatności to kluczowy brakujący element, ale warto dodać jeszcze kilka rzeczy:
 1. Płatności i rozliczenia
 Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
