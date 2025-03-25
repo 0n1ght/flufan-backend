@@ -1,8 +1,18 @@
 TODO (DONE)
 <summary>
 
+TODO now
+-popraw wyszukiwanie profili
+-w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
+-password reset link and working (zadanie dla frontendu)
+-Service powinien miec pole "type" typu String, umozliwiajac customowe oferty
 TODO platnosci
-wysylanie wiadomosci tylko po platnosciach:
+1. Płatności i rozliczenia
+Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
+Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
+Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
+System prowizji platformy.
+wysylanie wiadomosci,video rozmowy, zamownienia z menu tylko po platnosciach:
 -Blik
 -Przelewy24
 -Apple Pay
@@ -11,36 +21,17 @@ wysylanie wiadomosci tylko po platnosciach:
 -PayPal
 -Paysafecard
 
+w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
 wiadomosci tekstowe i dzwonienie jako opcjonalne (jezeli cena wynosi -1 to blokowana jest mozliwosc wykupienia tej uslugi)
 Kupowanie zawieszone gdy w Profilu pole active=false
 
-w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
-
-TODO poprawki:
--popraw wyszukiwanie profili
--w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
--password reset link and working (zadanie dla frontendu)
--Service ma pole type typu String, umozliwiajac customowe oferty
 TODO later:
--osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
--panel administracyjny do zarzadzania wszystkim, baza danych, recznie akceptowanie nowo tworzonych profili
-
-TODO By ChatGPT..
-System płatności to kluczowy brakujący element, ale warto dodać jeszcze kilka rzeczy:
-1. Płatności i rozliczenia
-Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
-Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
-Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
-System prowizji platformy.
-2. Rezerwacje wideorozmów
+-Rezerwacje wideorozmów
 Kalendarz dostępności influencera.
 Rezerwacja terminu, potwierdzenie płatności.
 Link do wideorozmowy (np. integracja z Twilio, Zoom API).
-3. Powiadomienia i UX
-Powiadomienia e-mail/SMS o nowej wiadomości, płatności itp.
-System ocen i opinii dla influencerów.
-Historia transakcji dla użytkownika i influencera.
-Jeśli chcesz szybko uruchomić MVP, skup się na płatnościach i podstawowej wersji wideorozmów.
+-osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
+-panel administracyjny do zarzadzania wszystkim, baza danych, recznie akceptowanie nowo tworzonych profili
 
 todo last:
 27-28
