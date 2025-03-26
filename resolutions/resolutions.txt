@@ -2,10 +2,7 @@ TODO (DONE)
 <summary>
 
 TODO now
--popraw wyszukiwanie profili (pozwolic nie uzywac znakow zpeclajnych, oraz sotrowanie wedlug interactionCounter)
--w Profile zestawy [platforma, nazwa], oraz filtrowac te dane
--Service powinien miec pole "type" typu String, umozliwiajac customowe oferty
--password reset link and working (zadanie dla frontendu)
+-Jak sa zapisywane obiekty Service ?
 TODO platnosci
 1. Płatności i rozliczenia
 Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
@@ -36,6 +33,8 @@ Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
 todo last:
 27-28
+-Przygotuj email wysylany do resetu hasla
+-pentesting, (injections) przeanalizuj kontrolery i parametry ktore sa zapisywane i wyswietlane innym
 -logowanie z facebook, google, apple
 -email dla aplikacji, uzywany np. do wysylania linka z resetem hasla
 -wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)

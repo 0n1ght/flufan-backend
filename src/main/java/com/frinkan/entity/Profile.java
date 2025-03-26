@@ -1,6 +1,6 @@
 package com.frinkan.entity;
 
-import com.frinkan.model.Service;
+import com.frinkan.model.LinkedAccount;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class Profile {
 
     @ElementCollection
     @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
-    private List<String> linkedAccounts;
+    private List<LinkedAccount> linkedAccounts;
 
     @OneToMany
     @JoinColumn(name = "profile_id")
@@ -142,11 +142,11 @@ public class Profile {
         this.profilePicturePath = profilePicturePath;
     }
 
-    public List<String> getLinkedAccounts() {
+    public List<LinkedAccount> getLinkedAccounts() {
         return linkedAccounts;
     }
 
-    public void setLinkedAccounts(List<String> linkedAccounts) {
+    public void setLinkedAccounts(List<LinkedAccount> linkedAccounts) {
         this.linkedAccounts = linkedAccounts;
     }
 

@@ -1,6 +1,5 @@
-package com.frinkan.model;
+package com.frinkan.entity;
 
-import com.frinkan.enums.ServiceType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,11 +11,11 @@ public class Service {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private ServiceType title;
+    private String title;
     private String description;
     private int price;
 
-    public Service(ServiceType title, String description, int price) {
+    public Service(String title, String description, int price) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -33,11 +32,11 @@ public class Service {
         this.id = id;
     }
 
-    public ServiceType getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(ServiceType title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
