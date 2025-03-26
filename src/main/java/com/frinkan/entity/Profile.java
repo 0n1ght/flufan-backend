@@ -14,7 +14,7 @@ public class Profile {
     private String nick;
     private String title;
     private boolean verified;
-    private boolean active;
+    private boolean active = true;
     private String firstName;
     private String lastName;
 

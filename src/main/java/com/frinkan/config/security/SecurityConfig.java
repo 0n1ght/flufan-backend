@@ -1,4 +1,4 @@
-package com.frinkan.config;
+package com.frinkan.config.security;
 
 import com.frinkan.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;

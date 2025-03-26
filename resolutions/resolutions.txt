@@ -2,10 +2,10 @@ TODO (DONE)
 <summary>
 
 TODO now
--popraw wyszukiwanie profili
--w ProfileDto konta social media powinny byc sprawdzane i filtrowane nie kazdy link moze tu byc
--password reset link and working (zadanie dla frontendu)
+-popraw wyszukiwanie profili (pozwolic nie uzywac znakow zpeclajnych, oraz sotrowanie wedlug interactionCounter)
+-w Profile zestawy [platforma, nazwa], oraz filtrowac te dane
 -Service powinien miec pole "type" typu String, umozliwiajac customowe oferty
+-password reset link and working (zadanie dla frontendu)
 TODO platnosci
 1. Płatności i rozliczenia
 Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
@@ -30,8 +30,9 @@ TODO later:
 Kalendarz dostępności influencera.
 Rezerwacja terminu, potwierdzenie płatności.
 Link do wideorozmowy (np. integracja z Twilio, Zoom API).
--osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
+
 -panel administracyjny do zarzadzania wszystkim, baza danych, recznie akceptowanie nowo tworzonych profili
+-osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
 
 todo last:
 27-28
