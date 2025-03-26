@@ -33,9 +33,9 @@ Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
 todo last:
 27-28
--Przygotuj email wysylany do resetu hasla
--pentesting, (injections) przeanalizuj kontrolery i parametry ktore sa zapisywane i wyswietlane innym
 -logowanie z facebook, google, apple
+-pentesting, (injections) przeanalizuj kontrolery i parametry ktore sa zapisywane i wyswietlane innym
+-Przygotuj email wysylany do resetu hasla
 -email dla aplikacji, uzywany np. do wysylania linka z resetem hasla
 -wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
     .csrf(AbstractHttpConfigurer::disable)
