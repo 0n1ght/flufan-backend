@@ -24,10 +24,4 @@ public interface ProfileRepo extends JpaRepository<Profile, Long> {
             "p.rating DESC, " +
             "p.respondTime ASC")
     List<Profile> searchByNickOrName(String searchVal);
-//    @Query("SELECT p FROM Profile p WHERE " +
-//            "LOWER(p.nick) LIKE LOWER(CONCAT('%', :searchVal, '%')) OR " +
-//            "LOWER(p.firstName) LIKE LOWER(CONCAT('%', :searchVal, '%')) OR " +
-//            "LOWER(p.lastName) LIKE LOWER(CONCAT('%', :searchVal, '%')) OR " +
-//            "LOWER(CONCAT(p.firstName, ' ', p.lastName)) LIKE LOWER(CONCAT('%', :searchVal, '%'))")
-//    List<Profile> searchByNickOrName(String searchVal);
 }

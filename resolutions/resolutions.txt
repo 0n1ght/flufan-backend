@@ -2,7 +2,6 @@ TODO (DONE)
 <summary>
 
 TODO now
--Jak sa zapisywane obiekty Service ?
 TODO platnosci
 1. Płatności i rozliczenia
 Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
@@ -33,10 +32,10 @@ Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
 todo last:
 27-28
--logowanie z facebook, google, apple
--pentesting, (injections) przeanalizuj kontrolery i parametry ktore sa zapisywane i wyswietlane innym
+-Logowanie z facebook, google, apple
+-Pentesting, (injections) przeanalizuj kontrolery i parametry ktore sa zapisywane,wyswietlane innym
 -Przygotuj email wysylany do resetu hasla
--email dla aplikacji, uzywany np. do wysylania linka z resetem hasla
+-Email dla aplikacji, uzywany np. do wysylania linka z resetem hasla
 -wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
     .csrf(AbstractHttpConfigurer::disable)
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))

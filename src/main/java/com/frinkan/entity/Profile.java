@@ -30,7 +30,7 @@ public class Profile {
     @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
     private List<LinkedAccount> linkedAccounts;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "profile_id")
     private List<Service> menu;
 
