@@ -1,42 +1,62 @@
-TODO (DONE)
-<summary>
-
-TODO platnosci
+TODO 1 (MAIN)
 1. Płatności i rozliczenia
-Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
-Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
-Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
-System prowizji platformy.
-Informacja o tym zeby wyslac zamowienie, przelew po realizacji
--Blik
--Przelewy24
--Apple Pay
--Google Pay
--Karta Kredytowa
--PayPal
--Paysafecard
+   - Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
+   - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
+   - Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
+   - System prowizji platformy.
+   - Informacja o tym, żeby wysłać zamówienie, przelew po realizacji.
+   - Obsługa dodatkowych metod płatności:
+     - Blik
+     - Przelewy24
+     - Apple Pay
+     - Google Pay
+     - Karta Kredytowa
+     - PayPal
+     - Paysafecard
+   - Możliwość dodania zdjęcia do wiadomości za +30% ceny.
+   - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
+   - Kupowanie zawieszone, gdy w profilu pole `active=false`.
 
-w trakcie wyslania wiadomosci mozna dolaczyc zdjecie za +30% ceny
-wiadomosci tekstowe i dzwonienie jako opcjonalne (jezeli cena wynosi -1 to blokowana jest mozliwosc wykupienia tej uslugi)
-Kupowanie zawieszone gdy w Profilu pole active=false
+2. Rezerwacje wideorozmów
+   - Kalendarz dostępności influencera.
+   - Rezerwacja terminu, potwierdzenie płatności.
+   - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
-TODO later:
--Rezerwacje wideorozmów
-Kalendarz dostępności influencera.
-Rezerwacja terminu, potwierdzenie płatności.
-Link do wideorozmowy (np. integracja z Twilio, Zoom API).
+TODO 2 (ADDITIONS)
+3. Panel administracyjny
+   - Zarządzanie użytkownikami, profilami i płatnościami.
+   - Baza danych, ręczne akceptowanie nowo tworzonych profili.
+   - Monitorowanie płatności (statusy transakcji).
+   - Możliwość edycji i usuwania kont oraz profili.
 
--panel administracyjny do zarzadzania wszystkim, baza danych, recznie akceptowanie nowo tworzonych profili
--osobny server ftp na zapisywanie zdjec/wiadomosci glosowych z konwersacji oraz zdjec profilowych
+4. Osobny serwer FTP
+   - Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
+   - Bezpieczne połączenie (SFTP).
 
-todo last:
-27-28
--Logowanie z facebook, google, apple
--Pentesting; (injections) przeanalizuj kontrolery, parametry ktore sa zapisywane, wyswietlane innym
--Przygotuj email wysylany do resetu hasla
--Email dla aplikacji, uzywany np. do wysylania linka z resetem hasla itp.
--wywalic produkcyjne linijki kodu z SecurityConfig (spytaj chatgpt ktore)
-    .csrf(AbstractHttpConfigurer::disable)
-            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
--Zamienic baze danych z H2 na PostgreSQL
--testy manualne + jednostkowe
+TODO 3 (FINAL)
+5. Domena, email, powiązanie kont
+   - Wykupienie domeny, założenie maila <nazwa>@<nazwa-domeny>.com.
+   - Założenie maila firmowego i powiązanie z kontami aplikacji 3rd party (np. Stripe, Google).
+
+6. Logowanie z Facebook, Google, Apple
+   - Implementacja logowania przez OAuth2.
+   - Potwierdzenie bezpieczeństwa logowania.
+
+7. Pentesting
+   - Testowanie aplikacji pod kątem podatności na ataki typu injection.
+   - Analiza kontrolerów i parametrów zapisywanych/wyświetlanych.
+
+8. Email dla aplikacji
+   - Przygotowanie emaila wysyłanego do resetu hasła.
+   - Email używany do wysyłania linków do resetu hasła i innych powiadomień.
+
+9. Konfiguracja SecurityConfig
+   - Usunięcie produkcyjnych linijek kodu (np. `.csrf(AbstractHttpConfigurer::disable)`, `.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))`).
+
+10. Zmiana bazy danych z H2 na PostgreSQL
+   - Przeprowadzenie migracji danych.
+   - Optymalizacja bazy danych (indeksy, backupy).
+
+11. Testy
+   - Testy manualne i jednostkowe.
+   - Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
