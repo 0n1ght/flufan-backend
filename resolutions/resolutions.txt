@@ -1,5 +1,5 @@
 TODO 1 (MAIN)
-1. Płatności i rozliczenia
+1. Płatności i rozliczenia (czwartek, piatek)
    - Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
    - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
    - Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
@@ -17,19 +17,19 @@ TODO 1 (MAIN)
    - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
    - Kupowanie zawieszone, gdy w profilu pole `active=false`.
 
-2. Rezerwacje wideorozmów
+2. Rezerwacje wideorozmów (sobota, niedziela)
    - Kalendarz dostępności influencera.
    - Rezerwacja terminu, potwierdzenie płatności.
    - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
 TODO 2 (ADDITIONS)
-3. Panel administracyjny
+3. Panel administracyjny (poniedzialek, wtorek)
    - Zarządzanie użytkownikami, profilami i płatnościami.
    - Baza danych, ręczne akceptowanie nowo tworzonych profili.
    - Monitorowanie płatności (statusy transakcji).
    - Możliwość edycji i usuwania kont oraz profili.
 
-4. Osobny serwer FTP
+4. Osobny serwer FTP (sroda, czwartek)
    - Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
    - Bezpieczne połączenie (SFTP).
 
@@ -60,3 +60,17 @@ TODO 3 (FINAL)
 11. Testy
    - Testy manualne i jednostkowe.
    - Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
+
+
+todo monetyzacja
+Subskrypcje premium – Influencerzy mogą płacić za lepszą widoczność, np. wyróżniony profil.
+
+Opłaty za promocję – Możliwość sponsorowania postów/profili w wynikach wyszukiwania.
+
+Reklamy – Umieszczanie reklam np. w formie banerów lub partnerstwa z markami.
+
+Opłaty za dodatkowe funkcje – Nagrywanie rozmów, dodatkowe filtry w wyszukiwaniu, integracja z social media.
+
+Marketplace usług – Pobieranie prowizji od sprzedaży dodatkowych usług np. konsultacji 1:1.
+
+White-label – Sprzedaż technologii (np. licencja na Twój system dla innych firm).
