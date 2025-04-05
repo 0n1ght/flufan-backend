@@ -1,4 +1,20 @@
-TODO 1 (MAIN)
+TODO day 1
+uslugi po zaplatach {
+    USLUGI:
+    -wiadomosc(
+    *na koncie usera lista do kogo moze wyslac ile wiadomosci
+    *podczas wysylania wiadomosci sprawdzany jest odbiorca i czy jest na liscie
+    *podczas wysylania wiadomosci sprawdzana jest liczba znakow)
+    -video rozmowa(
+    *notification na chacie
+    *notification dla influ
+    *wyslany link/przycisk do polaczenia na chacie)
+    -custom assets(
+    *powiadomienie na chat
+    *notification na konto influencera)
+}
+
+TODO day 2
 1. Płatności i rozliczenia (czwartek, piatek)
    - Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
    - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
@@ -17,12 +33,13 @@ TODO 1 (MAIN)
    - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
    - Kupowanie zawieszone, gdy w profilu pole `active=false`.
 
+TODO day 3
 2. Rezerwacje wideorozmów (sobota, niedziela)
    - Kalendarz dostępności influencera.
    - Rezerwacja terminu, potwierdzenie płatności.
    - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
-TODO 2 (ADDITIONS)
+TODO day 4
 3. Panel administracyjny (poniedzialek, wtorek)
    - Zarządzanie użytkownikami, profilami i płatnościami.
    - Baza danych, ręczne akceptowanie nowo tworzonych profili.
@@ -33,7 +50,7 @@ TODO 2 (ADDITIONS)
    - Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
    - Bezpieczne połączenie (SFTP).
 
-TODO 3 (FINAL)
+TODO day 5
 5. Domena, email, powiązanie kont
    - Wykupienie domeny, założenie maila <nazwa>@<nazwa-domeny>.com.
    - Założenie maila firmowego i powiązanie z kontami aplikacji 3rd party (np. Stripe, Google).
@@ -50,6 +67,7 @@ TODO 3 (FINAL)
    - Przygotowanie emaila wysyłanego do resetu hasła.
    - Email używany do wysyłania linków do resetu hasła i innych powiadomień.
 
+TODO day 6
 9. Konfiguracja SecurityConfig
    - Usunięcie produkcyjnych linijek kodu (np. `.csrf(AbstractHttpConfigurer::disable)`, `.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))`).
 
@@ -57,12 +75,14 @@ TODO 3 (FINAL)
    - Przeprowadzenie migracji danych.
    - Optymalizacja bazy danych (indeksy, backupy).
 
+TODO day 7
 11. Testy
    - Testy manualne i jednostkowe.
    - Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
 
 
 todo monetyzacja
+Subskrypcje premium dla influ - Nie placa prowizji.
 Subskrypcje premium – Influencerzy mogą płacić za lepszą widoczność, np. wyróżniony profil.
 
 Opłaty za promocję – Możliwość sponsorowania postów/profili w wynikach wyszukiwania.
