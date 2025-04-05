@@ -1,11 +1,7 @@
 package com.frinkan.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-
+import jakarta.persistence.*;
+import java.util.HashMap;
 import java.util.Map;
 
 @Entity
@@ -17,10 +13,14 @@ public class Account {
     private String username;
     private String email;
     private String password;
-    private Map<Long, Integer> availableMessages;
+
+    @ElementCollection
+    @MapKeyColumn(name = "receiver_id")
+    @Column(name = "message_count")
+    private Map<Long, Integer> availableMessages = new HashMap<>();
 
     @OneToOne
-    private Profile profile; // Powiązanie z Profile
+    private Profile profile;
 
     public Account(String username, String email, String password) {
         this.username = username;
@@ -77,5 +77,18 @@ public class Account {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return id != null && id.equals(account.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
