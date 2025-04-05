@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
+import java.util.Map;
+
 @Entity
 public class Account {
 
@@ -15,6 +17,7 @@ public class Account {
     private String username;
     private String email;
     private String password;
+    private Map<Long, Integer> availableMessages;
 
     @OneToOne
     private Profile profile; // Powiązanie z Profile
@@ -58,6 +61,14 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Map<Long, Integer> getAvailableMessages() {
+        return availableMessages;
+    }
+
+    public void setAvailableMessages(Map<Long, Integer> availableMessages) {
+        this.availableMessages = availableMessages;
     }
 
     public Profile getProfile() {

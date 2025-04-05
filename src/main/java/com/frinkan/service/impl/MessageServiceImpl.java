@@ -5,6 +5,8 @@ import com.frinkan.dto.MessageDto;
 import com.frinkan.entity.Account;
 import com.frinkan.entity.Message;
 import com.frinkan.enums.MessageType;
+import com.frinkan.exception.InsufficientMessagesException;
+import com.frinkan.exception.MessageLengthException;
 import com.frinkan.mapper.AccountMapper;
 import com.frinkan.repo.MessageRepo;
 import com.frinkan.service.AccountService;
@@ -28,9 +30,21 @@ public class MessageServiceImpl implements MessageService {
     }
 
     public void sendMessage(Long receiverId, String content, MessageType messageType) {
-        Account sender = accountService.getAuthenticatedAccount();
-        Account receiver = accountService.getById(receiverId);
+        if (content.isEmpty() || content.length() > 400) {
+            throw new MessageLengthException("Message has wrong length");
+        }
 
+        Account sender = accountService.getAuthenticatedAccount();
+
+        int availableMessages = sender.getAvailableMessages().getOrDefault(receiverId, 0);
+        if (availableMessages < 1) {
+            throw new InsufficientMessagesException("You can't send any messages to this receiver yet");
+        }
+
+        sender.getAvailableMessages().put(receiverId, availableMessages - 1);
+        accountService.updateAccount(sender);
+
+        Account receiver = accountService.getById(receiverId);
         Message message = new Message();
         message.setSender(sender);
         message.setReceiver(receiver);
@@ -38,6 +52,7 @@ public class MessageServiceImpl implements MessageService {
         message.setMessageType(messageType);
         messageRepo.save(message);
     }
+
 
     public List<MessageDto> getConversation(Long userId) {
         Account currentUser = accountService.getAuthenticatedAccount(); // Pobierz obecnego użytkownika

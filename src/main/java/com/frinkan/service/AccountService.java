@@ -12,4 +12,5 @@ public interface AccountService extends UserDetailsService {
     String verify(LoginDto loginDto);
     Account getById(Long id);
     void changeLoginData(LoginDto loginDto);
+    void updateAccount(Account account);
 }

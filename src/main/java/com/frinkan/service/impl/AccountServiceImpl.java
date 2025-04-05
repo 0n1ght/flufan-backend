@@ -127,4 +127,9 @@ public class AccountServiceImpl implements AccountService {
 
         accountRepo.save(accountToUpdate);
     }
+
+    @Override
+    public void updateAccount(Account account) {
+        accountRepo.save(account);
+    }
 }

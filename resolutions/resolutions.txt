@@ -1,17 +1,17 @@
 TODO day 1
-uslugi po zaplatach {
-    USLUGI:
+REALIZACJA USLUG:
     -wiadomosc(
-    *na koncie usera lista do kogo moze wyslac ile wiadomosci
-    *podczas wysylania wiadomosci sprawdzany jest odbiorca i czy jest na liscie
-    *podczas wysylania wiadomosci sprawdzana jest liczba znakow)
+    *odpowiadanie na wiadomosci
+    *powiadomienia o wiadomosciach)
+
+    -custom services(
+    *informacja na chat
+    *powiadomienie dla influencera)
+
     -video rozmowa(
     *notification na chacie
     *notification dla influ
     *wyslany link/przycisk do polaczenia na chacie)
-    -custom assets(
-    *powiadomienie na chat
-    *notification na konto influencera)
 }
 
 TODO day 2
