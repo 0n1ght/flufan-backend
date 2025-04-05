@@ -1,4 +1,20 @@
 TODO day 2
+stworz webhooki dla stripe
+REALIZACJA USLUG:
+    -wiadomsoc(
+    *odblokowanie mozliwosci wyslania wiadomosci i odpowiedzi na nia
+    -powiadomienie dla odbiorcy)
+
+    -custom services(
+    *informacja na chat
+    *powiadomienie dla influencera)
+
+    -video rozmowa(
+    *notification na chacie
+    *notification dla influ
+    *wyslany link/przycisk do polaczenia na chacie)
+}
+
 1. Płatności i rozliczenia (czwartek, piatek)
    - Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
    - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
@@ -16,18 +32,6 @@ TODO day 2
    - Możliwość dodania zdjęcia do wiadomości za +30% ceny.
    - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
    - Kupowanie zawieszone, gdy w profilu pole `active=false`.
-
-REALIZACJA USLUG:
-
-    -custom services(
-    *informacja na chat
-    *powiadomienie dla influencera)
-
-    -video rozmowa(
-    *notification na chacie
-    *notification dla influ
-    *wyslany link/przycisk do polaczenia na chacie)
-}
 
 TODO day 3
 2. Rezerwacje wideorozmów (sobota, niedziela)
