@@ -56,7 +56,10 @@ public class StripeServiceImpl implements StripeService {
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.BLIK)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.P24)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
-                .addLineItem(lineItem);
+                .addLineItem(lineItem)
+                .putMetadata("product_type", productRequest.getProductType() != null ? productRequest.getProductType() : "unknown")
+                .putMetadata("seller_id", productRequest.getSellerId() != null ? String.valueOf(productRequest.getSellerId()) : "0")
+                .putMetadata("email", productRequest.getEmail() != null ? productRequest.getEmail() : "not_provided");
 
         try {
             paramsBuilder.addPaymentMethodType(SessionCreateParams.PaymentMethodType.valueOf("PAYPAL"));

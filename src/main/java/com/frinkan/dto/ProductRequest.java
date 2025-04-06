@@ -4,16 +4,20 @@ public class ProductRequest {
     private Long amount;
     private Long quantity;
     private String name;
+    private String productType;
+    private Long sellerId;
     private String currency;
     private String email;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(Long amount, Long quantity, String name, String currency, String email) {
+    public ProductRequest(Long amount, Long quantity, String name, String productType, Long sellerId, String currency, String email) {
         this.amount = amount;
         this.quantity = quantity;
         this.name = name;
+        this.productType = productType;
+        this.sellerId = sellerId;
         this.currency = currency;
         this.email = email;
     }
@@ -40,6 +44,22 @@ public class ProductRequest {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
+    public Long getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(Long sellerId) {
+        this.sellerId = sellerId;
     }
 
     public String getCurrency() {
