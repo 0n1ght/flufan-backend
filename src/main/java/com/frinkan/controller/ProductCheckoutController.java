@@ -24,8 +24,7 @@ public class ProductCheckoutController {
     @PostMapping("/checkout")
     public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody ProductRequest productRequest) {
         StripeResponse stripeResponse = stripeService.checkoutProducts(productRequest);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(stripeResponse);
+        HttpStatus status = stripeResponse.getStatus().equals("SUCCESS") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(stripeResponse);
     }
 }

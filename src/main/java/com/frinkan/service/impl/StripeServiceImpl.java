@@ -16,7 +16,19 @@ public class StripeServiceImpl implements StripeService {
     @Value("${stripe.secretKey}")
     private String secretKey;
 
+    @Value("${stripe.successUrl}")
+    private String successUrl;
+
+    @Value("${stripe.cancelUrl}")
+    private String cancelUrl;
+
     public StripeResponse checkoutProducts(ProductRequest productRequest) {
+        if (productRequest.getAmount() == null || productRequest.getAmount() <= 0 ||
+                productRequest.getQuantity() == null || productRequest.getQuantity() <= 0 ||
+                productRequest.getName() == null || productRequest.getName().isEmpty()) {
+            return new StripeResponse("FAILED", "Invalid request parameters", null, null);
+        }
+
         Stripe.apiKey = secretKey;
 
         SessionCreateParams.LineItem.PriceData.ProductData productData =
@@ -39,36 +51,26 @@ public class StripeServiceImpl implements StripeService {
 
         SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:8080/success")
-                .setCancelUrl("http://localhost:8080/cancel")
+                .setSuccessUrl(successUrl)
+                .setCancelUrl(cancelUrl)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.BLIK)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.P24)
-                // Karta kredytowa – dzięki niej na urządzeniach Apple/Android wyświetlą się Apple Pay/Google Pay
-                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD);
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .addLineItem(lineItem);
 
         try {
             paramsBuilder.addPaymentMethodType(SessionCreateParams.PaymentMethodType.valueOf("PAYPAL"));
         } catch (IllegalArgumentException _) {}
 
-        paramsBuilder.addLineItem(lineItem);
-
         if (productRequest.getEmail() != null) {
             paramsBuilder.setCustomerEmail(productRequest.getEmail());
         }
 
-        SessionCreateParams params = paramsBuilder.build();
-
         try {
-            Session session = Session.create(params);
-            return new StripeResponse("SUCCESS",
-                    "Payment session created",
-                    session.getId(),
-                    session.getUrl());
+            Session session = Session.create(paramsBuilder.build());
+            return new StripeResponse("SUCCESS", "Payment session created", session.getId(), session.getUrl());
         } catch (StripeException e) {
-            return new StripeResponse("FAILED",
-                    "StripeException: " + e.getMessage(),
-                    null,
-                    null);
+            return new StripeResponse("FAILED", "Stripe error: " + e.getMessage(), null, null);
         }
     }
 }
