@@ -1,6 +1,8 @@
 package com.frinkan.controller;
 
+import com.frinkan.entity.Account;
 import com.frinkan.service.AccountService;
+import com.frinkan.service.OrderService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
 import com.stripe.model.checkout.Session;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,7 +28,7 @@ public class StripeWebhookController {
     private String endpointSecret;
 
     @Autowired
-    private AccountService accountService;
+    private OrderService orderService;
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleStripeWebhook(HttpServletRequest request) throws IOException {
@@ -45,15 +48,22 @@ public class StripeWebhookController {
                 String email = session.getCustomerEmail();
                 String sessionId = session.getId();
                 String productType = session.getMetadata().get("product_type");
-                String sellerId = session.getMetadata().get("seller_id");
+                long buyerId = Long.parseLong(session.getMetadata().get("buyer_id"));
+                long sellerId = Long.parseLong(session.getMetadata().get("seller_id"));
+                long quantity = Long.parseLong(session.getMetadata().get("quantity"));
 
-                System.out.println("Payment completed:");
-                System.out.println("Email: " + email);
-                System.out.println("Session ID: " + sessionId);
-                System.out.println("Product Type: " + productType);
-                System.out.println("Seller ID: " + sellerId);
                 //todo
-                // iteracja po opcjach, dodawanie mozliwosci do konta
+                // jezeli productType to wiadomosci, zwieksz
+                // iteracja po opcjach
+                // w zaleznosci od opcji: dodawanie zakupionej rzeczy do konta
+                // 2. Co jak ktos zmieni dane profilu, konta po zakupie przez kogos innego ? Zeby realizacja uslugi dalej byla aktualna
+                // SPRAWDZANIE CZY ZAPLACONA CENA SIE ZGADZA
+
+                switch (productType) {
+                    case "message" -> orderService.addMessageToAcc(buyerId, sellerId, quantity);
+                    case "call" -> orderService.addCallToAcc(buyerId, sellerId);
+                    case "service" -> orderService.addServiceToAcc(buyerId, sellerId, quantity);
+                }
             }
         }
 

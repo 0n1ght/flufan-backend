@@ -36,7 +36,7 @@ public class MessageServiceImpl implements MessageService {
 
         Account sender = accountService.getAuthenticatedAccount();
 
-        int availableMessages = sender.getAvailableMessages().getOrDefault(receiverId, 0);
+        long availableMessages = sender.getAvailableMessages().getOrDefault(receiverId, 0L);
         if (availableMessages < 1) {
             throw new InsufficientMessagesException("You can't send any messages to this receiver yet");
         }
@@ -51,6 +51,9 @@ public class MessageServiceImpl implements MessageService {
         message.setContent(content);
         message.setMessageType(messageType);
         messageRepo.save(message);
+
+        receiver.setNotifications(receiver.getNotifications()+1);
+        accountService.updateAccount(receiver);
     }
 
 

@@ -5,6 +5,7 @@ public class ProductRequest {
     private Long quantity;
     private String name;
     private String productType;
+    private Long buyerId;
     private Long sellerId;
     private String currency;
     private String email;
@@ -12,11 +13,12 @@ public class ProductRequest {
     public ProductRequest() {
     }
 
-    public ProductRequest(Long amount, Long quantity, String name, String productType, Long sellerId, String currency, String email) {
+    public ProductRequest(Long amount, Long quantity, String name, String productType, Long buyerId, Long sellerId, String currency, String email) {
         this.amount = amount;
         this.quantity = quantity;
         this.name = name;
         this.productType = productType;
+        this.buyerId = buyerId;
         this.sellerId = sellerId;
         this.currency = currency;
         this.email = email;
@@ -52,6 +54,14 @@ public class ProductRequest {
 
     public void setProductType(String productType) {
         this.productType = productType;
+    }
+
+    public Long getBuyerId() {
+        return buyerId;
+    }
+
+    public void setBuyerId(Long buyerId) {
+        this.buyerId = buyerId;
     }
 
     public Long getSellerId() {

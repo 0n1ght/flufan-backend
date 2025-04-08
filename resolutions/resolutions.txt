@@ -1,9 +1,9 @@
 TODO day 2
-stworz webhooki dla stripe
+luka bezpieczenstwa, ktos moze wyslac wiadomosc o tymie BOUGHT_SERVICE
+klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+zamien pole int notifications w Account na List<Enum/String> notifications
+
 REALIZACJA USLUG:
-    -wiadomsoc(
-    *odblokowanie mozliwosci wyslania wiadomosci i odpowiedzi na nia
-    -powiadomienie dla odbiorcy)
 
     -custom services(
     *informacja na chat
@@ -16,7 +16,7 @@ REALIZACJA USLUG:
 }
 
 1. Płatności i rozliczenia (czwartek, piatek)
-   - Integracja z bramką płatności (Stripe, PayPal, Przelewy24).
+   - Integracja z bramką płatności (Stripe, PayPal, Przelewy24, PaysafeCard).
    - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
    - Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
    - System prowizji platformy.
@@ -33,6 +33,9 @@ REALIZACJA USLUG:
    - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
    - Kupowanie zawieszone, gdy w profilu pole `active=false`.
 
+fix 3. Co jak ktos zmieni dane profilu po zakupie przez kogos innego ? Zeby realizacja uslugi dalej byla aktualna
+fix jezeli influencer usunie swoje konto, ludzie ktorzy cos kupili a to nie zostalo zrealizowane otrzymaja zwrot, albo moze beda musieli to wykorzystac nie dostac tego i dopiero zwrot
+
 TODO day 3
 2. Rezerwacje wideorozmów (sobota, niedziela)
    - Kalendarz dostępności influencera.
@@ -40,6 +43,7 @@ TODO day 3
    - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
 TODO day 4
+
 3. Panel administracyjny (poniedzialek, wtorek)
    - Zarządzanie użytkownikami, profilami i płatnościami.
    - Baza danych, ręczne akceptowanie nowo tworzonych profili.

@@ -13,11 +13,12 @@ public class Account {
     private String username;
     private String email;
     private String password;
+    private int notifications = 0;
 
     @ElementCollection
     @MapKeyColumn(name = "receiver_id")
     @Column(name = "message_count")
-    private Map<Long, Integer> availableMessages = new HashMap<>();
+    private Map<Long, Long> availableMessages = new HashMap<>();
 
     @OneToOne
     private Profile profile;
@@ -63,11 +64,11 @@ public class Account {
         this.password = password;
     }
 
-    public Map<Long, Integer> getAvailableMessages() {
+    public Map<Long, Long> getAvailableMessages() {
         return availableMessages;
     }
 
-    public void setAvailableMessages(Map<Long, Integer> availableMessages) {
+    public void setAvailableMessages(Map<Long, Long> availableMessages) {
         this.availableMessages = availableMessages;
     }
 
@@ -77,6 +78,14 @@ public class Account {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    public int getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(int notifications) {
+        this.notifications = notifications;
     }
 
     @Override

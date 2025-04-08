@@ -6,7 +6,7 @@ import com.frinkan.enums.MessageType;
 import java.util.List;
 
 public interface MessageService {
-    public void sendMessage(Long receiverId, String content, MessageType messageType);
-    public List<MessageDto> getConversation(Long userId);
-    public void markAsRead(Long messageId);
+    void sendMessage(Long receiverId, String content, MessageType messageType);
+    List<MessageDto> getConversation(Long userId);
+    void markAsRead(Long messageId);
 }

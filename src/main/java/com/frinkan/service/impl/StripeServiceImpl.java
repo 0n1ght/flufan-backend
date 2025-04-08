@@ -58,7 +58,9 @@ public class StripeServiceImpl implements StripeService {
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .addLineItem(lineItem)
                 .putMetadata("product_type", productRequest.getProductType() != null ? productRequest.getProductType() : "unknown")
-                .putMetadata("seller_id", productRequest.getSellerId() != null ? String.valueOf(productRequest.getSellerId()) : "0")
+                .putMetadata("buyer_id", productRequest.getBuyerId() != null ? String.valueOf(productRequest.getBuyerId()) : "-1")
+                .putMetadata("seller_id", productRequest.getSellerId() != null ? String.valueOf(productRequest.getSellerId()) : "-1")
+                .putMetadata("quantity", String.valueOf(productRequest.getQuantity()))
                 .putMetadata("email", productRequest.getEmail() != null ? productRequest.getEmail() : "not_provided");
 
         try {
