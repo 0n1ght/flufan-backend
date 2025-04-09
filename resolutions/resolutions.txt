@@ -1,13 +1,17 @@
 TODO day 2
-luka bezpieczenstwa, ktos moze wyslac wiadomosc o tymie BOUGHT_SERVICE
-klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+walidacja podczas generowania linka do zakupu (a nie podczas realizacji po webhooku):
+1. czy produkt istnieje u wybranego sellera
+2. czy produkt da sie kupic u wybranego sellera
+3. ustawienie odpowiedniej ceny produktu
+
+4. generowanie linka
+
+
 zamien pole int notifications w Account na List<Enum/String> notifications
+klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+dolacz opcje "mozliwosc bezplatnej wiadomosci" przy zakupie serwisu
 
 REALIZACJA USLUG:
-
-    -custom services(
-    *informacja na chat
-    *powiadomienie dla influencera)
 
     -video rozmowa(
     *notification na chacie

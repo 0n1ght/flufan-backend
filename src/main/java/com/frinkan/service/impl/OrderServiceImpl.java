@@ -2,12 +2,14 @@ package com.frinkan.service.impl;
 
 import com.frinkan.entity.Account;
 import com.frinkan.enums.MessageType;
+import com.frinkan.exception.ServiceNotFoundException;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.MessageService;
 import com.frinkan.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -51,21 +53,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addServiceToAcc(long buyerId, long sellerId, long quantity) {
-        Account buyerAccount = accountService.getById(buyerId);
+    public void addServiceToAcc(long buyerId, long sellerId, String productName, long quantity) {
         Account sellerAccount = accountService.getById(sellerId);
         //todo
-        // dodaj wiadomosc na chat "informacje"
-        // dodaj powiadomienie dla sellerId
         // dodaj mozliwosc realizacji uslugi przez sellera
-        // jezeli sellerAccount.getProfile().getMenu() zawiera rzecz ktora ktos kupil, to ona tu jest
-        // dodaj do konta liste z zakupionymi serwisami tak jak z wiadomosciami. obniz tutaj licznik po wykonaniu
+        List<com.frinkan.entity.Service> menu = sellerAccount.getProfile().getMenu();
+        if (menu.stream()
+                .noneMatch(service -> productName.equalsIgnoreCase(service.getTitle())))
+            throw new ServiceNotFoundException("Service not found");
 
-//        messageService.sendMessage(sellerId, sellerAccount.getProfile().getMenu(), MessageType.BOUGHT_SERVICE);
-
+        messageService.sendMessage(sellerId, productName, MessageType.BOUGHT_SERVICE);
         sellerAccount.setNotifications(sellerAccount.getNotifications()+1);
-
-        accountService.updateAccount(buyerAccount);
         accountService.updateAccount(sellerAccount);
     }
 }

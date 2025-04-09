@@ -2,6 +2,8 @@ package com.frinkan.entity;
 
 import com.frinkan.model.LinkedAccount;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,11 +30,11 @@ public class Profile {
 
     @ElementCollection
     @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
-    private List<LinkedAccount> linkedAccounts;
+    private List<LinkedAccount> linkedAccounts = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "profile_id")
-    private List<Service> menu;
+    private List<Service> menu = new ArrayList<>();
 
     @OneToOne(mappedBy = "profile")
     private Account account;

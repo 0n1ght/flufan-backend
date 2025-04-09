@@ -48,21 +48,20 @@ public class StripeWebhookController {
                 String email = session.getCustomerEmail();
                 String sessionId = session.getId();
                 String productType = session.getMetadata().get("product_type");
+                String productName = session.getMetadata().get("product_name");
                 long buyerId = Long.parseLong(session.getMetadata().get("buyer_id"));
                 long sellerId = Long.parseLong(session.getMetadata().get("seller_id"));
                 long quantity = Long.parseLong(session.getMetadata().get("quantity"));
 
                 //todo
-                // jezeli productType to wiadomosci, zwieksz
-                // iteracja po opcjach
-                // w zaleznosci od opcji: dodawanie zakupionej rzeczy do konta
                 // 2. Co jak ktos zmieni dane profilu, konta po zakupie przez kogos innego ? Zeby realizacja uslugi dalej byla aktualna
                 // SPRAWDZANIE CZY ZAPLACONA CENA SIE ZGADZA
+                // kontrolowane generowanie linkow do platnosci, i nie bedzie trzeba validowac platnosci po zakupie (ceny)
 
                 switch (productType) {
                     case "message" -> orderService.addMessageToAcc(buyerId, sellerId, quantity);
                     case "call" -> orderService.addCallToAcc(buyerId, sellerId);
-                    case "service" -> orderService.addServiceToAcc(buyerId, sellerId, quantity);
+                    case "service" -> orderService.addServiceToAcc(buyerId, sellerId, productName, quantity);
                 }
             }
         }

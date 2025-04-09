@@ -6,6 +6,7 @@ import com.frinkan.entity.Account;
 import com.frinkan.entity.Message;
 import com.frinkan.enums.MessageType;
 import com.frinkan.exception.InsufficientMessagesException;
+import com.frinkan.exception.MessageDoesNotExist;
 import com.frinkan.exception.MessageLengthException;
 import com.frinkan.mapper.AccountMapper;
 import com.frinkan.repo.MessageRepo;
@@ -32,6 +33,9 @@ public class MessageServiceImpl implements MessageService {
     public void sendMessage(Long receiverId, String content, MessageType messageType) {
         if (content.isEmpty() || content.length() > 400) {
             throw new MessageLengthException("Message has wrong length");
+        }
+        if (messageType.equals(MessageType.BOUGHT_SERVICE)) {
+            throw new MessageDoesNotExist("Wrong message");
         }
 
         Account sender = accountService.getAuthenticatedAccount();

@@ -56,16 +56,14 @@ public class StripeServiceImpl implements StripeService {
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.BLIK)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.P24)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
+                .addPaymentMethodType(SessionCreateParams.PaymentMethodType.PAYPAL)
                 .addLineItem(lineItem)
                 .putMetadata("product_type", productRequest.getProductType() != null ? productRequest.getProductType() : "unknown")
+                .putMetadata("product_name", productRequest.getName() != null ? productRequest.getName() : "unknown")
                 .putMetadata("buyer_id", productRequest.getBuyerId() != null ? String.valueOf(productRequest.getBuyerId()) : "-1")
                 .putMetadata("seller_id", productRequest.getSellerId() != null ? String.valueOf(productRequest.getSellerId()) : "-1")
                 .putMetadata("quantity", String.valueOf(productRequest.getQuantity()))
                 .putMetadata("email", productRequest.getEmail() != null ? productRequest.getEmail() : "not_provided");
-
-        try {
-            paramsBuilder.addPaymentMethodType(SessionCreateParams.PaymentMethodType.valueOf("PAYPAL"));
-        } catch (IllegalArgumentException _) {}
 
         if (productRequest.getEmail() != null) {
             paramsBuilder.setCustomerEmail(productRequest.getEmail());
