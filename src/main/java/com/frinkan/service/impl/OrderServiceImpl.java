@@ -18,9 +18,9 @@ public class OrderServiceImpl implements OrderService {
     private MessageService messageService;
 
     @Override
-    public void realiseMessage(long buyerId, long sellerId, long quantity) {
-        addSendMessageToAcc(buyerId, sellerId, quantity);
-        addSendMessageToAcc(sellerId, buyerId, quantity);
+    public void realiseMessage(long buyerId, long sellerId, String content, String details) {
+        messageService.sendMessage(sellerId, content, MessageType.valueOf(details.toUpperCase()));
+        addRepliesToAcc(sellerId, buyerId, 1);
     }
 
     @Override
@@ -33,23 +33,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void realiseService(long buyerId, long sellerId, String productName, long quantity) {
-        Account sellerAccount = accountService.getById(sellerId);
-
-        messageService.sendMessage(sellerId, productName, MessageType.BOUGHT_SERVICE);
-        addSendMessageToAcc(sellerId, buyerId, quantity);
+    public void realiseService(long buyerId, long sellerId, String productName, long quantity, String details) {
+        messageService.sendMessage(sellerId, productName+"\n"+details, MessageType.BOUGHT_SERVICE);
+        addRepliesToAcc(sellerId, buyerId, quantity);
     }
 
-    private void addSendMessageToAcc(long senderId, long receiverId, long quantity) {
+    private void addRepliesToAcc(long senderId, long receiverId, long quantity) {
         Account acc = accountService.getById(senderId);
 
-        Map<Long, Long> buyerAvailableMessages = acc.getAvailableMessages();
-        Long buyerCurrentCount = buyerAvailableMessages.get(receiverId);
+        Map<Long, Long> buyerAvailableReplies = acc.getAvailableReplies();
+        Long buyerCurrentCount = buyerAvailableReplies.get(receiverId);
         if (buyerCurrentCount == null) {
             buyerCurrentCount = 0L;
         }
-        buyerAvailableMessages.put(receiverId, buyerCurrentCount + quantity);
-        acc.setAvailableMessages(buyerAvailableMessages);
+        buyerAvailableReplies.put(receiverId, buyerCurrentCount + quantity);
+        acc.setAvailableReplies(buyerAvailableReplies);
         accountService.updateAccount(acc);
     }
 }

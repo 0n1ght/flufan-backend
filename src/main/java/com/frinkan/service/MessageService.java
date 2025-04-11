@@ -9,4 +9,5 @@ public interface MessageService {
     void sendMessage(Long receiverId, String content, MessageType messageType);
     List<MessageDto> getConversation(Long userId);
     void markAsRead(Long messageId);
+    boolean wasConversation(long user1Id, long user2Id);
 }

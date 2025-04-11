@@ -19,7 +19,6 @@ public class AccountController {
 
     @PostMapping(value = "/req/signup", consumes = "application/json")
     public void register(@RequestBody RegisterDto registerDto) {
-        registerDto.setPassword(registerDto.getPassword());
         accountService.saveAccount(registerDto);
     }
 

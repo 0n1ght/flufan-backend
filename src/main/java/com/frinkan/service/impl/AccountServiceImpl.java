@@ -56,10 +56,13 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void saveAccount(RegisterDto accountDto) {
-        Optional<Account> existingAccount = accountRepo.findByEmail(accountDto.getEmail());
-        if (existingAccount.isPresent()) {
+
+        if (accountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already in use");
+        } else if (accountRepo.findByUsername(accountDto.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username is already in use");
         }
+
         accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), passwordEncoder.encode(accountDto.getPassword())));
     }
 

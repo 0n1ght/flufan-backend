@@ -2,7 +2,6 @@ package com.frinkan.service.impl;
 
 import com.frinkan.entity.Account;
 import com.frinkan.enums.ProductType;
-import com.frinkan.exception.ServiceNotFoundException;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.StripeService;
 import com.stripe.Stripe;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.frinkan.dto.ProductRequest;
 import com.frinkan.dto.StripeResponse;
 
-import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -39,10 +37,13 @@ public class StripeServiceImpl implements StripeService {
 
         if (productRequest.getQuantity() == null || productRequest.getQuantity() <= 0 ||
                 productRequest.getName() == null || productRequest.getName().isEmpty() ||
-                (productRequest.getProductType().equals(ProductType.MESSAGE) && sellerAccount.getProfile().getMessagePrice() == -1) ||
-                (productRequest.getProductType().equals(ProductType.CALL) && sellerAccount.getProfile().getCallPrice() == -1) ||
-                (productRequest.getProductType().equals(ProductType.SERVICE) && sellerAccount.getProfile().getMenu().stream()
+                (productRequest.getProductType() == ProductType.MESSAGE &&
+                        (sellerAccount.getProfile().getMessagePrice() == -1 || productRequest.getQuantity() != 1)) ||
+                (productRequest.getProductType() == ProductType.CALL &&
+                        (sellerAccount.getProfile().getCallPrice() == -1 || productRequest.getQuantity() != 1)) ||
+                (productRequest.getProductType() == ProductType.SERVICE && sellerAccount.getProfile().getMenu().stream()
                         .noneMatch(service -> productRequest.getName().equalsIgnoreCase(service.getTitle()))) ||
+                (productRequest.getProductType() == ProductType.MESSAGE && productRequest.getName().length() > 700) ||
                 !sellerAccount.getProfile().isActive()) {
             return new StripeResponse("FAILED", "Invalid request parameters", null, null);
         }
@@ -80,6 +81,7 @@ public class StripeServiceImpl implements StripeService {
                 .addLineItem(lineItem)
                 .putMetadata("product_type", productRequest.getProductType() != null ? productRequest.getProductType().name() : "unknown")
                 .putMetadata("product_name", productRequest.getName() != null ? productRequest.getName() : "unknown")
+                .putMetadata("product_details", productRequest.getDetails() != null ? productRequest.getDetails() : "unknown")
                 .putMetadata("buyer_id", authenticatedAccount.getId() != null ? String.valueOf(authenticatedAccount.getId()) : "-1")
                 .putMetadata("seller_id", productRequest.getSellerId() != null ? String.valueOf(productRequest.getSellerId()) : "-1")
                 .putMetadata("quantity", String.valueOf(productRequest.getQuantity()))

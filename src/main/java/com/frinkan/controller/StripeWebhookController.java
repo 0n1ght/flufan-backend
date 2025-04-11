@@ -44,14 +44,15 @@ public class StripeWebhookController {
             if (session != null) {
                 String productType = session.getMetadata().get("product_type");
                 String productName = session.getMetadata().get("product_name");
+                String details = session.getMetadata().get("product_details");
                 long buyerId = Long.parseLong(session.getMetadata().get("buyer_id"));
                 long sellerId = Long.parseLong(session.getMetadata().get("seller_id"));
                 long quantity = Long.parseLong(session.getMetadata().get("quantity"));
 
                 switch (productType.toLowerCase()) {
-                    case "message" -> orderService.realiseMessage(buyerId, sellerId, quantity);
+                    case "message" -> orderService.realiseMessage(buyerId, sellerId, productName, details);
                     case "call" -> orderService.realiseCall(buyerId, sellerId);
-                    case "service" -> orderService.realiseService(buyerId, sellerId, productName, quantity);
+                    case "service" -> orderService.realiseService(buyerId, sellerId, productName, quantity, details);
                 }
             }
         }

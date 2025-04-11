@@ -1,31 +1,7 @@
-TODO day 2
-REFACTORING BUYING AND REALISING ORDER
-wysylany jest request z wiadomoscia po platnosci
-weryfikowana jest wiadomosc czy format jest poprawny, ilosc znakow itp
-generowany jest link do platnosci
-po webhooku po platnosci wiadomosc zostaje wyslana
-
-realizacja zakupionej uslugi service
-(podczas zakupu mozna dolaczyc wiadomosc bezplatna jezeli influ wyrazil na to zgode)
-seller moze wysylac wiadomosci jako drugi dopiero podczas odpisywania
-
-zamien pole int notifications w Account na List<Enum/String> notifications
-
-dolacz opcje "mozliwosc bezplatnej wiadomosci" przy zakupie serwisu
-
-opinie moga byc wystawione tylko jezeli:
-1. zostalo cos juz zakupione
-2. nie wystawiona zostala juz wczesniej opinia
-
+todo 1
 klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
 
-REALIZACJA USLUG:
-    -video rozmowa(
-    *notification na chacie
-    *notification dla influ
-    *wyslany link/przycisk do polaczenia na chacie)
-}
-
+todo 2
 1. Płatności i rozliczenia (czwartek, piatek)
    - Integracja z bramką płatności (Stripe, PayPal, Przelewy24, PaysafeCard).
    - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
@@ -44,10 +20,16 @@ REALIZACJA USLUG:
    - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
    - Kupowanie zawieszone, gdy w profilu pole `active=false`.
 
-fix jezeli influencer usunie swoje konto, ludzie ktorzy cos kupili a to nie zostalo zrealizowane otrzymaja zwrot, albo moze beda musieli to wykorzystac nie dostac tego i dopiero zwrot
-
+todo 3
 zwracanie pieniedzy jesli influencer chce, zwracanie jakiegos %
+
 TODO day 3
+REALIZACJA USLUG:
+    -video rozmowa(
+    *notification na chacie
+    *notification dla influ
+    *wyslany link/przycisk do polaczenia na chacie)
+}
 2. Rezerwacje wideorozmów (sobota, niedziela)
    - Kalendarz dostępności influencera.
    - Rezerwacja terminu, potwierdzenie płatności.
@@ -98,17 +80,3 @@ TODO day 7
 todo idea
 generowanie kodu: jezeli ktos namowi influencera, a on wpisze
 jego kod przy zakladaniu profilu- procent ze sprzedazy leci do tej osoby
-
-todo monetyzacja
-Subskrypcje premium dla influ - Nie placa prowizji.
-Subskrypcje premium – Influencerzy mogą płacić za lepszą widoczność, np. wyróżniony profil.
-
-Opłaty za promocję – Możliwość sponsorowania postów/profili w wynikach wyszukiwania.
-
-Reklamy – Umieszczanie reklam np. w formie banerów lub partnerstwa z markami.
-
-Opłaty za dodatkowe funkcje – Nagrywanie rozmów, dodatkowe filtry w wyszukiwaniu, integracja z social media.
-
-Marketplace usług – Pobieranie prowizji od sprzedaży dodatkowych usług np. konsultacji 1:1.
-
-White-label – Sprzedaż technologii (np. licencja na Twój system dla innych firm).

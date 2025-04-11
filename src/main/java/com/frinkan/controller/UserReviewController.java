@@ -31,7 +31,7 @@ public class UserReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<UserReviewDto> createReview(@RequestBody UserReviewDto userReviewDto) {
+    public ResponseEntity<UserReviewDto> addReview(@RequestBody UserReviewDto userReviewDto) {
         userReviewService.saveReview(userReviewDto);
         return ResponseEntity.ok(userReviewDto);
     }

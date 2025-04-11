@@ -24,4 +24,5 @@ public interface ProfileRepo extends JpaRepository<Profile, Long> {
             "p.rating DESC, " +
             "p.respondTime ASC")
     List<Profile> searchByNickOrName(String searchVal);
+    Optional<Profile> findById(Long id);
 }

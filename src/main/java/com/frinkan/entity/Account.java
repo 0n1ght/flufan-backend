@@ -1,7 +1,11 @@
 package com.frinkan.entity;
 
+import com.frinkan.model.Notification;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -13,12 +17,14 @@ public class Account {
     private String username;
     private String email;
     private String password;
-    private int notifications = 0;
+
+    @ElementCollection
+    private List<Notification> notifications = new ArrayList<>();
 
     @ElementCollection
     @MapKeyColumn(name = "receiver_id")
     @Column(name = "message_count")
-    private Map<Long, Long> availableMessages = new HashMap<>();
+    private Map<Long, Long> availableReplies = new HashMap<>();
 
     @OneToOne
     private Profile profile;
@@ -64,12 +70,12 @@ public class Account {
         this.password = password;
     }
 
-    public Map<Long, Long> getAvailableMessages() {
-        return availableMessages;
+    public Map<Long, Long> getAvailableReplies() {
+        return availableReplies;
     }
 
-    public void setAvailableMessages(Map<Long, Long> availableMessages) {
-        this.availableMessages = availableMessages;
+    public void setAvailableReplies(Map<Long, Long> availableReplies) {
+        this.availableReplies = availableReplies;
     }
 
     public Profile getProfile() {
@@ -80,11 +86,11 @@ public class Account {
         this.profile = profile;
     }
 
-    public int getNotifications() {
+    public List<Notification> getNotifications() {
         return notifications;
     }
 
-    public void setNotifications(int notifications) {
+    public void setNotifications(List<Notification> notifications) {
         this.notifications = notifications;
     }
 

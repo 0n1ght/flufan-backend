@@ -4,6 +4,7 @@ import com.frinkan.dto.ProfileDto;
 import com.frinkan.dto.ProfileResDto;
 import com.frinkan.entity.Account;
 import com.frinkan.entity.Profile;
+import com.frinkan.exception.ProfileNotFoundException;
 import com.frinkan.mapper.ProfileMapper;
 import com.frinkan.repo.AccountRepo;
 import com.frinkan.repo.ProfileRepo;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
@@ -83,5 +85,14 @@ public class ProfileServiceImpl implements ProfileService {
     public List<ProfileResDto> searchProfiles(String searchVal) {
         return profileRepo.searchByNickOrName(searchVal).stream()
                 .map(profileMapper::toProfileResDto).toList();
+    }
+
+    @Override
+    public Profile findById(Long profileId) {
+        Optional<Profile> profile = profileRepo.findById(profileId);
+        if (profile.isEmpty()) {
+            throw new ProfileNotFoundException("Profile not found");
+        }
+        return profile.get();
     }
 }
