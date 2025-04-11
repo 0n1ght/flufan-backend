@@ -1,7 +1,11 @@
 todo 1
-klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+Potdzas tworzeniu Service (swojej uslugi) influencer moze zaznaczyc czy zezwala na jakies dodatkowe wiadomosci czy nie.
+jak nie, details nie jest wyswietlane w konwersacji
 
 todo 2
+klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+
+todo 3
 1. Płatności i rozliczenia (czwartek, piatek)
    - Integracja z bramką płatności (Stripe, PayPal, Przelewy24, PaysafeCard).
    - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
@@ -20,10 +24,10 @@ todo 2
    - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
    - Kupowanie zawieszone, gdy w profilu pole `active=false`.
 
-todo 3
+todo 4
 zwracanie pieniedzy jesli influencer chce, zwracanie jakiegos %
 
-TODO day 3
+TODO day 1
 REALIZACJA USLUG:
     -video rozmowa(
     *notification na chacie
@@ -35,7 +39,7 @@ REALIZACJA USLUG:
    - Rezerwacja terminu, potwierdzenie płatności.
    - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
-TODO day 4
+TODO day 2
 
 3. Panel administracyjny (poniedzialek, wtorek)
    - Zarządzanie użytkownikami, profilami i płatnościami.
@@ -47,7 +51,7 @@ TODO day 4
    - Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
    - Bezpieczne połączenie (SFTP).
 
-TODO day 5
+TODO day 3
 5. Domena, email, powiązanie kont
    - Wykupienie domeny, założenie maila <nazwa>@<nazwa-domeny>.com.
    - Założenie maila firmowego i powiązanie z kontami aplikacji 3rd party (np. Stripe, Google).
@@ -64,7 +68,7 @@ TODO day 5
    - Przygotowanie emaila wysyłanego do resetu hasła.
    - Email używany do wysyłania linków do resetu hasła i innych powiadomień.
 
-TODO day 6
+TODO day 4
 9. Konfiguracja SecurityConfig
    - Usunięcie produkcyjnych linijek kodu (np. `.csrf(AbstractHttpConfigurer::disable)`, `.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))`).
 
@@ -72,11 +76,12 @@ TODO day 6
    - Przeprowadzenie migracji danych.
    - Optymalizacja bazy danych (indeksy, backupy).
 
-TODO day 7
+TODO day 5 (ideas)
+generowanie kodu: jezeli ktos namowi influencera, a on wpisze
+jego kod przy zakladaniu profilu- procent ze sprzedazy leci do tej osoby
+
+TODO day 6
 11. Testy
    - Testy manualne i jednostkowe.
    - Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
 
-todo idea
-generowanie kodu: jezeli ktos namowi influencera, a on wpisze
-jego kod przy zakladaniu profilu- procent ze sprzedazy leci do tej osoby
