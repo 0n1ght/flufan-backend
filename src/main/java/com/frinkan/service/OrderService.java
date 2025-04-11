@@ -1,7 +1,7 @@
 package com.frinkan.service;
 
 public interface OrderService {
-    void addMessageToAcc(long buyerId, long sellerId, long quantity);
-    void addCallToAcc(long buyerId, long sellerId);
-    void addServiceToAcc(long buyerId, long sellerId, String productName, long quantity);
+    void realiseMessage(long buyerId, long sellerId, long quantity);
+    void realiseCall(long buyerId, long sellerId);
+    void realiseService(long buyerId, long sellerId, String productName, long quantity);
 }

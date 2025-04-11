@@ -1,35 +1,23 @@
 package com.frinkan.dto;
 
+import com.frinkan.enums.ProductType;
+
 public class ProductRequest {
-    private Long amount;
     private Long quantity;
     private String name;
-    private String productType;
-    private Long buyerId;
+    private ProductType productType;
     private Long sellerId;
     private String currency;
-    private String email;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(Long amount, Long quantity, String name, String productType, Long buyerId, Long sellerId, String currency, String email) {
-        this.amount = amount;
+    public ProductRequest(Long quantity, String name, ProductType productType, Long sellerId, String currency) {
         this.quantity = quantity;
         this.name = name;
         this.productType = productType;
-        this.buyerId = buyerId;
         this.sellerId = sellerId;
         this.currency = currency;
-        this.email = email;
-    }
-
-    public Long getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Long amount) {
-        this.amount = amount;
     }
 
     public Long getQuantity() {
@@ -48,20 +36,12 @@ public class ProductRequest {
         this.name = name;
     }
 
-    public String getProductType() {
+    public ProductType getProductType() {
         return productType;
     }
 
-    public void setProductType(String productType) {
+    public void setProductType(ProductType productType) {
         this.productType = productType;
-    }
-
-    public Long getBuyerId() {
-        return buyerId;
-    }
-
-    public void setBuyerId(Long buyerId) {
-        this.buyerId = buyerId;
     }
 
     public Long getSellerId() {
@@ -78,13 +58,5 @@ public class ProductRequest {
 
     public void setCurrency(String currency) {
         this.currency = currency;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 }

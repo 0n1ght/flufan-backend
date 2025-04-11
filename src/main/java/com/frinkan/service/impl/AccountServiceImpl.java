@@ -87,9 +87,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAuthenticatedAccount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName(); // Pobranie emaila zalogowanego użytkownika
+        String email = authentication.getName();
 
-        return accountRepo.findByEmail(username)
+        return accountRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Logged in user not found"));
     }
 

@@ -1,18 +1,25 @@
 TODO day 2
-walidacja podczas generowania linka do zakupu (a nie podczas realizacji po webhooku):
-1. czy produkt istnieje u wybranego sellera
-2. czy produkt da sie kupic u wybranego sellera
-3. ustawienie odpowiedniej ceny produktu
+REFACTORING BUYING AND REALISING ORDER
+wysylany jest request z wiadomoscia po platnosci
+weryfikowana jest wiadomosc czy format jest poprawny, ilosc znakow itp
+generowany jest link do platnosci
+po webhooku po platnosci wiadomosc zostaje wyslana
 
-4. generowanie linka
-
+realizacja zakupionej uslugi service
+(podczas zakupu mozna dolaczyc wiadomosc bezplatna jezeli influ wyrazil na to zgode)
+seller moze wysylac wiadomosci jako drugi dopiero podczas odpisywania
 
 zamien pole int notifications w Account na List<Enum/String> notifications
-klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+
 dolacz opcje "mozliwosc bezplatnej wiadomosci" przy zakupie serwisu
 
-REALIZACJA USLUG:
+opinie moga byc wystawione tylko jezeli:
+1. zostalo cos juz zakupione
+2. nie wystawiona zostala juz wczesniej opinia
 
+klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+
+REALIZACJA USLUG:
     -video rozmowa(
     *notification na chacie
     *notification dla influ
@@ -37,9 +44,9 @@ REALIZACJA USLUG:
    - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
    - Kupowanie zawieszone, gdy w profilu pole `active=false`.
 
-fix 3. Co jak ktos zmieni dane profilu po zakupie przez kogos innego ? Zeby realizacja uslugi dalej byla aktualna
 fix jezeli influencer usunie swoje konto, ludzie ktorzy cos kupili a to nie zostalo zrealizowane otrzymaja zwrot, albo moze beda musieli to wykorzystac nie dostac tego i dopiero zwrot
 
+zwracanie pieniedzy jesli influencer chce, zwracanie jakiegos %
 TODO day 3
 2. Rezerwacje wideorozmów (sobota, niedziela)
    - Kalendarz dostępności influencera.
@@ -88,6 +95,9 @@ TODO day 7
    - Testy manualne i jednostkowe.
    - Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
 
+todo idea
+generowanie kodu: jezeli ktos namowi influencera, a on wpisze
+jego kod przy zakladaniu profilu- procent ze sprzedazy leci do tej osoby
 
 todo monetyzacja
 Subskrypcje premium dla influ - Nie placa prowizji.

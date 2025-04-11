@@ -1,7 +1,5 @@
 package com.frinkan.controller;
 
-import com.frinkan.entity.Account;
-import com.frinkan.service.AccountService;
 import com.frinkan.service.OrderService;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Event;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -45,23 +42,16 @@ public class StripeWebhookController {
         if ("checkout.session.completed".equals(event.getType())) {
             Session session = (Session) event.getDataObjectDeserializer().getObject().orElse(null);
             if (session != null) {
-                String email = session.getCustomerEmail();
-                String sessionId = session.getId();
                 String productType = session.getMetadata().get("product_type");
                 String productName = session.getMetadata().get("product_name");
                 long buyerId = Long.parseLong(session.getMetadata().get("buyer_id"));
                 long sellerId = Long.parseLong(session.getMetadata().get("seller_id"));
                 long quantity = Long.parseLong(session.getMetadata().get("quantity"));
 
-                //todo
-                // 2. Co jak ktos zmieni dane profilu, konta po zakupie przez kogos innego ? Zeby realizacja uslugi dalej byla aktualna
-                // SPRAWDZANIE CZY ZAPLACONA CENA SIE ZGADZA
-                // kontrolowane generowanie linkow do platnosci, i nie bedzie trzeba validowac platnosci po zakupie (ceny)
-
-                switch (productType) {
-                    case "message" -> orderService.addMessageToAcc(buyerId, sellerId, quantity);
-                    case "call" -> orderService.addCallToAcc(buyerId, sellerId);
-                    case "service" -> orderService.addServiceToAcc(buyerId, sellerId, productName, quantity);
+                switch (productType.toLowerCase()) {
+                    case "message" -> orderService.realiseMessage(buyerId, sellerId, quantity);
+                    case "call" -> orderService.realiseCall(buyerId, sellerId);
+                    case "service" -> orderService.realiseService(buyerId, sellerId, productName, quantity);
                 }
             }
         }

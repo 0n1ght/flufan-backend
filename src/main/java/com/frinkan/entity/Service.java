@@ -13,9 +13,9 @@ public class Service {
     private Long id;
     private String title;
     private String description;
-    private int price;
+    private long price;
 
-    public Service(String title, String description, int price) {
+    public Service(String title, String description, long price) {
         this.title = title;
         this.description = description;
         this.price = price;
@@ -48,7 +48,7 @@ public class Service {
         this.description = description;
     }
 
-    public int getPrice() {
+    public long getPrice() {
         return price;
     }
 

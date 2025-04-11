@@ -24,8 +24,8 @@ public class Profile {
     private double rating;
     private int respondTime;
 
-    private int messagePrice;
-    private int callPrice;
+    private long messagePrice;
+    private long callPrice;
     private String profilePicturePath;
 
     @ElementCollection
@@ -120,7 +120,7 @@ public class Profile {
         this.respondTime = respondTime;
     }
 
-    public int getMessagePrice() {
+    public long getMessagePrice() {
         return messagePrice;
     }
 
@@ -128,7 +128,7 @@ public class Profile {
         this.messagePrice = messagePrice;
     }
 
-    public int getCallPrice() {
+    public long getCallPrice() {
         return callPrice;
     }
 
