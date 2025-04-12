@@ -49,8 +49,13 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         String resetUrl = "http://localhost:8080/api/auth/reset-password?token=" + token;
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setSubject("Reset Password");
-        message.setText("Click the link to reset your password: " + resetUrl);
+        message.setSubject("Frinkan – Resetowanie hasła");
+        message.setText("Kliknij poniższy link, aby zresetować hasło: \n" +
+                resetUrl + "\n\n" +  // Dodanie pustych linii dla lepszej czytelności
+                "Jeśli to nie Ty wysłałeś tę prośbę, zignoruj ten e-mail. Twoje konto pozostaje bezpieczne.\n" +
+                "\n" +
+                "Pozdrawiamy,\n" +
+                "Zespół Frinkan");
         mailSender.send(message);
     }
 
