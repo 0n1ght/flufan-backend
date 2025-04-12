@@ -1,9 +1,9 @@
 package com.frinkan.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Service {
@@ -14,6 +14,9 @@ public class Service {
     private String title;
     private String description;
     private long price;
+
+    @ElementCollection
+    private List<String> optionalQuestions = new ArrayList<>();
 
     public Service(String title, String description, long price) {
         this.title = title;
@@ -54,5 +57,13 @@ public class Service {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public List<String> getOptionalQuestions() {
+        return optionalQuestions;
+    }
+
+    public void setOptionalQuestions(List<String> optionalQuestions) {
+        this.optionalQuestions = optionalQuestions;
     }
 }

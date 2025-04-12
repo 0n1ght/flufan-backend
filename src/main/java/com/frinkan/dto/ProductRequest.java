@@ -2,6 +2,8 @@ package com.frinkan.dto;
 
 import com.frinkan.enums.ProductType;
 
+import java.util.List;
+
 public class ProductRequest {
     private Long quantity;
     private ProductType productType;
@@ -9,17 +11,19 @@ public class ProductRequest {
     private String details;
     private Long sellerId;
     private String currency;
+    private List<String> optionalAnswers;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(Long quantity, String name, ProductType productType, String details, Long sellerId, String currency) {
+    public ProductRequest(Long quantity, String name, ProductType productType, String details, Long sellerId, String currency, List<String> optionalAnswers) {
         this.quantity = quantity;
         this.name = name;
         this.productType = productType;
         this.details = details;
         this.sellerId = sellerId;
         this.currency = currency;
+        this.optionalAnswers = optionalAnswers;
     }
 
     public Long getQuantity() {
@@ -68,5 +72,13 @@ public class ProductRequest {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public List<String> getOptionalAnswers() {
+        return optionalAnswers;
+    }
+
+    public void setOptionalAnswers(List<String> optionalAnswers) {
+        this.optionalAnswers = optionalAnswers;
     }
 }

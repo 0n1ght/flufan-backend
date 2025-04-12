@@ -1,33 +1,8 @@
-todo 1
-Potdzas tworzeniu Service (swojej uslugi) influencer moze zaznaczyc czy zezwala na jakies dodatkowe wiadomosci czy nie.
-jak nie, details nie jest wyswietlane w konwersacji
+TODO Test "Payments and Settlements"
 
-todo 2
-klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
+TODO klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
 
-todo 3
-1. Płatności i rozliczenia (czwartek, piatek)
-   - Integracja z bramką płatności (Stripe, PayPal, Przelewy24, PaysafeCard).
-   - Obsługa płatności za wiadomości i inne usługi (np. wideorozmowy, filmiki).
-   - Automatyczne wypłaty dla influencerów (np. po przekroczeniu progu).
-   - System prowizji platformy.
-   - Informacja o tym, żeby wysłać zamówienie, przelew po realizacji.
-   - Obsługa dodatkowych metod płatności:
-     - Blik
-     - Przelewy24
-     - Apple Pay
-     - Google Pay
-     - Karta Kredytowa
-     - PayPal
-     - Paysafecard
-   - Możliwość dodania zdjęcia do wiadomości za +30% ceny.
-   - Wiadomości tekstowe i dzwonienie jako opcjonalne (jeśli cena wynosi -1, blokowana jest możliwość wykupienia tej usługi).
-   - Kupowanie zawieszone, gdy w profilu pole `active=false`.
-
-todo 4
-zwracanie pieniedzy jesli influencer chce, zwracanie jakiegos %
-
-TODO day 1
+4.
 REALIZACJA USLUG:
     -video rozmowa(
     *notification na chacie
@@ -39,49 +14,56 @@ REALIZACJA USLUG:
    - Rezerwacja terminu, potwierdzenie płatności.
    - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
-TODO day 2
+TODO day 5 (ideas)
+-generowanie kodu: jezeli ktos namowi influencera, a on wpisze
+jego kod przy zakladaniu profilu- procent ze sprzedazy leci do tej osoby
 
-3. Panel administracyjny (poniedzialek, wtorek)
+-weryfikacja na social mediach podczas zakladania profilu
+
+
+todo (poniedzialek)
+6. Logowanie z Facebook, Google, Apple
+   - Implementacja logowania przez OAuth2.
+   - Potwierdzenie bezpieczeństwa logowania.
+
+8. Email dla aplikacji
+   - Przygotowanie emaila wysyłanego do resetu hasła.
+
+todo (wtorek, sroda)
+3. Panel administracyjny i logi np. komu ile wyplacic pieniedzy, jakie zrobic przelewy (moze da sie automatycznie)
+    Dodac mozliwosc zwrocenia jakiegos % / calosci pieniedzy przez influencera
    - Zarządzanie użytkownikami, profilami i płatnościami.
    - Baza danych, ręczne akceptowanie nowo tworzonych profili.
    - Monitorowanie płatności (statusy transakcji).
    - Możliwość edycji i usuwania kont oraz profili.
 
-4. Osobny serwer FTP (sroda, czwartek)
-   - Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
-   - Bezpieczne połączenie (SFTP).
+todo (czwartek, piatek)
+refactoring z ChatGPT
 
-TODO day 3
+todo (sobota, niedziela)
+Unit Testing
+Manual Testing with Postman
+
+todo (poniedzialek, wtorek)
 5. Domena, email, powiązanie kont
    - Wykupienie domeny, założenie maila <nazwa>@<nazwa-domeny>.com.
    - Założenie maila firmowego i powiązanie z kontami aplikacji 3rd party (np. Stripe, Google).
 
-6. Logowanie z Facebook, Google, Apple
-   - Implementacja logowania przez OAuth2.
-   - Potwierdzenie bezpieczeństwa logowania.
+todo (sroda)
+9. Przygotowanie kodu, usuniecie produkcyjnych linijek
+   - (np. Konfiguracja SecurityConfig `.csrf(AbstractHttpConfigurer::disable)`, `.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))`).
 
-7. Pentesting
-   - Testowanie aplikacji pod kątem podatności na ataki typu injection.
-   - Analiza kontrolerów i parametrów zapisywanych/wyświetlanych.
+todo (czwartek, piatek)
+4. Osobny serwer FTP (sroda, czwartek)
+   - Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
+   - Bezpieczne połączenie (SFTP).
 
-8. Email dla aplikacji
-   - Przygotowanie emaila wysyłanego do resetu hasła.
-   - Email używany do wysyłania linków do resetu hasła i innych powiadomień.
-
-TODO day 4
-9. Konfiguracja SecurityConfig
-   - Usunięcie produkcyjnych linijek kodu (np. `.csrf(AbstractHttpConfigurer::disable)`, `.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))`).
-
+todo (sobota, niedziela)
 10. Zmiana bazy danych z H2 na PostgreSQL
    - Przeprowadzenie migracji danych.
    - Optymalizacja bazy danych (indeksy, backupy).
-
-TODO day 5 (ideas)
-generowanie kodu: jezeli ktos namowi influencera, a on wpisze
-jego kod przy zakladaniu profilu- procent ze sprzedazy leci do tej osoby
 
 TODO day 6
 11. Testy
    - Testy manualne i jednostkowe.
    - Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
-

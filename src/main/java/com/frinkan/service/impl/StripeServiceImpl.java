@@ -1,5 +1,7 @@
 package com.frinkan.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.frinkan.entity.Account;
 import com.frinkan.enums.ProductType;
 import com.frinkan.service.AccountService;
@@ -14,13 +16,16 @@ import org.springframework.stereotype.Service;
 import com.frinkan.dto.ProductRequest;
 import com.frinkan.dto.StripeResponse;
 
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class StripeServiceImpl implements StripeService {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Value("${stripe.secretKey}")
     private String secretKey;
@@ -31,7 +36,7 @@ public class StripeServiceImpl implements StripeService {
     @Value("${stripe.cancelUrl}")
     private String cancelUrl;
 
-    public StripeResponse checkoutProducts(ProductRequest productRequest) {
+    public StripeResponse checkoutProducts(ProductRequest productRequest) throws JsonProcessingException {
         Account authenticatedAccount = accountService.getAuthenticatedAccount();
         Account sellerAccount = accountService.getById(productRequest.getSellerId());
 
@@ -88,12 +93,38 @@ public class StripeServiceImpl implements StripeService {
                 .putMetadata("email", authenticatedAccount.getEmail() != null ? authenticatedAccount.getEmail() : "not_provided")
                 .setCustomerEmail(authenticatedAccount.getEmail());
 
+        if (productRequest.getProductType() == ProductType.SERVICE) {
+            Map<String, String> purchaseQa = getStringStringMap(productRequest, sellerAccount);
+
+            paramsBuilder.putMetadata("purchase_qa", objectMapper.writeValueAsString(purchaseQa));
+        }
+
         try {
             Session session = Session.create(paramsBuilder.build());
             return new StripeResponse("SUCCESS", "Payment session created", session.getId(), session.getUrl());
         } catch (StripeException e) {
             return new StripeResponse("FAILED", "Stripe error: " + e.getMessage(), null, null);
         }
+    }
+
+    private static Map<String, String> getStringStringMap(ProductRequest productRequest, Account sellerAccount) {
+        List<String> questions = new ArrayList<>();
+        for (com.frinkan.entity.Service service : sellerAccount.getProfile().getMenu()) {
+            if (productRequest.getName().equalsIgnoreCase(service.getTitle())) {
+                questions = service.getOptionalQuestions();
+                break;
+            }
+        }
+        Map<String, String> purchaseQa = new HashMap<>();
+        List<String> answers = productRequest.getOptionalAnswers();
+        if (answers != null && questions.size() == answers.size()) {
+            for (int i = 0; i < questions.size(); i++) {
+                if (!"".equals(answers.get(i))) {
+                    purchaseQa.put(questions.get(i), answers.get(i));
+                }
+            }
+        }
+        return purchaseQa;
     }
 
     private static long getPriceAmount(ProductRequest productRequest, Account sellerAccount) {
@@ -103,7 +134,7 @@ public class StripeServiceImpl implements StripeService {
             case CALL -> priceAmount = sellerAccount.getProfile().getCallPrice();
             case SERVICE -> {
                 for (com.frinkan.entity.Service service : sellerAccount.getProfile().getMenu()) {
-                    if (Objects.equals(service.getTitle(), productRequest.getName())) {
+                    if (productRequest.getName().equalsIgnoreCase(service.getTitle())) {
                         priceAmount = service.getPrice();
                     }
                 }
