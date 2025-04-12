@@ -1,5 +1,6 @@
 package com.frinkan.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.frinkan.dto.ProductRequest;
 import com.frinkan.dto.StripeResponse;
 import com.frinkan.service.StripeService;
@@ -22,7 +23,7 @@ public class ProductCheckoutController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody ProductRequest productRequest) throws JsonProcessingException {
         StripeResponse stripeResponse = stripeService.checkoutProducts(productRequest);
         HttpStatus status = stripeResponse.getStatus().equals("SUCCESS") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
         return ResponseEntity.status(status).body(stripeResponse);

@@ -1,3 +1,13 @@
+todo (poniedzialek)
+6. Logowanie z Facebook, Google, Apple
+   - Implementacja logowania przez OAuth2.
+   - Potwierdzenie bezpieczeństwa logowania.
+
+9. Email dla aplikacji
+   - Przygotowanie emaila wysyłanego do resetu hasła.
+
+
+TODO
 2. Rezerwacje wideorozmów (sobota, niedziela)
    - Kalendarz dostępności influencera.
    - Rezerwacja terminu, potwierdzenie płatności.
@@ -11,19 +21,11 @@ REALIZACJA USLUG:
     *automatyczne otworzenie i zamkniecie/licznik
 }
 
-TODO Test "Payments and Settlements"
-
-todo (poniedzialek)
-6. Logowanie z Facebook, Google, Apple
-   - Implementacja logowania przez OAuth2.
-   - Potwierdzenie bezpieczeństwa logowania.
+6. Test "Payments and Settlements"
 
 7. Weryfikacja na social mediach podczas zakladania profilu
 
 8. Weryfikacja maila podczas zakladania konta/profilu
-
-9. Email dla aplikacji
-   - Przygotowanie emaila wysyłanego do resetu hasła.
 
 todo (wtorek, sroda)
 3. Panel administracyjny i logi np. komu ile wyplacic pieniedzy, jakie zrobic przelewy (moze da sie automatycznie)
@@ -40,10 +42,8 @@ todo (sobota, niedziela)
 Unit Testing
 Manual Testing with Postman
 
-todo (poniedzialek, wtorek)
-5. Domena, email, powiązanie kont
-   - Wykupienie domeny, założenie maila <nazwa>@<nazwa-domeny>.com.
-   - Założenie maila firmowego i powiązanie z kontami aplikacji 3rd party (np. Stripe, Google).
+
+======================================
 
 todo (sroda)
 9. Przygotowanie kodu, usuniecie produkcyjnych linijek
@@ -58,6 +58,11 @@ todo (sobota, niedziela)
 10. Zmiana bazy danych z H2 na PostgreSQL
    - Przeprowadzenie migracji danych.
    - Optymalizacja bazy danych (indeksy, backupy).
+
+todo (poniedzialek, wtorek)
+5. Domena, email, powiązanie kont
+   - Wykupienie domeny, założenie maila <nazwa>@<nazwa-domeny>.com.
+   - Założenie maila firmowego i powiązanie z kontami aplikacji 3rd party (np. Stripe, Google).
 
 TODO day 6
 11. Testy
