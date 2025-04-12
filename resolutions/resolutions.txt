@@ -1,32 +1,28 @@
-TODO Test "Payments and Settlements"
-
-TODO klasa Conversation z wiadomosciami (dla bardziej optymalnych zapytan sql zwracajacych konwersacje)
-
-4.
+2. Rezerwacje wideorozmów (sobota, niedziela)
+   - Kalendarz dostępności influencera.
+   - Rezerwacja terminu, potwierdzenie płatności.
+   - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 REALIZACJA USLUG:
     -video rozmowa(
     *notification na chacie
     *notification dla influ
     *wyslany link/przycisk do polaczenia na chacie)
+    *przypomnienie przed polaczeniem
+    *automatyczne otworzenie i zamkniecie/licznik
 }
-2. Rezerwacje wideorozmów (sobota, niedziela)
-   - Kalendarz dostępności influencera.
-   - Rezerwacja terminu, potwierdzenie płatności.
-   - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
 
-TODO day 5 (ideas)
--generowanie kodu: jezeli ktos namowi influencera, a on wpisze
-jego kod przy zakladaniu profilu- procent ze sprzedazy leci do tej osoby
-
--weryfikacja na social mediach podczas zakladania profilu
-
+TODO Test "Payments and Settlements"
 
 todo (poniedzialek)
 6. Logowanie z Facebook, Google, Apple
    - Implementacja logowania przez OAuth2.
    - Potwierdzenie bezpieczeństwa logowania.
 
-8. Email dla aplikacji
+7. Weryfikacja na social mediach podczas zakladania profilu
+
+8. Weryfikacja maila podczas zakladania konta/profilu
+
+9. Email dla aplikacji
    - Przygotowanie emaila wysyłanego do resetu hasła.
 
 todo (wtorek, sroda)

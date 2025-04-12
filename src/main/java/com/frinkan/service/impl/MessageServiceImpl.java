@@ -15,6 +15,9 @@ import com.frinkan.repo.MessageRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,15 +67,16 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDto> getConversation(Long userId) {
-        Account currentUser = accountService.getAuthenticatedAccount(); // Pobierz obecnego użytkownika
-        List<Message> messages = messageRepo.findConversation(currentUser.getId(), userId); // Pobierz wiadomości
+    public List<MessageDto> getConversation(Long userId, int page, int size) {
+        Account currentUser = accountService.getAuthenticatedAccount();
 
-        return messages.stream().map(message -> {
-            AccountDto sender = accountMapper.toAccountDto(message.getSender());
-            sender.setEmail("");
-            AccountDto receiver = accountMapper.toAccountDto(message.getReceiver());
-            receiver.setEmail("");
+        Pageable pageable = PageRequest.of(page, size);
+
+        Page<Message> messagesPage = messageRepo.findConversation(currentUser.getId(), userId, pageable);
+
+        return messagesPage.stream().map(message -> {
+            AccountDto sender = accountMapper.toAccountDto(accountService.getById(currentUser.getId()));
+            AccountDto receiver = accountMapper.toAccountDto(accountService.getById(userId));
             MessageDto messageDto = new MessageDto();
             messageDto.setId(message.getId());
             messageDto.setSender(sender);
@@ -80,7 +84,6 @@ public class MessageServiceImpl implements MessageService {
             messageDto.setContent(message.getContent());
             messageDto.setSentAt(message.getSentAt());
             messageDto.setReadStatus(message.isReadStatus());
-            messageDto.setMessageType(message.getMessageType());
             return messageDto;
         }).collect(Collectors.toList());
     }
@@ -95,7 +98,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public boolean wasConversation(long user1Id, long user2Id) {
-        List<Message> messages = messageRepo.findConversation(user1Id, user2Id);
+        List<Message> messages = messageRepo.findConversation(user1Id, user2Id, Pageable.unpaged()).getContent();
 
         boolean hasUser1ToUser2 = messages.stream()
                 .anyMatch(m -> m.getSender().getId() == user1Id && m.getReceiver().getId() == user2Id);

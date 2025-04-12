@@ -55,7 +55,10 @@ public class UserReviewServiceImpl implements UserReviewService {
     public void saveReview(UserReviewDto reviewDto) {
         reviewDto.setReviewerId(accountService.getAuthenticatedAccount().getId());
 
-        if (messageService.wasConversation(reviewDto.getReviewerId(), profileService.findById(reviewDto.getProfileId()).getAccount().getId())) {
+        if (messageService.wasConversation(reviewDto.getReviewerId(),
+                profileService.findById(reviewDto.getProfileId()).getAccount().getId()) &&
+                getReviewsForProfile(reviewDto.getProfileId()).stream()
+                        .noneMatch(userReviewDto -> Objects.equals(userReviewDto.getReviewerId(), reviewDto.getId()))) {
             UserReview review = userReviewMapper.toUserReview(reviewDto);
             UserReview savedReview = userReviewRepo.save(review);
             userReviewMapper.toUserReviewDto(savedReview);
