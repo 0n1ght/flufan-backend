@@ -1,67 +1,65 @@
-todo
-6. Logowanie z Facebook, Google, Apple
-   - Implementacja logowania przez OAuth2.
-   - Potwierdzenie bezpieczeństwa logowania.
+TODO (General)
+1. Logowanie z Facebook, Google, Apple
+    -Implementacja logowania przez OAuth2.
+    -Potwierdzenie bezpieczeństwa logowania (np. zabezpieczenie tokenów, sprawdzenie poprawności danych).
 
+2. Rezerwacje wideorozmów
+    -Kalendarz dostępności influencera.
+    -Rezerwacja terminu i potwierdzenie płatności.
+    -Link do wideorozmowy (np. integracja z Twilio, Zoom API).
+    -REALIZACJA USŁUG:
+        -Powiadomienia na chacie.
+        -Powiadomienia dla influencera.
+        -Wysłany link/przycisk do połączenia na chacie.
+        -Przypomnienie przed połączeniem.
+        -Automatyczne otwieranie i zamykanie połączenia/licznik.
 
-TODO
-2. Rezerwacje wideorozmów (sobota, niedziela)
-   - Kalendarz dostępności influencera.
-   - Rezerwacja terminu, potwierdzenie płatności.
-   - Link do wideorozmowy (np. integracja z Twilio, Zoom API).
-REALIZACJA USLUG:
-    -video rozmowa(
-    *notification na chacie
-    *notification dla influ
-    *wyslany link/przycisk do polaczenia na chacie)
-    *przypomnienie przed polaczeniem
-    *automatyczne otworzenie i zamkniecie/licznik
-}
+3. Test "Payments and Settlements"
+    -Testy związane z płatnościami i rozliczeniami.
 
-6. Test "Payments and Settlements"
+4. Weryfikacja na social mediach podczas zakładania profilu
+    -Weryfikacja konta użytkownika poprzez media społecznościowe.
 
-7. Weryfikacja na social mediach podczas zakladania profilu
+5. Weryfikacja maila podczas zakładania konta/profilu
+    -Weryfikacja konta użytkownika przez email.
 
-8. Weryfikacja maila podczas zakladania konta/profilu
+TODO (Administration)
+6. Panel administracyjny i logi
+    -Zarządzanie użytkownikami, profilami i płatnościami.
+    -Baza danych, ręczne akceptowanie nowo tworzonych profili.
+    -Monitorowanie płatności (statusy transakcji).
+    -Możliwość edycji i usuwania kont oraz profili.
+    -Dodanie opcji zwrotu części/całości pieniędzy przez influencera.
 
-todo (wtorek, sroda)
-3. Panel administracyjny i logi np. komu ile wyplacic pieniedzy, jakie zrobic przelewy (moze da sie automatycznie)
-    Dodac mozliwosc zwrocenia jakiegos % / calosci pieniedzy przez influencera
-   - Zarządzanie użytkownikami, profilami i płatnościami.
-   - Baza danych, ręczne akceptowanie nowo tworzonych profili.
-   - Monitorowanie płatności (statusy transakcji).
-   - Możliwość edycji i usuwania kont oraz profili.
+TODO (Refactoring and Testing)
+7. Refaktoryzacja z ChatGPT
+    -Refaktoryzacja kodu z uwzględnieniem najlepszych praktyk.
 
-todo (czwartek, piatek)
-refactoring z ChatGPT
+8. Unit Testing
+    -Testy jednostkowe dla głównych funkcji aplikacji.
 
-todo (sobota, niedziela)
-Unit Testing
-Manual Testing with Postman
+9. Manual Testing with Postman
+    -Testy manualne z użyciem Postmana do sprawdzenia API.
 
+TODO (Optym and preparing for production)
+10. Przygotowanie kodu
+    -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
+    -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.)
 
-======================================
+11. Osobny serwer FTP
+    -Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
+    -Bezpieczne połączenie (SFTP).
 
-todo (sroda)
-9. Przygotowanie kodu, usuniecie produkcyjnych linijek
-   - (np. Konfiguracja SecurityConfig `.csrf(AbstractHttpConfigurer::disable)`, `.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))`).
+12. Zmiana bazy danych z H2 na PostgreSQL
+    -Migracja danych.
+    -Optymalizacja bazy danych (indeksy, backupy).
 
-todo (czwartek, piatek)
-4. Osobny serwer FTP (sroda, czwartek)
-   - Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
-   - Bezpieczne połączenie (SFTP).
+TODO (Infrastructure and domains)
+13. Domena, email, powiązanie kont
+    -Wykupienie domeny i założenie maila firmowego <nazwa>@<nazwa-domeny>.com.
+    -Powiązanie maila firmowego z kontami aplikacji 3rd party (np. Stripe, Google).
 
-todo (sobota, niedziela)
-10. Zmiana bazy danych z H2 na PostgreSQL
-   - Przeprowadzenie migracji danych.
-   - Optymalizacja bazy danych (indeksy, backupy).
-
-todo (poniedzialek, wtorek)
-5. Domena, email, powiązanie kont
-   - Wykupienie domeny, założenie maila <nazwa>@<nazwa-domeny>.com.
-   - Założenie maila firmowego i powiązanie z kontami aplikacji 3rd party (np. Stripe, Google).
-
-TODO day 6
-11. Testy
-   - Testy manualne i jednostkowe.
-   - Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
+TODO (Testing and Verification)
+14. Testy
+    -Testy manualne i jednostkowe.
+    -Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
