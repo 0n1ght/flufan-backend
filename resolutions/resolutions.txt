@@ -1,7 +1,4 @@
-todo (poniedzialek)
-9. Email dla aplikacji
-   - Przygotowanie emaila wysyłanego do resetu hasła.
-
+todo
 6. Logowanie z Facebook, Google, Apple
    - Implementacja logowania przez OAuth2.
    - Potwierdzenie bezpieczeństwa logowania.
