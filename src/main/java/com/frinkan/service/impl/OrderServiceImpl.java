@@ -5,17 +5,19 @@ import com.frinkan.enums.MessageType;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.MessageService;
 import com.frinkan.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private MessageService messageService;
+    private final AccountService accountService;
+    private final MessageService messageService;
+
+    public OrderServiceImpl(AccountService accountService, MessageService messageService) {
+        this.accountService = accountService;
+        this.messageService = messageService;
+    }
 
     @Override
     public void realiseMessage(long buyerId, long sellerId, String content, String details) {

@@ -9,7 +9,6 @@ import com.frinkan.service.AccountService;
 import com.frinkan.service.MessageService;
 import com.frinkan.service.ProfileService;
 import com.frinkan.service.UserReviewService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +25,6 @@ public class UserReviewServiceImpl implements UserReviewService {
     private final AccountService accountService;
     private final ProfileService profileService;
 
-    @Autowired
     public UserReviewServiceImpl(UserReviewRepo userReviewRepo, UserReviewMapper userReviewMapper,
                                  MessageService messageService, AccountService accountService,
                                  ProfileService profileService) {

@@ -20,11 +20,7 @@ import java.util.*;
 
 @Service
 public class StripeServiceImpl implements StripeService {
-
-    @Autowired
     private AccountService accountService;
-
-    @Autowired
     private ObjectMapper objectMapper;
 
     @Value("${stripe.secretKey}")
@@ -35,6 +31,11 @@ public class StripeServiceImpl implements StripeService {
 
     @Value("${stripe.cancelUrl}")
     private String cancelUrl;
+
+    public StripeServiceImpl(AccountService accountService, ObjectMapper objectMapper) {
+        this.accountService = accountService;
+        this.objectMapper = objectMapper;
+    }
 
     public StripeResponse checkoutProducts(ProductRequest productRequest) throws JsonProcessingException {
         Account authenticatedAccount = accountService.getAuthenticatedAccount();

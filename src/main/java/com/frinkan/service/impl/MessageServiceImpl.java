@@ -29,7 +29,6 @@ public class MessageServiceImpl implements MessageService {
     private final AccountService accountService;
     private final AccountMapper accountMapper = new AccountMapper();
 
-    @Autowired
     public MessageServiceImpl(MessageRepo messageRepo, AccountService accountService) {
         this.messageRepo = messageRepo;
         this.accountService = accountService;

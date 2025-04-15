@@ -10,7 +10,6 @@ import com.frinkan.repo.AccountRepo;
 import com.frinkan.repo.ProfileRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.ProfileService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +23,6 @@ public class ProfileServiceImpl implements ProfileService {
     private final AccountService authService;
     private final ProfileMapper profileMapper;
 
-    @Autowired
     public ProfileServiceImpl(ProfileRepo profileRepo, AccountRepo accountRepo,
                               AccountService authService, ProfileMapper profileMapper) {
         this.profileRepo = profileRepo;

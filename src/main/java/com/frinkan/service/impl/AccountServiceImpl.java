@@ -31,7 +31,6 @@ public class AccountServiceImpl implements AccountService {
     private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
     public AccountServiceImpl(AccountRepo accountRepo, @Lazy AuthenticationManager authManager,
                               JWTService jwtService, PasswordEncoder passwordEncoder) {
         this.accountRepo = accountRepo;

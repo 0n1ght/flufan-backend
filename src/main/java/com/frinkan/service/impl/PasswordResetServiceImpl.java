@@ -21,7 +21,6 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender mailSender;
 
-    @Autowired
     public PasswordResetServiceImpl(AccountRepo accountRepo, PasswordResetTokenRepo tokenRepo,
                                 PasswordEncoder passwordEncoder, JavaMailSender mailSender) {
         this.accountRepo = accountRepo;
