@@ -1,0 +1,28 @@
+package com.frinkan.mapper;
+
+import com.frinkan.dto.MessageDto;
+import com.frinkan.entity.Message;
+import org.springframework.stereotype.Component;
+
+@Component
+public class MessageMapper {
+    private final AccountMapper accountMapper;
+
+    public MessageMapper(AccountMapper accountMapper) {
+        this.accountMapper = accountMapper;
+    }
+
+    public MessageDto toMessageDto(Message message) {
+        MessageDto messageDto = new MessageDto();
+
+        messageDto.setId(message.getId());
+        messageDto.setMessageType(message.getMessageType());
+        messageDto.setContent(message.getContent());
+        messageDto.setSender(accountMapper.toAccountDto(message.getSender()));
+        messageDto.setReceiver(accountMapper.toAccountDto(message.getReceiver()));
+        messageDto.setReadStatus(message.isReadStatus());
+        messageDto.setSentAt(message.getSentAt());
+
+        return messageDto;
+    }
+}

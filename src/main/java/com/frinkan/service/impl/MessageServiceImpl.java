@@ -10,11 +10,11 @@ import com.frinkan.exception.InsufficientMessagesException;
 import com.frinkan.exception.MessageDoesNotExist;
 import com.frinkan.exception.MessageLengthException;
 import com.frinkan.mapper.AccountMapper;
+import com.frinkan.mapper.MessageMapper;
 import com.frinkan.model.Notification;
 import com.frinkan.repo.MessageRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,11 +27,13 @@ import java.util.stream.Collectors;
 public class MessageServiceImpl implements MessageService {
     private final MessageRepo messageRepo;
     private final AccountService accountService;
-    private final AccountMapper accountMapper = new AccountMapper();
+    private final MessageMapper messageMapper;
 
-    public MessageServiceImpl(MessageRepo messageRepo, AccountService accountService) {
+    public MessageServiceImpl(MessageRepo messageRepo, AccountService accountService,
+                              MessageMapper messageMapper) {
         this.messageRepo = messageRepo;
         this.accountService = accountService;
+        this.messageMapper = messageMapper;
     }
 
     @Override
@@ -73,18 +75,9 @@ public class MessageServiceImpl implements MessageService {
 
         Page<Message> messagesPage = messageRepo.findConversation(currentUser.getId(), userId, pageable);
 
-        return messagesPage.stream().map(message -> {
-            AccountDto sender = accountMapper.toAccountDto(accountService.getById(currentUser.getId()));
-            AccountDto receiver = accountMapper.toAccountDto(accountService.getById(userId));
-            MessageDto messageDto = new MessageDto();
-            messageDto.setId(message.getId());
-            messageDto.setSender(sender);
-            messageDto.setReceiver(receiver);
-            messageDto.setContent(message.getContent());
-            messageDto.setSentAt(message.getSentAt());
-            messageDto.setReadStatus(message.isReadStatus());
-            return messageDto;
-        }).collect(Collectors.toList());
+        return messagesPage.stream()
+                .map(messageMapper::toMessageDto)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -3,7 +3,9 @@ package com.frinkan.mapper;
 import com.frinkan.dto.AccountDto;
 import com.frinkan.dto.ProfileDto;
 import com.frinkan.entity.Account;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AccountMapper {
 
     public AccountDto toAccountDto(Account account) {

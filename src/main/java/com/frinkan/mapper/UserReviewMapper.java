@@ -8,8 +8,6 @@ import com.frinkan.repo.ProfileRepo;
 import com.frinkan.repo.AccountRepo;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class UserReviewMapper {
 

@@ -4,6 +4,8 @@ import com.frinkan.dto.LoginDto;
 import com.frinkan.entity.Account;
 import com.frinkan.exception.ResourceNotFoundException;
 import com.frinkan.repo.AccountRepo;
+import com.frinkan.repo.BannedAccountRepo;
+import com.frinkan.repo.SuspendedAccountRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.dto.RegisterDto;
 import com.frinkan.service.JWTService;
@@ -27,13 +29,18 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepo accountRepo;
+    private final BannedAccountRepo bannedAccountRepo;
+    private final SuspendedAccountRepo suspendedAccountRepo;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-    public AccountServiceImpl(AccountRepo accountRepo, @Lazy AuthenticationManager authManager,
+    public AccountServiceImpl(AccountRepo accountRepo, BannedAccountRepo bannedAccountRepo,
+                              SuspendedAccountRepo suspendedAccountRepo, @Lazy AuthenticationManager authManager,
                               JWTService jwtService, PasswordEncoder passwordEncoder) {
         this.accountRepo = accountRepo;
+        this.bannedAccountRepo = bannedAccountRepo;
+        this.suspendedAccountRepo = suspendedAccountRepo;
         this.authManager = authManager;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
@@ -56,9 +63,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void saveAccount(RegisterDto accountDto) {
 
-        if (accountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
+        if (bannedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Account is banned");
+        } else if (accountRepo.findByEmail(accountDto.getEmail()).isPresent() ||
+                suspendedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already in use");
-        } else if (accountRepo.findByUsername(accountDto.getUsername()).isPresent()) {
+        } else if (accountRepo.findByUsername(accountDto.getUsername()).isPresent() ||
+                suspendedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Username is already in use");
         }
 
