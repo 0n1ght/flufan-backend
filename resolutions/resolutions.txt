@@ -1,13 +1,3 @@
-
-6. Panel administracyjny i logi
-    -Zarządzanie użytkownikami, profilami i płatnościami.
-    -Baza danych, ręczne akceptowanie nowo tworzonych profili.
-    -Monitorowanie płatności (statusy transakcji).
-    -Możliwość edycji i usuwania kont oraz profili.
-    -Dodanie opcji zwrotu części/całości pieniędzy przez influencera.
-
-7. Zawieszanie i odwieszanie konta
-
 TODO (General)
 1. Logowanie z Facebook, Google, Apple
     -Implementacja logowania przez OAuth2.

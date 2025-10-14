@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/product/v1")
 public class ProductCheckoutController {
-
-
     private final StripeService stripeService;
 
     public ProductCheckoutController(StripeService stripeService) {

@@ -24,8 +24,11 @@ public class StripeWebhookController {
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
+
+    public StripeWebhookController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleStripeWebhook(HttpServletRequest request) throws IOException {

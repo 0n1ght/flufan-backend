@@ -10,20 +10,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+    private final PasswordResetService passwordResetService;
 
-    @Autowired
-    private PasswordResetService passwordResetService;
+    public AuthController(AccountService accountService, PasswordResetService passwordResetService) {
+        this.accountService = accountService;
+        this.passwordResetService = passwordResetService;
+    }
 
     @PostMapping("/login")
     public String login(@RequestBody LoginDto loginDto) {
         return accountService.verify(loginDto);
-    }
-
-    @Autowired
-    public AuthController(PasswordResetService passwordResetService) {
-        this.passwordResetService = passwordResetService;
     }
 
     @GetMapping("/forgot-password")

@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AccountController {
+    private final AccountService accountService;
 
-    @Autowired
-    private AccountService accountService;
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     @PostMapping(value = "/req/signup", consumes = "application/json")
     public void register(@RequestBody RegisterDto registerDto) {

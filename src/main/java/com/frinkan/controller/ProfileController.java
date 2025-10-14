@@ -11,7 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/profiles")
 public class ProfileController {
-
     private final ProfileService profileService;
 
     public ProfileController(ProfileService profileService) {

@@ -23,7 +23,6 @@ public class AdminServiceImpl implements AdminService {
     private final BannedAccountRepo bannedAccountRepo;
     private final SuspendedAccountRepo suspendedAccountRepo;
     private final MessageRepo messageRepo;
-    private final PasswordResetTokenRepo passwordResetTokenRepo;
     private final ProfileRepo profileRepo;
     private final UserReviewRepo userReviewRepo;
     private final AccountMapper accountMapper;
@@ -48,7 +47,6 @@ public class AdminServiceImpl implements AdminService {
         this.bannedAccountRepo = bannedAccountRepo;
         this.suspendedAccountRepo = suspendedAccountRepo;
         this.messageRepo = messageRepo;
-        this.passwordResetTokenRepo = passwordResetTokenRepo;
         this.profileRepo = profileRepo;
         this.userReviewRepo = userReviewRepo;
         this.accountMapper = accountMapper;
@@ -80,73 +78,65 @@ public class AdminServiceImpl implements AdminService {
         return accountMapper.toAccountDto(bannedAccountRepo.findById(id).orElseThrow());
     }
 
-    void banAccount(Long id) {
+    public void banAccount(Long id) {
         bannedAccountRepo.save(accountRepo.findById(id).orElseThrow());
         accountRepo.deleteById(id);
     }
 
-    void unbanAccount(Long id) {
+    public void unbanAccount(Long id) {
         accountRepo.save(bannedAccountRepo.findById(id).orElseThrow());
         bannedAccountRepo.deleteById(id);
     }
 
-    void deactivateAccount(Long id) {
-        //todo
-    }
-
-    void activateAccount(Long id) {
-        //todo
-    }
-
-    void deleteAccount(Long id) {
+    public void deleteAccount(Long id) {
         accountRepo.deleteById(id);
         bannedAccountRepo.deleteById(id);
     }
 
-    void sendResetPassword(Long accountId) {
+    public void sendResetPassword(Long accountId) {
         passwordResetService.requestPasswordReset(accountRepo.findById(accountId).orElseThrow().getEmail());
     }
 
 
     // Profile Management
-    ProfileResDto getProfileByAccountId(Long accountId) {
+    public ProfileResDto getProfileByAccountId(Long accountId) {
         return profileMapper.toProfileResDto(accountRepo.findById(accountId).orElseThrow().getProfile());
     }
 
 
     // Messages and Content Moderation
-    List<MessageDto> getAllMessages(long acc1Id, long acc2Id, int page, int size) {
+    public List<MessageDto> getAllMessages(long acc1Id, long acc2Id, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         return messageRepo.findConversation(acc1Id, acc2Id, pageable).stream()
                 .map(messageMapper::toMessageDto)
                 .collect(Collectors.toList());
     }
 
-    void deleteMessage(Long messageId) {
+    public void deleteMessage(Long messageId) {
         messageRepo.deleteById(messageId);
     }
 
-    List<UserReviewDto> getAllReviews(long profileId) {
+    public List<UserReviewDto> getAllReviews(long profileId) {
         return userReviewRepo.findAll().stream()
                 .map(userReviewMapper::toUserReviewDto)
                 .collect(Collectors.toList());
     }
 
-    void deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId) {
         userReviewRepo.deleteById(reviewId);
     }
 
 
     // Statistics
-    long countAccounts() {
+    public long countAccounts() {
         return accountRepo.findAll().size();
     }
 
-    long countMessages() {
+    public long countMessages() {
         return messageRepo.findAll().size();
     }
 
-    Map<String, Long> getSystemStats() {
+    public Map<String, Long> getSystemStats() {
         Map<String, Long> stats = new HashMap<>();
 
         stats.put("accounts", (long) accountRepo.findAll().size()+suspendedAccountRepo.findAll().size());

@@ -13,7 +13,6 @@ import java.util.List;
 public class MessageController {
     private final MessageService messageService;
 
-    @Autowired
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
     }
