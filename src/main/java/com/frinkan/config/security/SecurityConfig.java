@@ -54,21 +54,22 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return httpSecurity
+        return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-
-                .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/req/signup", "/css/**", "/js/**", "/h2-console/**", "/**").permitAll();
-                    registry.anyRequest().authenticated();
-                })
-
+                .authorizeHttpRequests(registry -> registry
+                    .requestMatchers("/req/signup", "/css/**", "/js/**", "/h2-console/**", "/**").permitAll()
+                    .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth -> oauth
+                        .loginPage("/login") // możesz dodać własną stronę logowania
+                        .defaultSuccessUrl("/home", true)
+                )
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-
                 .build();
     }
 }
