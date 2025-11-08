@@ -1,7 +1,5 @@
 TODO (General)
 1. Logowanie z Facebook, Google, Apple
-    -Implementacja logowania przez OAuth2.
-    -Potwierdzenie bezpieczeństwa logowania (np. zabezpieczenie tokenów, sprawdzenie poprawności danych).
 
 2. Rezerwacje wideorozmów
     -Kalendarz dostępności influencera.
@@ -13,9 +11,6 @@ TODO (General)
         -Wysłany link/przycisk do połączenia na chacie.
         -Przypomnienie przed połączeniem.
         -Automatyczne otwieranie i zamykanie połączenia/licznik.
-
-3. Test "Payments and Settlements"
-    -Testy związane z płatnościami i rozliczeniami.
 
 4. Weryfikacja na social mediach podczas zakładania profilu
     -Weryfikacja konta użytkownika poprzez media społecznościowe.
