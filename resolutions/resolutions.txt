@@ -1,5 +1,7 @@
 TODO (General)
-1. Logowanie z Facebook, Google, Apple
+
+5. Weryfikacja maila podczas zakładania konta/profilu
+    -Weryfikacja konta użytkownika przez email.
 
 2. Rezerwacje wideorozmów
     -Kalendarz dostępności influencera.
@@ -14,9 +16,6 @@ TODO (General)
 
 4. Weryfikacja na social mediach podczas zakładania profilu
     -Weryfikacja konta użytkownika poprzez media społecznościowe.
-
-5. Weryfikacja maila podczas zakładania konta/profilu
-    -Weryfikacja konta użytkownika przez email.
 
 TODO (Refactoring and Testing)
 7. Refaktoryzacja z ChatGPT

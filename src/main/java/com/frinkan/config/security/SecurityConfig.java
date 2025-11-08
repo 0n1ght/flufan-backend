@@ -65,11 +65,9 @@ public class SecurityConfig {
                     .requestMatchers("/req/signup", "/css/**", "/js/**", "/h2-console/**", "/**").permitAll()
                     .anyRequest().authenticated()
                 )
-                .oauth2Login(oauth -> oauth
-                        .loginPage("/login") // możesz dodać własną stronę logowania
-                        .defaultSuccessUrl("/home", true)
-                )
+
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+
                 .build();
     }
 }
