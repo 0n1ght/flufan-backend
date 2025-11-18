@@ -3,6 +3,20 @@ TODO (General)
 5. Weryfikacja maila podczas zakładania konta/profilu
     -Weryfikacja konta użytkownika przez email.
 
+    po zalozeniu konta, konto staje sie zablokowane,
+    wysylany jest email z linkiem do weryfikacji.
+    link to <domena>/<path>/unikalnykod
+    po wyslaniu get requesta z linka, wykonywana jest metoda odblokowywania konta.
+
+
+4. Weryfikacja na social mediach podczas zakładania profilu
+    -Weryfikacja konta użytkownika poprzez media społecznościowe.
+
+    powiazywanie kont jak na discordzie, x, grach
+    z jakimi kontami mozna powiazac? social media, aplikacje
+    porozmawiaj o tym z chatgpt
+    dodawaj po kolei weryfikacje (powiazanie konta z) i dodaj informacje o weryfikacji do profilu:
+
 2. Rezerwacje wideorozmów
     -Kalendarz dostępności influencera.
     -Rezerwacja terminu i potwierdzenie płatności.
@@ -14,8 +28,13 @@ TODO (General)
         -Przypomnienie przed połączeniem.
         -Automatyczne otwieranie i zamykanie połączenia/licznik.
 
-4. Weryfikacja na social mediach podczas zakładania profilu
-    -Weryfikacja konta użytkownika poprzez media społecznościowe.
+        ktos wybiera termin,
+        kupuje rozmowe,
+        informacja o terminie leci do influencera,
+        on ja akceptuje, odrzuca, badz sugeruje zmiane
+        jezeli akceptuje-> powiadomienie o zaakceptowaniu, wysylany link do rozmowy, pozniej powiadomienie (przypomnienie o rozmowie 15 minut przed)
+        jezeli odrzuci-> powiadomienie do kupujacego ze zwrotem pieniedzy
+        jezeli zasugeruje zmiane-> powiadomienie do kupujacego zeby zaakceptowal, odrzucil, lub zasugerowal zmiane-> powtorz punkt 1 lub 2
 
 TODO (Refactoring and Testing)
 7. Refaktoryzacja z ChatGPT
