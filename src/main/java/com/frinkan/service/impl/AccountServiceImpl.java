@@ -27,7 +27,6 @@ import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-
     private final AccountRepo accountRepo;
     private final BannedAccountRepo bannedAccountRepo;
     private final SuspendedAccountRepo suspendedAccountRepo;
@@ -144,5 +143,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updateAccount(Account account) {
         accountRepo.save(account);
+    }
+
+    @Override
+    public void verifyAccountEmail(String email) {
+        accountRepo.findByEmail(email).orElseThrow().setVerifiedEmail(true);
     }
 }

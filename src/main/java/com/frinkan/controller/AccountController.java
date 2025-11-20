@@ -3,6 +3,7 @@ package com.frinkan.controller;
 import com.frinkan.dto.LoginDto;
 import com.frinkan.dto.RegisterDto;
 import com.frinkan.service.AccountService;
+import com.frinkan.service.VerificationTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class AccountController {
     private final AccountService accountService;
+    private final VerificationTokenService verificationTokenService;
 
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, VerificationTokenService verificationTokenService) {
         this.accountService = accountService;
+        this.verificationTokenService = verificationTokenService;
     }
 
     @PostMapping(value = "/req/signup", consumes = "application/json")

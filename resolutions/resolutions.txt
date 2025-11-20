@@ -3,10 +3,22 @@ TODO (General)
 5. Weryfikacja maila podczas zakładania konta/profilu
     -Weryfikacja konta użytkownika przez email.
 
-    po zalozeniu konta, konto staje sie zablokowane,
+    po zalozeniu konta, konto staje sie zablokowane, {
+    stworz token, powiaz go z kontem, dodaj jego utworzenie podczas rejestracji konta
+    dodaj wysylanie maila po utworzeniu konta
+    dodaj zablokowanie konta do czasu weryfikacji
+    dodaj endpoint i zmienianie verifiedEmail=true po uzyciu linka
+    dodaj "resend email"
+    }
+
+    wysylanie emaila z linkiem z tokenem przy rejestrowaniu konta
+    oraz zmianie emaila (ale wtedy jeszcze mozliwosc zmiany, nie calkowita blokada konta)
+    api do odbierania veryfikacji emaila
+
     wysylany jest email z linkiem do weryfikacji.
     link to <domena>/<path>/unikalnykod
     po wyslaniu get requesta z linka, wykonywana jest metoda odblokowywania konta.
+
 
 
 4. Weryfikacja na social mediach podczas zakładania profilu
@@ -36,7 +48,15 @@ TODO (General)
         jezeli odrzuci-> powiadomienie do kupujacego ze zwrotem pieniedzy
         jezeli zasugeruje zmiane-> powiadomienie do kupujacego zeby zaakceptowal, odrzucil, lub zasugerowal zmiane-> powtorz punkt 1 lub 2
 
+ALGORYTM POKAZYWANIA PROFILI
+
 TODO (Refactoring and Testing)
+8. Unit Testing
+    -Testy jednostkowe dla głównych funkcji aplikacji.
+
+9. Manual Testing with Postman
+    -Testy manualne z użyciem Postmana do sprawdzenia API.
+
 7. Refaktoryzacja z ChatGPT
     -Refaktoryzacja kodu z uwzględnieniem najlepszych praktyk.
 

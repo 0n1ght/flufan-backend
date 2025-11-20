@@ -18,6 +18,7 @@ public class Account {
     @Column(unique = true)
     private String username;
     private String email;
+    private boolean verifiedEmail = false;
     private String password;
 
     @ElementCollection
@@ -62,6 +63,14 @@ public class Account {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isVerifiedEmail() {
+        return verifiedEmail;
+    }
+
+    public void setVerifiedEmail(boolean verifiedEmail) {
+        this.verifiedEmail = verifiedEmail;
     }
 
     public String getPassword() {
