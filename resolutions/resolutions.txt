@@ -1,27 +1,20 @@
 TODO (General)
+2 dodac restrykcje
+3 przetestowac wszystko postmanem
+4 zrobic refactoring kodu z chatemgpt
+6 napisac dokumentacje API
+7 napisac testy jednostkowe niektorych waznych funkcji aplikacji
 
-5. Weryfikacja maila podczas zakładania konta/profilu
-    -Weryfikacja konta użytkownika przez email.
-
-    po zalozeniu konta, konto staje sie zablokowane, {
-    stworz token, powiaz go z kontem, dodaj jego utworzenie podczas rejestracji konta
-    dodaj wysylanie maila po utworzeniu konta
-    dodaj zablokowanie konta do czasu weryfikacji
-    dodaj endpoint i zmienianie verifiedEmail=true po uzyciu linka
-    dodaj "resend email"
-    }
-
-    wysylanie emaila z linkiem z tokenem przy rejestrowaniu konta
-    oraz zmianie emaila (ale wtedy jeszcze mozliwosc zmiany, nie calkowita blokada konta)
-    api do odbierania veryfikacji emaila
-
-    wysylany jest email z linkiem do weryfikacji.
-    link to <domena>/<path>/unikalnykod
-    po wyslaniu get requesta z linka, wykonywana jest metoda odblokowywania konta.
+=======================================================================
 
 
 
-4. Weryfikacja na social mediach podczas zakładania profilu
+popraw maila wysylanego do weryfikacji konta oraz inne.
+ustaw nazwy, ikony, loga
+napisz zwykly controller do odbierania weryfikacji maila, ze strona html
+
+
+1. Weryfikacja na social mediach podczas zakładania profilu
     -Weryfikacja konta użytkownika poprzez media społecznościowe.
 
     powiazywanie kont jak na discordzie, x, grach
@@ -48,43 +41,36 @@ TODO (General)
         jezeli odrzuci-> powiadomienie do kupujacego ze zwrotem pieniedzy
         jezeli zasugeruje zmiane-> powiadomienie do kupujacego zeby zaakceptowal, odrzucil, lub zasugerowal zmiane-> powtorz punkt 1 lub 2
 
-ALGORYTM POKAZYWANIA PROFILI
+3. permissions kont, zalogowanych, niezalogowanych, kont ze zweryfikowanym i niezweryfikowanym mailem, zmienionym mailem niezweryfikowanym
+
+4. ALGORYTM POKAZYWANIA PROFILI
 
 TODO (Refactoring and Testing)
-8. Unit Testing
-    -Testy jednostkowe dla głównych funkcji aplikacji.
+1. Unit Testing
+    -Napisz testy jednostkowe dla głównych funkcji aplikacji.
 
-9. Manual Testing with Postman
+2. Manual Testing with Postman
     -Testy manualne z użyciem Postmana do sprawdzenia API.
 
-7. Refaktoryzacja z ChatGPT
+3. Refaktoryzacja z ChatGPT
     -Refaktoryzacja kodu z uwzględnieniem najlepszych praktyk.
 
-8. Unit Testing
-    -Testy jednostkowe dla głównych funkcji aplikacji.
-
-9. Manual Testing with Postman
-    -Testy manualne z użyciem Postmana do sprawdzenia API.
-
-TODO (Optym and preparing for production)
-10. Przygotowanie kodu
-    -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
-    -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.)
-
-11. Osobny serwer FTP
-    -Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
-    -Bezpieczne połączenie (SFTP).
-
-12. Zmiana bazy danych z H2 na PostgreSQL
-    -Migracja danych.
-    -Optymalizacja bazy danych (indeksy, backupy).
+Repeat 1&2 po refaktoryzacji
 
 TODO (Infrastructure and domains)
 13. Domena, email, powiązanie kont
     -Wykupienie domeny i założenie maila firmowego <nazwa>@<nazwa-domeny>.com.
     -Powiązanie maila firmowego z kontami aplikacji 3rd party (np. Stripe, Google).
 
-TODO (Testing and Verification)
-14. Testy
-    -Testy manualne i jednostkowe.
-    -Testy obciążeniowe dla funkcji płatności, rezerwacji i wiadomości.
+TODO (Preparing for production)
+10. Przygotowanie kodu
+    -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
+    -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.)
+11. Osobny serwer FTP
+    -Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
+    -Bezpieczne połączenie (SFTP).
+12. Zmiana bazy danych z H2 na PostgreSQL
+    -Migracja danych.
+    -Optymalizacja bazy danych (indeksy, backupy).
+
+TODO (Testing and Verificat

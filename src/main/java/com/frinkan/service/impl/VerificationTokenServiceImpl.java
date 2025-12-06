@@ -1,6 +1,5 @@
 package com.frinkan.service.impl;
 
-import com.frinkan.entity.Account;
 import com.frinkan.entity.VerificationToken;
 import com.frinkan.repo.VerificationTokenRepo;
 import com.frinkan.service.AccountService;
@@ -8,7 +7,7 @@ import com.frinkan.service.VerificationTokenService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,16 +21,24 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public void generateToken(String email) {
-        if (tokenRepo.findByEmail(email) != null) tokenRepo.deleteByEmail(email);
-        tokenRepo.save(new VerificationToken(createUniqueToken(email), email, LocalDateTime.now().plusMinutes(20)));
+    public String generateToken(String email) {
+        VerificationToken token = new VerificationToken(createUniqueToken(email), email);
+        tokenRepo.save(token);
+
+        return token.getToken();
     }
 
     @Override
     public void useToken(String email, String token) {
-        VerificationToken verificationToken = tokenRepo.findByEmail(email);
-        if (verificationToken != null && !verificationToken.isExpired() && verificationToken.getToken().equals(token)) {
-            accountService.verifyAccountEmail(email);
+        List<VerificationToken> verificationTokens = tokenRepo.findAllByEmail(email);
+        System.out.println(verificationTokens);
+        for (VerificationToken verificationToken : verificationTokens) {
+            if (verificationToken != null && !verificationToken.isExpired() && verificationToken.getToken().equals(token) && verificationToken.getUsedAt() == null) {
+                accountService.verifyAccountEmail(email);
+                verificationToken.setUsedAt(LocalDateTime.now());
+                tokenRepo.save(verificationToken);
+                break;
+            }
         }
     }
 

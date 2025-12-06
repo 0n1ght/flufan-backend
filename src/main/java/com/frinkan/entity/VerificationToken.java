@@ -14,7 +14,7 @@ public class VerificationToken {
     @Column(unique = true, nullable = false)
     private String token;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String email;
 
     @Column(nullable = false)
@@ -22,14 +22,20 @@ public class VerificationToken {
 
     private LocalDateTime usedAt;
 
-    public VerificationToken(String token, String email, LocalDateTime expiresAt) {
+    public VerificationToken() {}
+
+    public VerificationToken(String token, String email) {
         this.token = token;
         this.email = email;
-        this.expiresAt = expiresAt;
+        this.expiresAt = LocalDateTime.now().plusMinutes(20);
     }
 
     public String getToken() {
         return token;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public LocalDateTime getExpiresAt() {

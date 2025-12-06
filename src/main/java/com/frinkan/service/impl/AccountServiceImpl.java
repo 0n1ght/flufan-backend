@@ -62,14 +62,14 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void saveAccount(RegisterDto accountDto) {
 
-        if (bannedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Account is banned");
-        } else if (accountRepo.findByEmail(accountDto.getEmail()).isPresent() ||
+        if (accountRepo.findByEmail(accountDto.getEmail()).isPresent() ||
                 suspendedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already in use");
         } else if (accountRepo.findByUsername(accountDto.getUsername()).isPresent() ||
-                suspendedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
+                suspendedAccountRepo.findByUsername(accountDto.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username is already in use");
+        } else if (bannedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Account is banned");
         }
 
         accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), passwordEncoder.encode(accountDto.getPassword())));
@@ -134,6 +134,9 @@ public class AccountServiceImpl implements AccountService {
         Account accountToUpdate = accountRepo.findByEmail(authenticatedAccount.getEmail())
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
+        if (!accountToUpdate.getEmail().equals(loginDto.getEmail())) {
+            accountToUpdate.setVerifiedEmail(false);
+        }
         accountToUpdate.setEmail(loginDto.getEmail());
         accountToUpdate.setPassword(passwordEncoder.encode(loginDto.getPassword()));
 
@@ -148,5 +151,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void verifyAccountEmail(String email) {
         accountRepo.findByEmail(email).orElseThrow().setVerifiedEmail(true);
+    }
+
+    @Override
+    public Account findAccountByEmail(String email) {
+        return accountRepo.findByEmail(email).orElseThrow();
     }
 }
