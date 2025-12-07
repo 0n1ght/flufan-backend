@@ -48,6 +48,10 @@ public class ProfileResDto {
         this.accountId = accountId;
     }
 
+    public ProfileResDto() {
+
+    }
+
     public Long getId() {
         return id;
     }
