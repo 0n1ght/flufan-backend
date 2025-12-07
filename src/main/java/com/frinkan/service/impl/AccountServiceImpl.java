@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -155,5 +156,27 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account findAccountByEmail(String email) {
         return accountRepo.findByEmail(email).orElseThrow();
+    }
+
+    @Override
+    public Account loadOrCreateGoogleUser(String email) {
+        Optional<Account> existing = accountRepo.findByEmail(email);
+
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+
+        Account newAccount = new Account();
+        newAccount.setEmail(email);
+        newAccount.setUsername(email.split("@")[0]);
+
+        String randomPwd = UUID.randomUUID().toString();
+        newAccount.setPassword(passwordEncoder.encode(randomPwd));
+
+        newAccount.setVerifiedEmail(true);
+
+        accountRepo.save(newAccount);
+
+        return newAccount;
     }
 }

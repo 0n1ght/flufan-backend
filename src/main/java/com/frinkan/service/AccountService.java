@@ -15,4 +15,5 @@ public interface AccountService extends UserDetailsService {
     void updateAccount(Account account);
     void verifyAccountEmail(String email);
     Account findAccountByEmail(String email);
+    Account loadOrCreateGoogleUser(String email);
 }
