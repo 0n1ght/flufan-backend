@@ -1,8 +1,5 @@
 TODO (General)
 2 dodac restrykcje
-3 przetestowac wszystko postmanem
-4 zrobic refactoring kodu z chatemgpt
-6 napisac dokumentacje API
 7 napisac testy jednostkowe niektorych waznych funkcji aplikacji
 
 =======================================================================
