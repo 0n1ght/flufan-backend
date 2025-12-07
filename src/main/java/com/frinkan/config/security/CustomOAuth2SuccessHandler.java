@@ -34,6 +34,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         }
 
         Account acc = accountService.loadOrCreateGoogleUser(email);
+
         String token = jwtService.generateToken(acc.getEmail());
 
         response.setContentType("application/json");
