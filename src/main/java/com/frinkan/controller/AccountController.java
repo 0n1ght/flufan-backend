@@ -5,54 +5,57 @@ import com.frinkan.dto.RegisterDto;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.MailSenderService;
 import com.frinkan.service.VerificationTokenService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/account")
 public class AccountController {
     private final AccountService accountService;
-    private final VerificationTokenService verificationTokenService;
-    private final MailSenderService mailSender;
+    private final VerificationTokenService tokenService;
+    private final MailSenderService mailService;
 
-    public AccountController(AccountService accountService, VerificationTokenService verificationTokenService, MailSenderService mailSender) {
+    public AccountController(AccountService accountService,
+                             VerificationTokenService tokenService,
+                             MailSenderService mailService) {
         this.accountService = accountService;
-        this.verificationTokenService = verificationTokenService;
-        this.mailSender = mailSender;
+        this.tokenService = tokenService;
+        this.mailService = mailService;
     }
 
-    @PostMapping(value = "/req/signup", consumes = "application/json")
-    public void register(@RequestBody RegisterDto registerDto) {
-
+    @PostMapping(value = "/signup", consumes = "application/json")
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         accountService.saveAccount(registerDto);
-        String verificationToken = verificationTokenService.generateToken(registerDto.getEmail());
-
-        String link = "http://localhost:8080/email-auth/verify-loader?email="
-                + registerDto.getEmail() + "&token=" + verificationToken;
-
-        mailSender.sendEmail(registerDto.getEmail(),
-                "Account Verification",
-                "To verify your email for account " + registerDto.getUsername() + ", please click the link below:\n" + link);
+        String token = tokenService.generateToken(registerDto.getEmail());
+        String link = buildVerificationLink(registerDto.getEmail(), token);
+        sendVerificationEmail(registerDto.getEmail(), registerDto.getUsername(), link);
+        return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
 
-    @PostMapping("/update-login-data")
+    @PostMapping("/login/update")
     public ResponseEntity<String> updateLoginData(@RequestBody LoginDto loginDto) {
         try {
             accountService.changeLoginData(loginDto);
-            return ResponseEntity.ok("Login data updated successfully");
+            return ResponseEntity.ok("Login data updated successfully.");
         } catch (Exception e) {
-            return ResponseEntity.status(400).body("Failed to update login data: " + e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body("Failed to update login data: " + e.getMessage());
         }
     }
 
-    @DeleteMapping("/req/delete-account")
+    @DeleteMapping("/delete")
     public ResponseEntity<String> deleteAccount(@RequestBody LoginDto loginDto) {
         accountService.deleteAccount(loginDto);
-        return ResponseEntity.ok("Account deleted successfully");
+        return ResponseEntity.ok("Account deleted successfully.");
+    }
+
+    private String buildVerificationLink(String email, String token) {
+        return String.format("http://localhost:8080/email-auth/verify-loader?email=%s&token=%s", email, token);
+    }
+
+    private void sendVerificationEmail(String email, String username, String link) {
+        String subject = "Account Verification";
+        String message = String.format("To verify your email for account %s, please click the link below:\n%s", username, link);
+        mailService.sendEmail(email, subject, message);
     }
 }

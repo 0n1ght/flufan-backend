@@ -3,7 +3,6 @@ package com.frinkan.controller;
 import com.frinkan.dto.LoginDto;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.PasswordResetService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

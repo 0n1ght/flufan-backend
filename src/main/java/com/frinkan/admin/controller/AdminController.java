@@ -18,29 +18,27 @@ public class AdminController {
     }
 
     @GetMapping("/accounts")
-    public List<AccountDto> getAllAccounts() {
+    public List<AccountDto> getAccounts(@RequestParam(required = false) Boolean banned) {
+        if (Boolean.TRUE.equals(banned)) {
+            return adminService.getAllBannedAccounts();
+        }
         return adminService.getAllAccounts();
     }
 
-    @GetMapping("/accounts/banned")
-    public List<AccountDto> getAllBannedAccounts() {
-        return adminService.getAllBannedAccounts();
-    }
-
     @GetMapping("/accounts/{id}")
-    public AccountDto getAccountById(@PathVariable Long id) {
+    public AccountDto getAccountById(@PathVariable Long id,
+                                     @RequestParam(required = false) Boolean banned) {
+        if (Boolean.TRUE.equals(banned)) {
+            return adminService.getBannedAccountById(id);
+        }
         return adminService.getAccountById(id);
-    }
-
-    @GetMapping("/accounts/banned/{id}")
-    public AccountDto getBannedAccountById(@PathVariable Long id) {
-        return adminService.getBannedAccountById(id);
     }
 
     @PostMapping("/accounts/{id}/ban")
     public void banAccount(@PathVariable Long id) {
         adminService.banAccount(id);
     }
+
 
     @PostMapping("/accounts/{id}/unban")
     public void unbanAccount(@PathVariable Long id) {
@@ -85,18 +83,10 @@ public class AdminController {
         adminService.deleteReview(id);
     }
 
-    @GetMapping("/stats/accounts")
-    public long countAccounts() {
-        return adminService.countAccounts();
-    }
-
-    @GetMapping("/stats/messages")
-    public long countMessages() {
-        return adminService.countMessages();
-    }
-
     @GetMapping("/stats")
-    public Map<String, Long> getSystemStats() {
+    public Map<String, Long> getSystemStats(@RequestParam(required = false) String type) {
+        if ("accounts".equalsIgnoreCase(type)) return Map.of("accounts", adminService.countAccounts());
+        if ("messages".equalsIgnoreCase(type)) return Map.of("messages", adminService.countMessages());
         return adminService.getSystemStats();
     }
 }

@@ -9,7 +9,6 @@ import com.frinkan.repo.SuspendedAccountRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.dto.RegisterDto;
 import com.frinkan.service.JWTService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,6 +1,5 @@
 package com.frinkan.service.impl;
 
-import com.frinkan.dto.AccountDto;
 import com.frinkan.dto.MessageDto;
 import com.frinkan.entity.Account;
 import com.frinkan.entity.Message;
@@ -9,14 +8,12 @@ import com.frinkan.enums.NotificationType;
 import com.frinkan.exception.InsufficientMessagesException;
 import com.frinkan.exception.MessageDoesNotExist;
 import com.frinkan.exception.MessageLengthException;
-import com.frinkan.mapper.AccountMapper;
 import com.frinkan.mapper.MessageMapper;
 import com.frinkan.model.Notification;
 import com.frinkan.repo.MessageRepo;
 import com.frinkan.service.AccountService;
 import com.frinkan.service.MessageService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -68,17 +65,12 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDto> getConversation(Long userId, int page, int size) {
+    public Page<MessageDto> getConversation(Long userId, Pageable pageable) {
         Account currentUser = accountService.getAuthenticatedAccount();
-
-        Pageable pageable = PageRequest.of(page, size);
-
         Page<Message> messagesPage = messageRepo.findConversation(currentUser.getId(), userId, pageable);
-
-        return messagesPage.stream()
-                .map(messageMapper::toMessageDto)
-                .collect(Collectors.toList());
+        return messagesPage.map(messageMapper::toMessageDto);
     }
+
 
     @Override
     public void markAsRead(Long messageId) {

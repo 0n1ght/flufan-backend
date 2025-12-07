@@ -2,10 +2,7 @@ package com.frinkan.admin.service.impl;
 
 import com.frinkan.admin.service.AdminService;
 import com.frinkan.dto.*;
-import com.frinkan.mapper.AccountMapper;
-import com.frinkan.mapper.MessageMapper;
-import com.frinkan.mapper.ProfileMapper;
-import com.frinkan.mapper.UserReviewMapper;
+import com.frinkan.mapper.*;
 import com.frinkan.repo.*;
 import com.frinkan.service.PasswordResetService;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -56,26 +54,30 @@ public class AdminServiceImpl implements AdminService {
         this.passwordResetService = passwordResetService;
     }
 
+    // --- Helpers ---
+    private <T> T findByIdOrThrow(Long id, Function<Long, T> repoFindById) {
+        return repoFindById.apply(id);
+    }
 
-    // Account Management
+    private <E, D> List<D> mapListToDto(List<E> entities, Function<E, D> mapper) {
+        return entities.stream().map(mapper).collect(Collectors.toList());
+    }
+
+    // --- Account Management ---
     public List<AccountDto> getAllAccounts() {
-        return accountRepo.findAll().stream()
-                .map(accountMapper::toAccountDto)
-                .collect(Collectors.toList());
+        return mapListToDto(accountRepo.findAll(), accountMapper::toAccountDto);
     }
 
     public List<AccountDto> getAllBannedAccounts() {
-        return bannedAccountRepo.findAll().stream()
-                .map(accountMapper::toAccountDto)
-                .collect(Collectors.toList());
+        return mapListToDto(bannedAccountRepo.findAll(), accountMapper::toAccountDto);
     }
 
     public AccountDto getAccountById(Long id) {
-        return accountMapper.toAccountDto(accountRepo.findById(id).orElseThrow());
+        return accountMapper.toAccountDto(findByIdOrThrow(id, accountRepo::findById).orElseThrow());
     }
 
     public AccountDto getBannedAccountById(Long id) {
-        return accountMapper.toAccountDto(bannedAccountRepo.findById(id).orElseThrow());
+        return accountMapper.toAccountDto(findByIdOrThrow(id, bannedAccountRepo::findById).orElseThrow());
     }
 
     public void banAccount(Long id) {
@@ -94,22 +96,22 @@ public class AdminServiceImpl implements AdminService {
     }
 
     public void sendResetPassword(Long accountId) {
-        passwordResetService.requestPasswordReset(accountRepo.findById(accountId).orElseThrow().getEmail());
+        String email = accountRepo.findById(accountId).orElseThrow().getEmail();
+        passwordResetService.requestPasswordReset(email);
     }
 
-
-    // Profile Management
+    // --- Profile Management ---
     public ProfileResDto getProfileByAccountId(Long accountId) {
         return profileMapper.toProfileResDto(accountRepo.findById(accountId).orElseThrow().getProfile());
     }
 
-
-    // Messages and Content Moderation
+    // --- Messages and Content Moderation ---
     public List<MessageDto> getAllMessages(long acc1Id, long acc2Id, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return messageRepo.findConversation(acc1Id, acc2Id, pageable).stream()
-                .map(messageMapper::toMessageDto)
-                .collect(Collectors.toList());
+        return mapListToDto(
+                messageRepo.findConversation(acc1Id, acc2Id, pageable).getContent(),
+                messageMapper::toMessageDto
+        );
     }
 
     public void deleteMessage(Long messageId) {
@@ -117,34 +119,29 @@ public class AdminServiceImpl implements AdminService {
     }
 
     public List<UserReviewDto> getAllReviews(long profileId) {
-        return userReviewRepo.findAll().stream()
-                .map(userReviewMapper::toUserReviewDto)
-                .collect(Collectors.toList());
+        return mapListToDto(userReviewRepo.findAll(), userReviewMapper::toUserReviewDto);
     }
 
     public void deleteReview(Long reviewId) {
         userReviewRepo.deleteById(reviewId);
     }
 
-
-    // Statistics
+    // --- Statistics ---
     public long countAccounts() {
-        return accountRepo.findAll().size();
+        return accountRepo.count();
     }
 
     public long countMessages() {
-        return messageRepo.findAll().size();
+        return messageRepo.count();
     }
 
     public Map<String, Long> getSystemStats() {
         Map<String, Long> stats = new HashMap<>();
-
-        stats.put("accounts", (long) accountRepo.findAll().size()+suspendedAccountRepo.findAll().size());
-        stats.put("banned_accounts", (long) bannedAccountRepo.findAll().size());
-        stats.put("profiles", (long) profileRepo.findAll().size());
-        stats.put("messages", (long) messageRepo.findAll().size());
-        stats.put("reviews", (long) userReviewRepo.findAll().size());
-
+        stats.put("accounts", accountRepo.count() + suspendedAccountRepo.count());
+        stats.put("banned_accounts", bannedAccountRepo.count());
+        stats.put("profiles", profileRepo.count());
+        stats.put("messages", messageRepo.count());
+        stats.put("reviews", userReviewRepo.count());
         return stats;
     }
 }

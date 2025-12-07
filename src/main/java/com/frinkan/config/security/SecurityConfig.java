@@ -62,7 +62,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(registry -> registry
-                    .requestMatchers("/req/signup", "/css/**", "/js/**", "/h2-console/**", "/**").permitAll()
+                    .requestMatchers("/req/signup", "/css/**", "/js/**", "/**", "/h2-console").permitAll()
                     .anyRequest().authenticated()
                 )
 

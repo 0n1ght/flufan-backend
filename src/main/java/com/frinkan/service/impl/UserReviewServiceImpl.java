@@ -1,6 +1,5 @@
 package com.frinkan.service.impl;
 
-import com.frinkan.entity.Account;
 import com.frinkan.entity.UserReview;
 import com.frinkan.dto.UserReviewDto;
 import com.frinkan.mapper.UserReviewMapper;

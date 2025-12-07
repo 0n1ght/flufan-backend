@@ -23,18 +23,11 @@ public class EmailVerificationController {
         this.mailSender = mailSender;
     }
 
-    // -------------------------------------------
-    // 1) STRONA verify-loader.html
-    // -------------------------------------------
     @GetMapping("/verify-loader")
     public String verifyLoaderPage() {
         return "verify-loader";
     }
 
-
-    // -------------------------------------------
-    // 2) BACKEND do którego uderza verify-loader (POST)
-    // -------------------------------------------
     @PostMapping("/verify")
     @ResponseBody
     public ResponseEntity<?> verifyEmail(
@@ -49,10 +42,6 @@ public class EmailVerificationController {
         }
     }
 
-
-    // -------------------------------------------
-    // 3) Twój endpoint regeneracji tokenu
-    // -------------------------------------------
     @GetMapping("/regenerateToken")
     @ResponseBody
     public void regenerateToken(@RequestParam String email) {
@@ -61,7 +50,6 @@ public class EmailVerificationController {
 
             String newToken = verificationTokenService.generateToken(email);
 
-            // UWAGA: poprawny link musi zawierać parametry
             String link = "http://localhost:8080/email-auth/verify-loader?email="
                     + email + "&token=" + newToken;
 
@@ -75,11 +63,11 @@ public class EmailVerificationController {
 
     @GetMapping("/verified")
     public String verifiedPage() {
-        return "verified"; // Thymeleaf szuka templates/verified.html
+        return "verified";
     }
 
     @GetMapping("/expired")
     public String expiredPage() {
-        return "expired";  // Thymeleaf szuka templates/expired.html
+        return "expired";
     }
 }

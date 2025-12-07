@@ -2,11 +2,10 @@ package com.frinkan.controller;
 
 import com.frinkan.dto.MessageDto;
 import com.frinkan.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -18,16 +17,16 @@ public class MessageController {
     }
 
     @PostMapping("/send/{receiverId}")
-    public ResponseEntity<String> sendMessage(@PathVariable Long receiverId, @RequestBody MessageDto messageDto) {
+    public ResponseEntity<String> sendMessage(@PathVariable Long receiverId,
+                                              @RequestBody MessageDto messageDto) {
         messageService.sendMessage(receiverId, messageDto.getContent(), messageDto.getMessageType());
         return ResponseEntity.ok("Message sent");
     }
 
     @GetMapping("/conversation/{userId}")
-    public List<MessageDto> getConversation(@PathVariable Long userId,
-                                            @RequestParam int page,
-                                            @RequestParam int size) {
-        return messageService.getConversation(userId, page, size);
+    public ResponseEntity<Page<MessageDto>> getConversation(@PathVariable Long userId, Pageable pageable) {
+        Page<MessageDto> conversation = messageService.getConversation(userId, pageable);
+        return ResponseEntity.ok(conversation);
     }
 
     @PutMapping("/read/{messageId}")

@@ -5,7 +5,6 @@ import com.frinkan.entity.PasswordResetToken;
 import com.frinkan.repo.AccountRepo;
 import com.frinkan.repo.PasswordResetTokenRepo;
 import com.frinkan.service.PasswordResetService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
