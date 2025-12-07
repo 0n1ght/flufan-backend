@@ -29,6 +29,10 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         OAuth2User oAuthUser = (OAuth2User) authentication.getPrincipal();
         String email = oAuthUser.getAttribute("email");
 
+        if (email == null) {
+            email = oAuthUser.getName() + "@facebook.local";
+        }
+
         Account acc = accountService.loadOrCreateGoogleUser(email);
 
         String token = jwtService.generateToken(acc.getEmail());
