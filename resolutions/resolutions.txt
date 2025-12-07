@@ -1,10 +1,5 @@
 TODO (General)
 2 dodac restrykcje
-7 napisac testy jednostkowe niektorych waznych funkcji aplikacji
-
-=======================================================================
-
-
 
 popraw maila wysylanego do weryfikacji konta oraz inne.
 ustaw nazwy, ikony, loga
@@ -43,8 +38,6 @@ napisz zwykly controller do odbierania weryfikacji maila, ze strona html
 4. ALGORYTM POKAZYWANIA PROFILI
 
 TODO (Refactoring and Testing)
-1. Unit Testing
-    -Napisz testy jednostkowe dla głównych funkcji aplikacji.
 
 2. Manual Testing with Postman
     -Testy manualne z użyciem Postmana do sprawdzenia API.
