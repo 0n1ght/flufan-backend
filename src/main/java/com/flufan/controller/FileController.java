@@ -55,11 +55,11 @@ public class FileController {
 
     //TODO: update pfp
     // sprawdza dane zdjecia, parametry itp. jezeli nie jest odpowiednie -> zwraca wyjatek
-    // jezeli jest juz zdjecie pod sciezka -> <nickname_zalogowanego_uzytkownika>_pfp.png/jpg/jpeg to je usowa
-    // zapisuej zdjecie pod sciezka <nickname_zalogowanego_uzytkownika>_pfp.png/jpg/jpeg
+    // jezeli jest juz zdjecie pod sciezka -> <id konta/profilu>_pfp.png/jpg/jpeg to je usowa
+    // zapisuej zdjecie pod sciezka <id konta/profilu>_pfp.png/jpg/jpeg
 
     //TODO: delete pfp
-    // usowa zdjecie pod sciezka <nickname_zalogowanego_uzytkownika>_pfp.png/jpg/jpeg
+    // usowa zdjecie pod sciezka <id konta/profilu>_pfp.png/jpg/jpeg
 
     //TODO: add photo/video to message
 
