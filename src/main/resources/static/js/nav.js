@@ -59,7 +59,7 @@ document.getElementById("nav").innerHTML = `
 </style>
 
 <ul class="navBar">
-    <li class="logo"><a href="/">Frinkan</a></li>
+    <li class="logo"><a href="/">Flufan</a></li>
     <li class="navItem"><a href="/">Leaderboard</a></li>
     <li class="navItem"><a href="/">Settings</a></li>
     <li class="navItem"><a href="/about">FAQ</a></li>

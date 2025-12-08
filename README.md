@@ -1,2 +1,2 @@
-# Frinkan-Backend
-Backend for Frinkan.com
+# Flufan-Backend
+Backend for Flufan.com

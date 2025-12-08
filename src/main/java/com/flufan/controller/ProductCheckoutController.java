@@ -1,0 +1,29 @@
+package com.flufan.controller;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.flufan.dto.ProductRequest;
+import com.flufan.dto.StripeResponse;
+import com.flufan.service.StripeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/product/v1")
+public class ProductCheckoutController {
+    private final StripeService stripeService;
+
+    public ProductCheckoutController(StripeService stripeService) {
+        this.stripeService = stripeService;
+    }
+
+    @PostMapping("/checkout")
+    public ResponseEntity<StripeResponse> checkoutProducts(@RequestBody ProductRequest productRequest) throws JsonProcessingException {
+        StripeResponse stripeResponse = stripeService.checkoutProducts(productRequest);
+        HttpStatus status = stripeResponse.getStatus().equals("SUCCESS") ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        return ResponseEntity.status(status).body(stripeResponse);
+    }
+}
