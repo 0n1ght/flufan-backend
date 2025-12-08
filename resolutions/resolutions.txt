@@ -26,21 +26,26 @@ TODO (General)
         jezeli odrzuci-> powiadomienie do kupujacego ze zwrotem pieniedzy
         jezeli zasugeruje zmiane-> powiadomienie do kupujacego zeby zaakceptowal, odrzucil, lub zasugerowal zmiane-> powtorz punkt 1 lub 2
 
-3. permissions kont, zalogowanych, niezalogowanych,
+
+TODO: Quick Changes
+-Permissions kont, zalogowanych, niezalogowanych,
     kont ze zweryfikowanym i niezweryfikowanym mailem,
     zmienionym mailem niezweryfikowanym itp.
 
-4. algorytm wyswietlania profili
+-Algorytm wyswietlania profili
 
-TODO (Infrastructure and domains)
-13. Domena, email, powiązanie kont
+
+(Infrastructure and domains)
+-Domena, email, powiązanie kont
     -Wykupienie domeny i założenie maila firmowego <nazwa>@<nazwa-domeny>.com.
     -Powiązanie maila firmowego z kontami aplikacji 3rd party (np. Stripe, Google).
 
-TODO (Preparing for production)
-10. Przygotowanie kodu
+
+(Preparing for production)
+-Przygotowanie kodu
     -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
     -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.), log, nazw itd.
-12. Zmiana bazy danych z H2 na PostgreSQL
+
+-Zmiana bazy danych z H2 na PostgreSQL
     -Migracja danych.
     -Optymalizacja bazy danych (indeksy, backupy).
