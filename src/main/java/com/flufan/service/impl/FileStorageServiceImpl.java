@@ -26,7 +26,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         Path target = dir.resolve(name);
 
         Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
-        return name; // zapisujesz to w bazie
+        return name;
     }
 
     public Path load(String folder, String filename) {
