@@ -33,10 +33,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public void createProfile(ProfileDto profileDto) {
-        // Pobieramy zalogowanego użytkownika
         Account account = authService.getAuthenticatedAccount();
 
-        // Sprawdzamy, czy konto już ma profil
         if (account.getProfile() != null) {
             throw new RuntimeException("Your profile is already created");
         }
