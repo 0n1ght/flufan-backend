@@ -1,11 +1,4 @@
 TODO (General)
-2 dodac restrykcje
-
-popraw maila wysylanego do weryfikacji konta oraz inne.
-ustaw nazwy, ikony, loga
-napisz zwykly controller do odbierania weryfikacji maila, ze strona html
-
-
 1. Weryfikacja na social mediach podczas zakładania profilu
     -Weryfikacja konta użytkownika poprzez media społecznościowe.
 
@@ -33,19 +26,11 @@ napisz zwykly controller do odbierania weryfikacji maila, ze strona html
         jezeli odrzuci-> powiadomienie do kupujacego ze zwrotem pieniedzy
         jezeli zasugeruje zmiane-> powiadomienie do kupujacego zeby zaakceptowal, odrzucil, lub zasugerowal zmiane-> powtorz punkt 1 lub 2
 
-3. permissions kont, zalogowanych, niezalogowanych, kont ze zweryfikowanym i niezweryfikowanym mailem, zmienionym mailem niezweryfikowanym
+3. permissions kont, zalogowanych, niezalogowanych,
+    kont ze zweryfikowanym i niezweryfikowanym mailem,
+    zmienionym mailem niezweryfikowanym itp.
 
-4. ALGORYTM POKAZYWANIA PROFILI
-
-TODO (Refactoring and Testing)
-
-2. Manual Testing with Postman
-    -Testy manualne z użyciem Postmana do sprawdzenia API.
-
-3. Refaktoryzacja z ChatGPT
-    -Refaktoryzacja kodu z uwzględnieniem najlepszych praktyk.
-
-Repeat 1&2 po refaktoryzacji
+4. algorytm wyswietlania profili
 
 TODO (Infrastructure and domains)
 13. Domena, email, powiązanie kont
@@ -55,12 +40,7 @@ TODO (Infrastructure and domains)
 TODO (Preparing for production)
 10. Przygotowanie kodu
     -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
-    -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.)
-11. Osobny serwer FTP
-    -Przechowywanie zdjęć/wiadomości głosowych z konwersacji oraz zdjęć profilowych.
-    -Bezpieczne połączenie (SFTP).
+    -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.), log, nazw itd.
 12. Zmiana bazy danych z H2 na PostgreSQL
     -Migracja danych.
     -Optymalizacja bazy danych (indeksy, backupy).
-
-TODO (Testing and Verificat
