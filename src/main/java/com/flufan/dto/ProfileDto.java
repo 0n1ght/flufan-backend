@@ -15,7 +15,7 @@ public class ProfileDto {
     private int messagePrice;
     private int callPrice;
     private String profilePicturePath;
-    private List<LinkedAccount> linkedAccounts; // Konta social media
+    private List<LinkedAccount> linkedAccounts;
     private List<Service> menu;
 
     public String getNick() {

@@ -66,4 +66,16 @@ public class FileController {
     //TODO: remove photo/video from message
 
     //TODO: WARNING: jezeli uzytkownik zmieni nick, nazwa pliku z jego pfp i inne pliki tez powinny sie zaktualizowac
+
+    //TODO: formaty do wiadomosci: mp3, mp4, png, jpg, jpeg
+    //obrazy: .jpg, .jpeg, .png, .gif
+    //NeetoChat Help Center
+    //+1
+    //dokumenty: .doc, .docx, .xls, .xlsx, .pdf, .txt, .rtf, .csv, ewentualnie też .html
+    //NeetoChat Help Center
+    //+1
+    //archiwa: .zip
+    //NeetoChat Help Center
+    //+1
+    //filmy/wideo: np. .mp4, .mov, .avi, .mkv i inne formaty wideo obsługiwane przez Messenger
 }
