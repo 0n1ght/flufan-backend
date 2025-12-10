@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/stripe")
+@RequestMapping("/api/stripe")
 public class StripeWebhookController {
 
     @Value("${stripe.webhook.secret}")

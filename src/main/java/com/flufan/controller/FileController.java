@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.*;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping("/api/files")
 public class FileController {
 
     private final FileStorageService storage;

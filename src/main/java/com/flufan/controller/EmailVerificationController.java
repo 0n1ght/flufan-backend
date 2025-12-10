@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/email-auth")
+@RequestMapping("/api/email-auth")
 public class EmailVerificationController {
 
     private final VerificationTokenService verificationTokenService;

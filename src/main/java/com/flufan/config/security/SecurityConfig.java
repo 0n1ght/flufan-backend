@@ -70,10 +70,10 @@ public class SecurityConfig {
                                 "/api/auth/login",
                                 "/oauth2/**",
                                 "/login/**",
-                                "/h2-console/**",
                                 "/css/**",
                                 "/js/**",
-                                "/files/**"
+                                "/files/**",
+                                "/api/auth/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
