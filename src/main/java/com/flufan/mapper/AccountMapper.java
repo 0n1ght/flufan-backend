@@ -20,7 +20,6 @@ public class AccountMapper {
             profileDto.setNick(account.getProfile().getNick());
             profileDto.setFirstName(account.getProfile().getFirstName());
             profileDto.setLastName(account.getProfile().getLastName());
-            profileDto.setProfilePicturePath(account.getProfile().getProfilePicturePath());
             accountDto.setProfile(profileDto);
         }
 

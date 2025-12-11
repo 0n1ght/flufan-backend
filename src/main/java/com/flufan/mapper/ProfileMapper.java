@@ -25,7 +25,6 @@ public class ProfileMapper {
         profile.setRespondTime(profileDto.getRespondTime());
         profile.setMessagePrice(profileDto.getMessagePrice());
         profile.setCallPrice(profileDto.getCallPrice());
-        profile.setProfilePicturePath(profileDto.getProfilePicturePath());
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
         profile.setMenu(profileDto.getMenu());
 
@@ -51,7 +50,6 @@ public class ProfileMapper {
                 profile.getRespondTime(),
                 profile.getMessagePrice(),
                 profile.getCallPrice(),
-                profile.getProfilePicturePath(),
                 profile.getLinkedAccounts(),
                 profile.getMenu(),
                 profile.getAccount().getId()

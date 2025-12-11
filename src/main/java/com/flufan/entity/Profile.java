@@ -26,7 +26,6 @@ public class Profile {
 
     private long messagePrice;
     private long callPrice;
-    private String profilePicturePath;
 
     @ElementCollection
     @CollectionTable(name = "linked_accounts", joinColumns = @JoinColumn(name = "profile_id"))
@@ -134,14 +133,6 @@ public class Profile {
 
     public void setCallPrice(int callPrice) {
         this.callPrice = callPrice;
-    }
-
-    public String getProfilePicturePath() {
-        return profilePicturePath;
-    }
-
-    public void setProfilePicturePath(String profilePicturePath) {
-        this.profilePicturePath = profilePicturePath;
     }
 
     public List<LinkedAccount> getLinkedAccounts() {

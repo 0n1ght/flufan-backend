@@ -1,3 +1,6 @@
+Throw out profile photo path field from Profile
+messages, calls, menu, buying things
+
 TODO (General)
 1. Weryfikacja na social mediach podczas zakładania profilu
     -Weryfikacja konta użytkownika poprzez media społecznościowe.

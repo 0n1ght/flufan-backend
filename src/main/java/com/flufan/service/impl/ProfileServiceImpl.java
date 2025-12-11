@@ -70,7 +70,6 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setRespondTime(profileDto.getRespondTime());
         profile.setMessagePrice(profileDto.getMessagePrice());
         profile.setCallPrice(profileDto.getCallPrice());
-        profile.setProfilePicturePath(profileDto.getProfilePicturePath());
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
         profile.setMenu(profileDto.getMenu());
 

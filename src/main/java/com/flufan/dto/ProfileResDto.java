@@ -21,14 +21,13 @@ public class ProfileResDto {
 
     private long messagePrice;
     private long callPrice;
-    private String profilePicturePath;
     private List<LinkedAccount> linkedAccounts;
     private List<Service> menu;
     private Long accountId;
 
     public ProfileResDto(Long id, String nick, String title, boolean verified, boolean active, String firstName,
                          String lastName, int interactionCounter, double rating, int respondTime, long messagePrice,
-                         long callPrice, String profilePicturePath, List<LinkedAccount> linkedAccounts,
+                         long callPrice, List<LinkedAccount> linkedAccounts,
                          List<Service> menu, Long accountId) {
         this.id = id;
         this.nick = nick;
@@ -42,7 +41,6 @@ public class ProfileResDto {
         this.respondTime = respondTime;
         this.messagePrice = messagePrice;
         this.callPrice = callPrice;
-        this.profilePicturePath = profilePicturePath;
         this.linkedAccounts = linkedAccounts;
         this.menu = menu;
         this.accountId = accountId;
@@ -146,14 +144,6 @@ public class ProfileResDto {
 
     public void setCallPrice(int callPrice) {
         this.callPrice = callPrice;
-    }
-
-    public String getProfilePicturePath() {
-        return profilePicturePath;
-    }
-
-    public void setProfilePicturePath(String profilePicturePath) {
-        this.profilePicturePath = profilePicturePath;
     }
 
     public List<LinkedAccount> getLinkedAccounts() {
