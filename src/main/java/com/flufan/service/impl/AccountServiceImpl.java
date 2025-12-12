@@ -132,23 +132,25 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void changeLoginData(LoginDto loginDto) {
-        Optional<Account> existingAccount = accountRepo.findByEmail(loginDto.getEmail());
         Account authenticatedAccount = getAuthenticatedAccount();
 
-        if (existingAccount.isPresent() && !existingAccount.get().getId().equals(authenticatedAccount.getId())) {
+        if (accountRepo.findByEmail(loginDto.getEmail()).isPresent()
+                && !authenticatedAccount.getEmail().equals(loginDto.getEmail())) {
             throw new IllegalArgumentException("Email is already in use");
         }
+        authenticatedAccount.setEmail(loginDto.getEmail());
+        authenticatedAccount.setVerifiedEmail(false);
 
-        Account accountToUpdate = accountRepo.findByEmail(authenticatedAccount.getEmail())
-                .orElseThrow(() -> new RuntimeException("Account not found"));
 
-        if (!accountToUpdate.getEmail().equals(loginDto.getEmail())) {
-            accountToUpdate.setVerifiedEmail(false);
+        if (accountRepo.findByUsername(loginDto.getUsername()).isPresent()
+                && !authenticatedAccount.getUsername().equals(loginDto.getUsername())) {
+            throw new IllegalArgumentException("Username is taken");
         }
-        accountToUpdate.setEmail(loginDto.getEmail());
-        accountToUpdate.setPassword(passwordEncoder.encode(loginDto.getPassword()));
+        authenticatedAccount.setUsername(loginDto.getUsername());
 
-        accountRepo.save(accountToUpdate);
+        authenticatedAccount.setPassword(passwordEncoder.encode(loginDto.getPassword()));
+
+        accountRepo.save(authenticatedAccount);
     }
 
     @Override
