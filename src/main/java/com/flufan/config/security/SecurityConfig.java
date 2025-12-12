@@ -66,7 +66,7 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(
-                                "/account/signup",
+                                "/api/account/signup",
                                 "/api/auth/login",
                                 "/oauth2/**",
                                 "/login/**",
