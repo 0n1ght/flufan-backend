@@ -107,19 +107,19 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String verify(LoginDto loginDto) {
-        Authentication authentication;
+
+        String email;
         if (loginDto.getEmail() != null) {
-            authentication =
-                    authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+            email = loginDto.getEmail();
         } else {
-            authentication =
-                    authManager.authenticate(new UsernamePasswordAuthenticationToken(
-                            accountRepo.findByUsername(loginDto.getUsername()).orElseThrow().getEmail(),
-                            loginDto.getPassword()));
+            email = accountRepo.findByUsername(loginDto.getUsername()).orElseThrow().getEmail();
         }
 
+        Authentication authentication =
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(email, loginDto.getPassword()));
+
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(loginDto.getEmail());
+            return jwtService.generateToken(email);
         }
 
         return "Fail";
