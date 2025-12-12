@@ -1,4 +1,4 @@
-Throw out profile photo path field from Profile
+profile.nick = account.username
 messages, calls, menu, buying things
 
 TODO (General)
