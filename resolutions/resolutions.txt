@@ -1,12 +1,8 @@
-Add pfp management endpoints in AccountController
-2 methods:
-updatePfp
-removePfp
-
-Add new field/s to Account class
-
 Update AccountDto class and accountMapper.toAccountDto() method
 Make profile.nick equals account.username
+
+
+Add new field/s to Account class
 
 commit2:
 "

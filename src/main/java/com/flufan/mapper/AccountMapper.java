@@ -13,7 +13,6 @@ public class AccountMapper {
 
         accountDto.setId(account.getId());
         accountDto.setUsername(account.getUsername());
-        accountDto.setEmail(account.getEmail());
 
         if (account.getProfile() != null) {
             ProfileDto profileDto = new ProfileDto();
