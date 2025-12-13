@@ -1,13 +1,12 @@
 package com.flufan.controller;
 
-import com.flufan.dto.ChangeEmailRequest;
-import com.flufan.dto.ChangePasswordRequest;
-import com.flufan.dto.LoginDto;
-import com.flufan.dto.RegisterDto;
+import com.flufan.dto.*;
 import com.flufan.entity.Account;
+import com.flufan.mapper.AccountMapper;
 import com.flufan.service.AccountService;
 import com.flufan.service.MailSenderService;
 import com.flufan.service.VerificationTokenService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +16,16 @@ public class AccountController {
     private final AccountService accountService;
     private final VerificationTokenService tokenService;
     private final MailSenderService mailService;
+    private final AccountMapper accountMapper;
 
     public AccountController(AccountService accountService,
                              VerificationTokenService tokenService,
-                             MailSenderService mailService) {
+                             MailSenderService mailService,
+                             AccountMapper accountMapper) {
         this.accountService = accountService;
         this.tokenService = tokenService;
         this.mailService = mailService;
+        this.accountMapper = accountMapper;
     }
 
     @PostMapping(value = "/signup", consumes = "application/json")
@@ -35,16 +37,14 @@ public class AccountController {
         return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
 
-//    todo
-//    @GetMapping("/this-account")
-//    public ResponseEntity<AccountDto> getAuthenticatedAccount() {
-//        Account account = accountService.getAuthenticatedAccount();
-//        if (account == null) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-//        }
-//        AccountDto dto = new AccountDto(account.getUsername(), account.getEmail());
-//        return ResponseEntity.ok(dto);
-//    }
+    @GetMapping("/this-account")
+    public ResponseEntity<AccountDto> getAuthenticatedAccount() {
+        Account account = accountService.getAuthenticatedAccount();
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(accountMapper.toAccountDto(account));
+    }
 
     @PostMapping("/update/username")
     public ResponseEntity<String> changeUsername(@RequestBody String newUsername) {

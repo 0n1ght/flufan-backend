@@ -1,5 +1,5 @@
 dodaj "points" do account
-dodaj endpoint zwracania authenticated account w AccountController
+zaktualizuj klase accountDto i metode accountMapper.toAccountDto()
 profile.nick = account.username
 
 messages,
