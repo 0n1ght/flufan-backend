@@ -19,15 +19,6 @@ public class FileController {
         this.storage = storage;
     }
 
-    @PostMapping("/{folder}")
-    public ResponseEntity<String> upload(
-            @PathVariable String folder,
-            @RequestParam("file") MultipartFile file) throws IOException {
-
-        String filename = storage.save(file, folder);
-        return ResponseEntity.ok(filename);
-    }
-
     @GetMapping("/{folder}/{filename}")
     public ResponseEntity<Resource> get(
             @PathVariable String folder,
@@ -43,30 +34,6 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(contentType == null ? "application/octet-stream" : contentType))
                 .body(resource);
     }
-
-    @DeleteMapping("/{folder}/{filename}")
-    public ResponseEntity<Void> delete(
-            @PathVariable String folder,
-            @PathVariable String filename) throws IOException {
-
-        boolean deleted = storage.delete(folder, filename);
-        return deleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
-    }
-
-    //TODO: update pfp
-    // sprawdza dane zdjecia, parametry itp. jezeli nie jest odpowiednie -> zwraca wyjatek
-    // jezeli jest juz zdjecie pod sciezka -> <id konta/profilu>_pfp.png/jpg/jpeg to je usowa
-    // zapisuej zdjecie pod sciezka <id konta/profilu>_pfp.png/jpg/jpeg
-
-    //TODO: delete pfp
-    // usowa zdjecie pod sciezka <id konta/profilu>_pfp.png/jpg/jpeg
-
-    //TODO: add photo/video to message
-
-    //TODO: remove photo/video from message
-
-    //TODO: WARNING: jezeli uzytkownik zmieni nick, nazwa pliku z jego pfp i inne pliki tez powinny sie zaktualizowac
-
     //TODO: formaty do wiadomosci: mp3, mp4, png, jpg, jpeg
     //obrazy: .jpg, .jpeg, .png, .gif
     //NeetoChat Help Center

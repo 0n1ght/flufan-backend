@@ -1,10 +1,21 @@
-dodaj "points" do account
-zaktualizuj klase accountDto i metode accountMapper.toAccountDto()
-profile.nick = account.username
+Add pfp management endpoints in AccountController
+2 methods:
+updatePfp
+removePfp
 
+Add new field/s to Account class
+
+Update AccountDto class and accountMapper.toAccountDto() method
+Make profile.nick equals account.username
+
+commit2:
+"
+Fix bugs, do refactoring, and prepare for prod:
 messages,
 calls,
 menu
+"
+
 
 TODO (General)
 1. Weryfikacja na social mediach podczas zakładania profilu
@@ -36,24 +47,22 @@ TODO (General)
 
 
 TODO: Quick Changes
--Permissions kont, zalogowanych, niezalogowanych,
-    kont ze zweryfikowanym i niezweryfikowanym mailem,
-    zmienionym mailem niezweryfikowanym itp.
+commit 5:
+"
+Add algorithm of returning list of profiles
+"
 
--Algorytm wyswietlania profili
-
-
+commit 6:
 (Infrastructure and domains)
 -Domena, email, powiązanie kont
     -Wykupienie domeny i założenie maila firmowego <nazwa>@<nazwa-domeny>.com.
     -Powiązanie maila firmowego z kontami aplikacji 3rd party (np. Stripe, Google).
+-Zmiana bazy danych z H2 na PostgreSQL
+    -Migracja danych.
+    -Optymalizacja bazy danych (indeksy, backupy).
 
-
+commit 7:
 (Preparing for production)
 -Przygotowanie kodu
     -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
     -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.), log, nazw itd.
-
--Zmiana bazy danych z H2 na PostgreSQL
-    -Migracja danych.
-    -Optymalizacja bazy danych (indeksy, backupy).
