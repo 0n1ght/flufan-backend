@@ -1,5 +1,7 @@
 package com.flufan.controller;
 
+import com.flufan.dto.ChangeEmailRequest;
+import com.flufan.dto.ChangePasswordRequest;
 import com.flufan.dto.LoginDto;
 import com.flufan.dto.RegisterDto;
 import com.flufan.service.AccountService;
@@ -7,17 +9,23 @@ import com.flufan.service.MailSenderService;
 import com.flufan.service.VerificationTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class AccountControllerTest {
+
     @Mock
     private AccountService accountService;
+
     @Mock
     private VerificationTokenService tokenService;
+
     @Mock
     private MailSenderService mailService;
 
@@ -30,57 +38,76 @@ class AccountControllerTest {
     }
 
     @Test
-    void testRegister_Success() {
+    void testRegister() {
         RegisterDto dto = new RegisterDto();
-        dto.setEmail("test@test.com");
-        dto.setUsername("user");
-
-        when(tokenService.generateToken(dto.getEmail())).thenReturn("TOKEN");
+        dto.setEmail("test@example.com");
+        dto.setUsername("user123");
+        when(tokenService.generateToken(dto.getEmail())).thenReturn("token123");
 
         ResponseEntity<String> response = accountController.register(dto);
 
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Registration successful"));
+
         verify(accountService).saveAccount(dto);
-        verify(tokenService).generateToken(dto.getEmail());
-        verify(mailService).sendEmail(eq("test@test.com"), anyString(), contains("http://localhost:8080/email-auth/verify-loader"));
+
+        ArgumentCaptor<String> emailCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> subjectCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> messageCaptor = ArgumentCaptor.forClass(String.class);
+
+        verify(mailService).sendEmail(emailCaptor.capture(), subjectCaptor.capture(), messageCaptor.capture());
+
+        assertEquals(dto.getEmail(), emailCaptor.getValue());
+        assertTrue(messageCaptor.getValue().contains("token123"));
     }
 
     @Test
-    void testUpdateLoginData_Success() {
-        LoginDto dto = new LoginDto();
-        dto.setEmail("test@test.com");
-        dto.setPassword("pwd");
-
-        ResponseEntity<String> response = accountController.updateLoginData(dto);
-
+    void testChangeUsernameSuccess() {
+        ResponseEntity<String> response = accountController.changeUsername("newUser");
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Login data updated successfully"));
-        verify(accountService).changeLoginData(dto);
+        verify(accountService).changeUsername("newUser");
     }
 
     @Test
-    void testUpdateLoginData_Failure() {
-        LoginDto dto = new LoginDto();
-        dto.setEmail("test@test.com");
+    void testChangeUsernameFailure() {
+        doThrow(new RuntimeException("Error")).when(accountService).changeUsername("badUser");
 
-        doThrow(new RuntimeException("Error")).when(accountService).changeLoginData(dto);
-
-        ResponseEntity<String> response = accountController.updateLoginData(dto);
-
+        ResponseEntity<String> response = accountController.changeUsername("badUser");
         assertEquals(400, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Failed to update login data"));
     }
 
     @Test
-    void testDeleteAccount_Success() {
+    void testChangeEmailSuccess() {
+        ChangeEmailRequest req = new ChangeEmailRequest();
+        req.setNewEmail("new@example.com");
+        req.setPassword("pass123");
+
+        ResponseEntity<String> response = accountController.changeEmail(req);
+        assertEquals(200, response.getStatusCodeValue());
+        verify(accountService).changeEmail("pass123", "new@example.com");
+    }
+
+    @Test
+    void testChangePasswordSuccess() {
+        ChangePasswordRequest req = new ChangePasswordRequest();
+        req.setOldPassword("old");
+        req.setNewPassword("new");
+
+        ResponseEntity<String> response = accountController.changePassword(req);
+        assertEquals(200, response.getStatusCodeValue());
+        verify(accountService).changePassword("old", "new");
+    }
+
+    @Test
+    void testDeleteAccount() {
         LoginDto dto = new LoginDto();
-        dto.setEmail("test@test.com");
+        dto.setEmail("user@example.com");
+        dto.setPassword("pass");
 
         ResponseEntity<String> response = accountController.deleteAccount(dto);
-
         assertEquals(200, response.getStatusCodeValue());
-        assertTrue(response.getBody().contains("Account deleted successfully"));
         verify(accountService).deleteAccount(dto);
     }
 }

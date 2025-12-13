@@ -1,7 +1,10 @@
 dodaj "points" do account
+dodaj endpoint zwracania authenticated account w AccountController
 profile.nick = account.username
 
-messages, calls, menu, buying things
+messages,
+calls,
+menu
 
 TODO (General)
 1. Weryfikacja na social mediach podczas zakładania profilu

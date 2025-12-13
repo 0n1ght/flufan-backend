@@ -4,6 +4,7 @@ import com.flufan.dto.ChangeEmailRequest;
 import com.flufan.dto.ChangePasswordRequest;
 import com.flufan.dto.LoginDto;
 import com.flufan.dto.RegisterDto;
+import com.flufan.entity.Account;
 import com.flufan.service.AccountService;
 import com.flufan.service.MailSenderService;
 import com.flufan.service.VerificationTokenService;
@@ -33,6 +34,17 @@ public class AccountController {
         sendVerificationEmail(registerDto.getEmail(), registerDto.getUsername(), link);
         return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
+
+//    todo
+//    @GetMapping("/this-account")
+//    public ResponseEntity<AccountDto> getAuthenticatedAccount() {
+//        Account account = accountService.getAuthenticatedAccount();
+//        if (account == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//        }
+//        AccountDto dto = new AccountDto(account.getUsername(), account.getEmail());
+//        return ResponseEntity.ok(dto);
+//    }
 
     @PostMapping("/update/username")
     public ResponseEntity<String> changeUsername(@RequestBody String newUsername) {
