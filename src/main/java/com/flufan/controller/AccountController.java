@@ -36,7 +36,6 @@ public class AccountController {
 
     @PostMapping("/update/username")
     public ResponseEntity<String> changeUsername(@RequestBody String newUsername) {
-        System.out.println("wchodzi tutaj");
         try {
             accountService.changeUsername(newUsername);
             return ResponseEntity.ok("Login data updated successfully.");

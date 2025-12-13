@@ -67,13 +67,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(
                                 "/api/account/signup",
-                                "/api/auth/login",
+                                "/api/auth/**",
                                 "/oauth2/**",
                                 "/login/**",
                                 "/css/**",
                                 "/js/**",
                                 "/files/**",
-                                "/api/auth/**",
                                 "/h2-console/**"
                         ).permitAll()
                         .anyRequest().authenticated()
