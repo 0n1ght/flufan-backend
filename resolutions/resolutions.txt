@@ -1,15 +1,4 @@
-Make profile.nick equals account.username
-
-
-Add new field/s to Account class
-
-commit2:
-"
-Fix bugs, do refactoring, and prepare for prod:
-messages,
-calls,
-menu
-"
+Fix bugs, do refactoring, and prepare for prod: messages, calls, menu
 
 
 TODO (General)
@@ -43,9 +32,7 @@ TODO (General)
 
 TODO: Quick Changes
 commit 5:
-"
 Add algorithm of returning list of profiles
-"
 
 commit 6:
 (Infrastructure and domains)

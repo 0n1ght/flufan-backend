@@ -6,7 +6,6 @@ import com.flufan.entity.Service;
 import java.util.List;
 
 public class ProfileDto {
-    private String nick;
     private String title;
     private boolean active;
     private String firstName;
@@ -17,14 +16,6 @@ public class ProfileDto {
     private String profilePicturePath;
     private List<LinkedAccount> linkedAccounts;
     private List<Service> menu;
-
-    public String getNick() {
-        return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
 
     public String getTitle() {
         return title;
