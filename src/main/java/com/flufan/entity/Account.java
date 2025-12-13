@@ -3,6 +3,7 @@ package com.flufan.entity;
 import com.flufan.model.Notification;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Account {
 
     @Column(unique = true)
     private String username;
+    private LocalDateTime lastUsernameChange = null;
     private String email;
     private boolean verifiedEmail = false;
     private String password;
@@ -116,5 +118,13 @@ public class Account {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public LocalDateTime getLastUsernameChange() {
+        return lastUsernameChange;
+    }
+
+    public void setLastUsernameChange(LocalDateTime lastUsernameChange) {
+        this.lastUsernameChange = lastUsernameChange;
     }
 }

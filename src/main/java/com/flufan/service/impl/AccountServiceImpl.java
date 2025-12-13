@@ -22,6 +22,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -134,12 +136,22 @@ public class AccountServiceImpl implements AccountService {
     public void changeUsername(String newUsername) {
         Account authenticatedAccount = getAuthenticatedAccount();
 
+        if (authenticatedAccount.getLastUsernameChange() != null) {
+            long daysSince = ChronoUnit.DAYS.between(authenticatedAccount.getLastUsernameChange(), LocalDateTime.now());
+            if (daysSince < 14) {
+                long daysLeft = 14 - daysSince;
+                if (daysLeft > 1) throw new IllegalArgumentException("Username can be changed in " + daysLeft + " days");
+                throw new IllegalArgumentException("Username can be changed in 1 day");
+            }
+        }
+
         if (accountRepo.findByUsername(newUsername).isPresent()
                 && !authenticatedAccount.getUsername().equals(newUsername)) {
             throw new IllegalArgumentException("Username is taken");
         }
 
         authenticatedAccount.setUsername(newUsername);
+        authenticatedAccount.setLastUsernameChange(LocalDateTime.now());
 
         accountRepo.save(authenticatedAccount);
     }

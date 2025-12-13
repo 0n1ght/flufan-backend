@@ -1,5 +1,7 @@
 package com.flufan.controller;
 
+import com.flufan.dto.ChangeEmailRequest;
+import com.flufan.dto.ChangePasswordRequest;
 import com.flufan.dto.LoginDto;
 import com.flufan.dto.RegisterDto;
 import com.flufan.service.AccountService;
@@ -32,8 +34,9 @@ public class AccountController {
         return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
 
-    @PostMapping("/login/update/username")
+    @PostMapping("/update/username")
     public ResponseEntity<String> changeUsername(@RequestBody String newUsername) {
+        System.out.println("wchodzi tutaj");
         try {
             accountService.changeUsername(newUsername);
             return ResponseEntity.ok("Login data updated successfully.");
@@ -43,10 +46,10 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/login/update/email")
-    public ResponseEntity<String> changeEmail(@RequestBody String password, @RequestBody String newEmail) {
+    @PostMapping("/update/email")
+    public ResponseEntity<String> changeEmail(@RequestBody ChangeEmailRequest req) {
         try {
-            accountService.changeEmail(password, newEmail);
+            accountService.changeEmail(req.getPassword(), req.getNewEmail());
             return ResponseEntity.ok("Login data updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -54,10 +57,10 @@ public class AccountController {
         }
     }
 
-    @PostMapping("/login/update/password")
-    public ResponseEntity<String> changePassword(@RequestBody String oldPassword, @RequestBody String newPassword) {
+    @PostMapping("/update/password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest req) {
         try {
-            accountService.changePassword(oldPassword, newPassword);
+            accountService.changePassword(req.getOldPassword(), req.getNewPassword());
             return ResponseEntity.ok("Login data updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()
