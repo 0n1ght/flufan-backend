@@ -38,7 +38,7 @@ public class StripeServiceImpl implements StripeService {
 
     public StripeResponse checkoutProducts(ProductRequest productRequest) throws JsonProcessingException {
         Account authenticatedAccount = accountService.getAuthenticatedAccount();
-        Account sellerAccount = accountService.getById(productRequest.getSellerId());
+        Account sellerAccount = accountService.findById(productRequest.getSellerId());
 
         if (productRequest.getQuantity() == null || productRequest.getQuantity() <= 0 ||
                 productRequest.getName() == null || productRequest.getName().isEmpty() ||

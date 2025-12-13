@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void addRepliesToAcc(long senderId, long receiverId, long quantity) {
-        Account acc = accountService.getById(senderId);
+        Account acc = accountService.findById(senderId);
 
         Map<Long, Long> buyerAvailableReplies = acc.getAvailableReplies();
         Long buyerCurrentCount = buyerAvailableReplies.get(receiverId);

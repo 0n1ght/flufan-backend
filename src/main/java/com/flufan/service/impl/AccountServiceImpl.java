@@ -128,8 +128,13 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account getById(Long id) {
+    public Account findById(Long id) {
         return accountRepo.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
+    }
+
+    @Override
+    public Account findByUsername(String username) {
+        return accountRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
     @Override

@@ -10,7 +10,8 @@ public interface AccountService extends UserDetailsService {
     void deleteAccount(LoginDto loginDto);
     Account getAuthenticatedAccount();
     String verify(LoginDto loginDto);
-    Account getById(Long id);
+    Account findById(Long id);
+    Account findByUsername(String username);
     void changeUsername(String newUsername);
     void changeEmail(String password, String newEmail);
     void changePassword(String oldPassword, String newPassword);

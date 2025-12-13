@@ -4,9 +4,10 @@ import com.flufan.service.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.*;
-import java.util.Objects;
 
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
@@ -22,17 +23,18 @@ public class FileStorageServiceImpl implements FileStorageService {
         Path dir = storageRoot.resolve(folder);
         Files.createDirectories(dir);
 
-        String original = Objects.requireNonNull(file.getOriginalFilename());
-        String ext = original.contains(".")
-                ? original.substring(original.lastIndexOf("."))
-                : "";
-
-        String filename = name + ext;
+        String filename = name + ".png";
         Path target = dir.resolve(filename);
 
-        Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+        BufferedImage image = ImageIO.read(file.getInputStream());
+        if (image == null) {
+            throw new IllegalArgumentException("Not an image");
+        }
+
+        ImageIO.write(image, "png", target.toFile());
         return filename;
     }
+
 
     @Override
     public Path load(String folder, String filename) {

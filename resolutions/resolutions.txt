@@ -1,4 +1,3 @@
-Update AccountDto class and accountMapper.toAccountDto() method
 Make profile.nick equals account.username
 
 

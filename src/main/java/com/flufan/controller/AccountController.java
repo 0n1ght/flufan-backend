@@ -7,14 +7,17 @@ import com.flufan.service.AccountService;
 import com.flufan.service.FileStorageService;
 import com.flufan.service.MailSenderService;
 import com.flufan.service.VerificationTokenService;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Set;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RestController
 @RequestMapping("/api/account")
@@ -100,15 +103,41 @@ public class AccountController {
 
         validateImage(file);
 
-        String filename = fileStorageService.save(file, account.getUsername() + "_pfp", "profile-pictures");
+        String filename = fileStorageService.save(file, account.getId() + "_pfp", "profile-pictures");
         return ResponseEntity.ok(filename);
     }
 
     @DeleteMapping("/remove-pfp")
     public ResponseEntity<Void> removePfp() throws IOException {
         Account account = accountService.getAuthenticatedAccount();
-        boolean deleted = fileStorageService.delete("profile-pictures", account.getUsername() + "_pfp");
+        boolean deleted = fileStorageService.delete("profile-pictures", account.getId() + "_pfp");
         return deleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/profile-pictures/{username}")
+    public ResponseEntity<Resource> getAccountPfp(@PathVariable String username) throws IOException {
+
+        if (!username.matches("[a-zA-Z0-9_]+")) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Path path = fileStorageService.load("profile-pictures",
+                accountService.findByUsername(username).getId()+ "_pfp.png");
+
+        if (!Files.exists(path)) {
+            path = fileStorageService.load("profile-pictures", "pfp.png");
+            if (!Files.exists(path)) {
+                return ResponseEntity.notFound().build();
+            }
+        }
+
+        Resource resource = new UrlResource(path.toUri());
+        String contentType = Files.probeContentType(path);
+
+        return ResponseEntity.ok()
+                .cacheControl(org.springframework.http.CacheControl.maxAge(30, java.util.concurrent.TimeUnit.DAYS))
+                .contentType(MediaType.parseMediaType(contentType == null ? "application/octet-stream" : contentType))
+                .body(resource);
     }
 
     private String buildVerificationLink(String email, String token) {
@@ -124,14 +153,6 @@ public class AccountController {
     private void validateImage(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
-        }
-
-        String original = Objects.requireNonNull(file.getOriginalFilename());
-        String ext = original.contains(".")
-                ? original.substring(original.lastIndexOf(".") + 1).toLowerCase()
-                : "";
-        if (!Set.of("png", "jpg", "jpeg").contains(ext)) {
-            throw new IllegalArgumentException("Invalid file type. Only png, jpg, jpeg allowed");
         }
 
         if (file.getSize() > 2 * 1024 * 1024) {

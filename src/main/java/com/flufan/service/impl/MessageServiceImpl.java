@@ -51,7 +51,7 @@ public class MessageServiceImpl implements MessageService {
         sender.getAvailableReplies().put(receiverId, availableMessages - 1);
         accountService.updateAccount(sender);
 
-        Account receiver = accountService.getById(receiverId);
+        Account receiver = accountService.findById(receiverId);
         Message message = new Message();
         message.setSender(sender);
         message.setReceiver(receiver);

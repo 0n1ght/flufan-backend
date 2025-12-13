@@ -4,7 +4,6 @@ import com.flufan.service.FileStorageService;
 import org.springframework.core.io.*;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -19,12 +18,10 @@ public class FileController {
         this.storage = storage;
     }
 
-    @GetMapping("/{folder}/{filename}")
-    public ResponseEntity<Resource> get(
-            @PathVariable String folder,
-            @PathVariable String filename) throws IOException {
+    @GetMapping("/profile-pictures/{username}")
+    public ResponseEntity<Resource> get(@PathVariable String username) throws IOException {
 
-        Path path = storage.load(folder, filename);
+        Path path = storage.load("profile-pictures", username+"_pfp.png");
         if (!Files.exists(path)) return ResponseEntity.notFound().build();
 
         Resource resource = new UrlResource(path.toUri());
