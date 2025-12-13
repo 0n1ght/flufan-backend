@@ -11,7 +11,9 @@ public interface AccountService extends UserDetailsService {
     Account getAuthenticatedAccount();
     String verify(LoginDto loginDto);
     Account getById(Long id);
-    void changeLoginData(LoginDto loginDto);
+    void changeUsername(String newUsername);
+    void changeEmail(String password, String newEmail);
+    void changePassword(String oldPassword, String newPassword);
     void updateAccount(Account account);
     void verifyAccountEmail(String email);
     Account findAccountByEmail(String email);

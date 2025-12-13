@@ -32,10 +32,32 @@ public class AccountController {
         return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
 
-    @PostMapping("/login/update")
-    public ResponseEntity<String> updateLoginData(@RequestBody LoginDto loginDto) {
+    @PostMapping("/login/update/username")
+    public ResponseEntity<String> changeUsername(@RequestBody String newUsername) {
         try {
-            accountService.changeLoginData(loginDto);
+            accountService.changeUsername(newUsername);
+            return ResponseEntity.ok("Login data updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Failed to update login data: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/login/update/email")
+    public ResponseEntity<String> changeEmail(@RequestBody String password, @RequestBody String newEmail) {
+        try {
+            accountService.changeEmail(password, newEmail);
+            return ResponseEntity.ok("Login data updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Failed to update login data: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/login/update/password")
+    public ResponseEntity<String> changePassword(@RequestBody String oldPassword, @RequestBody String newPassword) {
+        try {
+            accountService.changePassword(oldPassword, newPassword);
             return ResponseEntity.ok("Login data updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()

@@ -1,4 +1,6 @@
+dodaj "points" do account
 profile.nick = account.username
+
 messages, calls, menu, buying things
 
 TODO (General)

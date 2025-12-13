@@ -131,24 +131,49 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void changeLoginData(LoginDto loginDto) {
+    public void changeUsername(String newUsername) {
         Account authenticatedAccount = getAuthenticatedAccount();
 
-        if (accountRepo.findByEmail(loginDto.getEmail()).isPresent()
-                && !authenticatedAccount.getEmail().equals(loginDto.getEmail())) {
-            throw new IllegalArgumentException("Email is already in use");
-        }
-        authenticatedAccount.setEmail(loginDto.getEmail());
-        authenticatedAccount.setVerifiedEmail(false);
-
-
-        if (accountRepo.findByUsername(loginDto.getUsername()).isPresent()
-                && !authenticatedAccount.getUsername().equals(loginDto.getUsername())) {
+        if (accountRepo.findByUsername(newUsername).isPresent()
+                && !authenticatedAccount.getUsername().equals(newUsername)) {
             throw new IllegalArgumentException("Username is taken");
         }
-        authenticatedAccount.setUsername(loginDto.getUsername());
 
-        authenticatedAccount.setPassword(passwordEncoder.encode(loginDto.getPassword()));
+        authenticatedAccount.setUsername(newUsername);
+
+        accountRepo.save(authenticatedAccount);
+    }
+
+    @Override
+    public void changeEmail(String password, String newEmail) {
+        Account authenticatedAccount = getAuthenticatedAccount();
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(password, authenticatedAccount.getPassword())) {
+            throw new AccessDeniedException("Incorrect password");
+        }
+
+        if (accountRepo.findByEmail(newEmail).isPresent()
+                && !authenticatedAccount.getEmail().equals(newEmail)) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
+
+        authenticatedAccount.setEmail(newEmail);
+        authenticatedAccount.setVerifiedEmail(false);
+
+        accountRepo.save(authenticatedAccount);
+    }
+
+    @Override
+    public void changePassword(String oldPassword, String newPassword) {
+        Account authenticatedAccount = getAuthenticatedAccount();
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(oldPassword, authenticatedAccount.getPassword())) {
+            throw new AccessDeniedException("Incorrect password");
+        }
+
+        authenticatedAccount.setPassword(passwordEncoder.encode(newPassword));
 
         accountRepo.save(authenticatedAccount);
     }
