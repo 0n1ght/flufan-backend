@@ -16,7 +16,6 @@ public class AccountMapper {
 
         if (account.getProfile() != null) {
             ProfileDto profileDto = new ProfileDto();
-            profileDto.setNick(account.getProfile().getNick());
             profileDto.setFirstName(account.getProfile().getFirstName());
             profileDto.setLastName(account.getProfile().getLastName());
             accountDto.setProfile(profileDto);

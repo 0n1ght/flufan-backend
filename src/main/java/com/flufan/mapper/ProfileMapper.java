@@ -3,14 +3,10 @@ package com.flufan.mapper;
 import com.flufan.dto.ProfileDto;
 import com.flufan.dto.ProfileResDto;
 import com.flufan.entity.Profile;
-import com.flufan.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProfileMapper {
-    @Autowired
-    private AccountService accountService;
 
     public Profile toProfile(ProfileDto profileDto) {
         Profile profile = new Profile();
