@@ -170,7 +170,6 @@ public class AccountController {
         }
 
         String token = tokenService.generateToken(account.getEmail(), account);
-        String verificationLink = baseUrl + "/api/email-auth/verify/" + token;
 
         mailSender.sendEmail(
                 account.getEmail(),
@@ -178,14 +177,14 @@ public class AccountController {
                 String.format(
                         "To verify your email for account %s, please click the link below:\n%s",
                         account.getUsername(),
-                        verificationLink)
+                        buildVerificationLink(token))
         );
 
         return ResponseEntity.ok("Verification email sent");
     }
 
     private String buildVerificationLink(String token) {
-        return String.format("http://localhost:8080/api/email-auth/verify/%s", token);
+        return String.format("http://localhost:8080/api/account/verify/%s", token);
     }
 
     private void sendVerificationEmail(String email, String username, String link) {

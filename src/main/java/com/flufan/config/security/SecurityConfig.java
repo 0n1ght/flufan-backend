@@ -76,7 +76,8 @@ public class SecurityConfig {
                                 "/oauth2/**",
                                 "/login/**",
                                 "/css/**",
-                                "/js/**"
+                                "/js/**",
+                                "/h2-console/**"
                         ).permitAll()
                         .requestMatchers(
                                 "/api/account/**",
