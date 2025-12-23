@@ -207,11 +207,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account findAccountByEmail(String email) {
-        return accountRepo.findByEmail(email).orElseThrow();
-    }
-
-    @Override
     public Account loadOrCreateGoogleUser(String email) {
         Optional<Account> existing = accountRepo.findByEmail(email);
 

@@ -1,17 +1,16 @@
-Add admin role: assigning admin role, permissions, controller & service
+1) kupowanie i realizacja uslug
 
-2) kupowanie i realizacja uslug
-test+refactoring, dodanie logow zakupow do serwisu administratora zebysmy mieli do pobrania
+2) video rozmowy
 
-3) video rozmowy
+3) weryfikacja kont social media, kont aplikacji
 
-4) weryfikacja kont social media, kont aplikacji
+4) usowanie konta, mozliwosc odzyskiwania konta jezeli usuniecie nastapilo mniej niz 30 dni temu
 
-5) usowanie konta, mozliwosc odzyskiwania konta jezeli usuniecie nastapilo mniej niz 30 dni temu
+5) odpowiadanie na wiadomości w formie głosówek
 
-6) odpowiadanie na wiadomości w formie głosówek
+6) settings
 
-7) settings
+7) Add admin role: assigning admin role, permissions, controller & service
 
 8) wykup i zalozenie firmieych domen, kont i maila oraz ich implementacja do kodu
 
