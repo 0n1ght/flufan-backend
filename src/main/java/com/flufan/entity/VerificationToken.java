@@ -1,10 +1,15 @@
 package com.flufan.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class VerificationToken {
 
     @Id
@@ -17,37 +22,14 @@ public class VerificationToken {
     @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private LocalDateTime expiresAt;
 
     private LocalDateTime usedAt;
-
-    public VerificationToken() {}
 
     public VerificationToken(String token, String email) {
         this.token = token;
         this.email = email;
         this.expiresAt = LocalDateTime.now().plusMinutes(20);
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public LocalDateTime getExpiresAt() {
-        return expiresAt;
-    }
-
-    public LocalDateTime getUsedAt() {
-        return usedAt;
-    }
-
-    public void setUsedAt(LocalDateTime usedAt) {
-        this.usedAt = usedAt;
     }
 
     public boolean isExpired() {

@@ -1,8 +1,15 @@
 package com.flufan.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class UserReview {
 
@@ -12,22 +19,19 @@ public class UserReview {
 
     @ManyToOne
     @JoinColumn(name = "profile_id", nullable = false)
-    private Profile profile; // Profil, który otrzymuje recenzję
+    private Profile profile;
 
     @ManyToOne
     @JoinColumn(name = "reviewer_id", nullable = false)
-    private Account reviewer; // Użytkownik, który wystawia opinię
+    private Account reviewer;
 
-    private int rating; // Ocena (np. 1-5 gwiazdek)
+    private int rating;
 
     @Column(columnDefinition = "TEXT")
-    private String comment; // Komentarz do opinii
+    private String comment;
 
-    private LocalDateTime createdAt;
-
-    public UserReview() {
-        this.createdAt = LocalDateTime.now();
-    }
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     public UserReview(Profile profile, Account reviewer, int rating, String comment) {
         this.profile = profile;
@@ -35,49 +39,5 @@ public class UserReview {
         this.rating = rating;
         this.comment = comment;
         this.createdAt = LocalDateTime.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
-    public Account getReviewer() {
-        return reviewer;
-    }
-
-    public void setReviewer(Account reviewer) {
-        this.reviewer = reviewer;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
     }
 }

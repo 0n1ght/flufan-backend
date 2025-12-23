@@ -1,11 +1,16 @@
 package com.flufan.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Service {
 
     @Id
@@ -22,48 +27,5 @@ public class Service {
         this.title = title;
         this.description = description;
         this.price = price;
-    }
-
-    public Service() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public long getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public List<String> getOptionalQuestions() {
-        return optionalQuestions;
-    }
-
-    public void setOptionalQuestions(List<String> optionalQuestions) {
-        this.optionalQuestions = optionalQuestions;
     }
 }

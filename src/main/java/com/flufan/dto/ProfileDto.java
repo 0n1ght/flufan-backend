@@ -2,9 +2,11 @@ package com.flufan.dto;
 
 import com.flufan.model.LinkedAccount;
 import com.flufan.entity.Service;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class ProfileDto {
     private String title;
     private boolean active;
@@ -17,96 +19,4 @@ public class ProfileDto {
     private String profilePicturePath;
     private List<LinkedAccount> linkedAccounts;
     private List<Service> menu;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean getActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getNick() {
-        return nick;
-    }
-
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public int getRespondTime() {
-        return respondTime;
-    }
-
-    public void setRespondTime(int respondTime) {
-        this.respondTime = respondTime;
-    }
-
-    public int getMessagePrice() {
-        return messagePrice;
-    }
-
-    public void setMessagePrice(int messagePrice) {
-        this.messagePrice = messagePrice;
-    }
-
-    public int getCallPrice() {
-        return callPrice;
-    }
-
-    public void setCallPrice(int callPrice) {
-        this.callPrice = callPrice;
-    }
-
-    public String getProfilePicturePath() {
-        return profilePicturePath;
-    }
-
-    public void setProfilePicturePath(String profilePicturePath) {
-        this.profilePicturePath = profilePicturePath;
-    }
-
-    public List<LinkedAccount> getLinkedAccounts() {
-        return linkedAccounts;
-    }
-
-    public void setLinkedAccounts(List<LinkedAccount> linkedAccounts) {
-        this.linkedAccounts = linkedAccounts;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public List<Service> getMenu() {
-        return menu;
-    }
-
-    public void setMenu(List<Service> menu) {
-        this.menu = menu;
-    }
 }

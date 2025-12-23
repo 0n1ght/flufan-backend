@@ -12,7 +12,7 @@ public class ProfileMapper {
         Profile profile = new Profile();
         profile.setTitle(profileDto.getTitle());
         profile.setVerified(false);
-        profile.setActive(profileDto.getActive());
+        profile.setActive(profileDto.isActive());
         profile.setNick(profileDto.getNick());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());
