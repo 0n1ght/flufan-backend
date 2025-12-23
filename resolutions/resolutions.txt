@@ -1,5 +1,30 @@
+Update email verification system and permissions
 
+Add admin role: assigning admin role, permissions, controller & service
 
+2) kupowanie i realizacja uslug
+test+refactoring, dodanie logow zakupow do serwisu administratora zebysmy mieli do pobrania
+
+3) video rozmowy
+
+4) weryfikacja kont social media, kont aplikacji
+
+5) usowanie konta, mozliwosc odzyskiwania konta jezeli usuniecie nastapilo mniej niz 30 dni temu
+
+6) odpowiadanie na wiadomości w formie głosówek
+
+7) settings
+
+8) wykup i zalozenie firmieych domen, kont i maila oraz ich implementacja do kodu
+
+9) testy manualne (jednostkowe juz istnieja dla podstawowych funkcjonalnosci)
+
+[grupowa składki]
+
+todo:
+Add algorithm of returning list of profiles
+
+-----------------
 
 TODO (General)
 1. Weryfikacja na social mediach podczas zakładania profilu
@@ -32,7 +57,6 @@ TODO (General)
 
 TODO: Quick Changes
 commit 5:
-Add algorithm of returning list of profiles
 
 commit 6:
 (Infrastructure and domains)

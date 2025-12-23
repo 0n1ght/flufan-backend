@@ -22,7 +22,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
     @Override
     public String generateToken(String email) {
-        VerificationToken token = new VerificationToken(createUniqueToken(email), email);
+        VerificationToken token = new VerificationToken(createUniqueToken(), email);
         tokenRepo.save(token);
 
         return token.getToken();
@@ -42,7 +42,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         return false;
     }
 
-    private String createUniqueToken(String email) {
+    private String createUniqueToken() {
         String token;
         do {
             token = UUID.randomUUID().toString();

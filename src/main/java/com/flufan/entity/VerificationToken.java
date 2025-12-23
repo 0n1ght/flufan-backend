@@ -29,7 +29,7 @@ public class VerificationToken {
     public VerificationToken(String token, String email) {
         this.token = token;
         this.email = email;
-        this.expiresAt = LocalDateTime.now().plusMinutes(20);
+        this.expiresAt = LocalDateTime.now().plusHours(24);
     }
 
     public boolean isExpired() {

@@ -26,6 +26,8 @@ public class Account {
     @Column(unique = true)
     private String username;
     private LocalDateTime lastUsernameChange = null;
+
+    @Column(unique = true)
     private String email;
     private boolean verifiedEmail = false;
     private String password;

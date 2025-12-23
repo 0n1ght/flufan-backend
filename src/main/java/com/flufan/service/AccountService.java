@@ -12,10 +12,10 @@ public interface AccountService extends UserDetailsService {
     String verify(LoginDto loginDto);
     Account findById(Long id);
     Account findByUsername(String username);
-    void changeUsername(String newUsername);
-    void changeEmail(String password, String newEmail);
-    void changePassword(String oldPassword, String newPassword);
+    void updateUsername(String newUsername);
+    void updatePassword(String oldPassword, String newPassword);
     void updateAccount(Account account);
+    void verifyEmailUpdateRequest(String password, String newEmail);
     void verifyAccountEmail(String email);
     Account findAccountByEmail(String email);
     Account loadOrCreateGoogleUser(String email);

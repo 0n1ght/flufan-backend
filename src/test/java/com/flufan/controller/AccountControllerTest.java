@@ -62,42 +62,42 @@ class AccountControllerTest {
     }
 
     @Test
-    void testChangeUsernameSuccess() {
-        ResponseEntity<String> response = accountController.changeUsername("newUser");
+    void testUpdateUsernameSuccess() {
+        ResponseEntity<String> response = accountController.updateUsername("newUser");
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Login data updated successfully"));
-        verify(accountService).changeUsername("newUser");
+        verify(accountService).updateUsername("newUser");
     }
 
     @Test
-    void testChangeUsernameFailure() {
-        doThrow(new RuntimeException("Error")).when(accountService).changeUsername("badUser");
+    void testUpdateUsernameFailure() {
+        doThrow(new RuntimeException("Error")).when(accountService).updateUsername("badUser");
 
-        ResponseEntity<String> response = accountController.changeUsername("badUser");
+        ResponseEntity<String> response = accountController.updateUsername("badUser");
         assertEquals(400, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Failed to update login data"));
     }
 
     @Test
-    void testChangeEmailSuccess() {
+    void testUpdateEmailSuccess() {
         ChangeEmailRequest req = new ChangeEmailRequest();
         req.setNewEmail("new@example.com");
         req.setPassword("pass123");
 
-        ResponseEntity<String> response = accountController.changeEmail(req);
+        ResponseEntity<String> response = accountController.updateEmail(req);
         assertEquals(200, response.getStatusCodeValue());
-        verify(accountService).changeEmail("pass123", "new@example.com");
+        verify(accountService).verifyEmailUpdateRequest("pass123", "new@example.com");
     }
 
     @Test
-    void testChangePasswordSuccess() {
+    void testUpdatePasswordSuccess() {
         ChangePasswordRequest req = new ChangePasswordRequest();
         req.setOldPassword("old");
         req.setNewPassword("new");
 
-        ResponseEntity<String> response = accountController.changePassword(req);
+        ResponseEntity<String> response = accountController.updatePassword(req);
         assertEquals(200, response.getStatusCodeValue());
-        verify(accountService).changePassword("old", "new");
+        verify(accountService).updatePassword("old", "new");
     }
 
     @Test

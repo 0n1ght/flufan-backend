@@ -19,24 +19,24 @@ public class UserReviewController {
         this.userReviewService = userReviewService;
     }
 
-    @GetMapping("/profile/{profileId}")
+    @GetMapping("/get-profile-reviews/{profileId}")
     public ResponseEntity<List<UserReviewDto>> getReviewsForProfile(@PathVariable Long profileId) {
         return ResponseEntity.ok(new ArrayList<>(userReviewService.getReviewsForProfile(profileId)));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get-review/{id}")
     public ResponseEntity<UserReviewDto> getReviewById(@PathVariable Long id) {
         Optional<UserReviewDto> reviewOpt = userReviewService.getReviewById(id);
         return ResponseEntity.of(reviewOpt);
     }
 
-    @PostMapping
+    @PostMapping("/add-review")
     public ResponseEntity<UserReviewDto> addReview(@RequestBody UserReviewDto userReviewDto) {
         userReviewService.saveReview(userReviewDto);
         return ResponseEntity.ok(userReviewDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete-review/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         userReviewService.deleteReview(id);
         return ResponseEntity.noContent().build();

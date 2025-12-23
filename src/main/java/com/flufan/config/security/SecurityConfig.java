@@ -69,14 +69,24 @@ public class SecurityConfig {
                                 "/api/account/signup",
                                 "/api/auth/**",
                                 "/api/email-auth/**",
+                                "/api/profiles/search/**",
+                                "/api/account/profile-pictures/**",
+                                "/api/reviews/get-profile-reviews/**",
+                                "/api/reviews/get-review/**",
                                 "/oauth2/**",
                                 "/login/**",
                                 "/css/**",
-                                "/js/**",
-                                "/files/**",
-                                "/h2-console/**"
+                                "/js/**"
                         ).permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers(
+                                "/api/account/**",
+                                "/api/messages/**",
+                                "/product/v1/**",
+                                "/api/profiles/**",
+                                "/api/stripe/**",
+                                "/api/reviews"
+                        ).hasRole("VERIFIED_USER")
+                        .anyRequest().hasRole("ADMIN")
                 )
 
                 .oauth2Login(oauth -> oauth

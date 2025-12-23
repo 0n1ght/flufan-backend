@@ -52,14 +52,20 @@ public class AccountServiceImpl implements AccountService {
         Optional<Account> account = accountRepo.findByEmail(username);
         if (account.isPresent()) {
             var accountObj = account.get();
-            return User.builder()
+
+            User.UserBuilder builder = User.builder()
                     .username(accountObj.getEmail())
-                    .password(accountObj.getPassword())
-                    .roles("USER")
-                    .build();
+                    .password(accountObj.getPassword());
+
+            if (accountObj.isVerifiedEmail()) {
+                builder.roles("VERIFIED_USER");
+            }
+
+            return builder.build();
         }
         throw new UsernameNotFoundException(username);
     }
+
 
     @Override
     public void saveAccount(RegisterDto accountDto) {
@@ -138,7 +144,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void changeUsername(String newUsername) {
+    public void updateUsername(String newUsername) {
         Account authenticatedAccount = getAuthenticatedAccount();
 
         if (authenticatedAccount.getLastUsernameChange() != null) {
@@ -162,27 +168,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void changeEmail(String password, String newEmail) {
-        Account authenticatedAccount = getAuthenticatedAccount();
-
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(password, authenticatedAccount.getPassword())) {
-            throw new AccessDeniedException("Incorrect password");
-        }
-
-        if (accountRepo.findByEmail(newEmail).isPresent()
-                && !authenticatedAccount.getEmail().equals(newEmail)) {
-            throw new IllegalArgumentException("Email is already in use");
-        }
-
-        authenticatedAccount.setEmail(newEmail);
-        authenticatedAccount.setVerifiedEmail(false);
-
-        accountRepo.save(authenticatedAccount);
-    }
-
-    @Override
-    public void changePassword(String oldPassword, String newPassword) {
+    public void updatePassword(String oldPassword, String newPassword) {
         Account authenticatedAccount = getAuthenticatedAccount();
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -198,6 +184,21 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void updateAccount(Account account) {
         accountRepo.save(account);
+    }
+
+    @Override
+    public void verifyEmailUpdateRequest(String password, String newEmail) {
+        Account authenticatedAccount = getAuthenticatedAccount();
+
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(password, authenticatedAccount.getPassword())) {
+            throw new AccessDeniedException("Incorrect password");
+        }
+
+        if (accountRepo.findByEmail(newEmail).isPresent()
+                && !authenticatedAccount.getEmail().equals(newEmail)) {
+            throw new IllegalArgumentException("Email is already in use");
+        }
     }
 
     @Override
