@@ -34,12 +34,10 @@ public class EmailVerificationController {
             @RequestParam String email,
             @RequestParam String token
     ) {
-        try {
-            verificationTokenService.useToken(email, token);
+        if (verificationTokenService.useToken(email, token)) {
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
         }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/regenerateToken")

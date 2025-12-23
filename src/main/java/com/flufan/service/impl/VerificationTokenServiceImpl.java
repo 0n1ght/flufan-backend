@@ -29,17 +29,17 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public void useToken(String email, String token) {
+    public boolean useToken(String email, String token) {
         List<VerificationToken> verificationTokens = tokenRepo.findAllByEmail(email);
-        System.out.println(verificationTokens);
         for (VerificationToken verificationToken : verificationTokens) {
             if (verificationToken != null && !verificationToken.isExpired() && verificationToken.getToken().equals(token) && verificationToken.getUsedAt() == null) {
                 accountService.verifyAccountEmail(email);
                 verificationToken.setUsedAt(LocalDateTime.now());
                 tokenRepo.save(verificationToken);
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     private String createUniqueToken(String email) {

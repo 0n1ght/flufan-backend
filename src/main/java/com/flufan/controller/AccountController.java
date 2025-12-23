@@ -141,7 +141,7 @@ public class AccountController {
     }
 
     private String buildVerificationLink(String email, String token) {
-        return String.format("http://localhost:8080/email-auth/verify-loader?email=%s&token=%s", email, token);
+        return String.format("http://localhost:8080/api/email-auth/verify-loader?email=%s&token=%s", email, token);
     }
 
     private void sendVerificationEmail(String email, String username, String link) {
