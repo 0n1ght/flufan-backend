@@ -41,7 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
 
         Profile profile = profileMapper.toProfile(profileDto);
         profile.setAccount(account);
-        profile.setNick(account.getUsername());
+        profile.setNick(profileDto.getNick());
 
         profileRepo.save(profile);
         account.setProfile(profile);
@@ -59,13 +59,9 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public void editProfile(ProfileDto profileDto) {
         Account account = authService.getAuthenticatedAccount();
-        Profile profile = profileRepo.findByNick(account.getUsername())
-                .orElseThrow(() -> new RuntimeException("Profile not found"));
+        Profile profile = account.getProfile();
 
-        if (!profile.getAccount().equals(account)) {
-            throw new RuntimeException("You can not edit this profile");
-        }
-
+        profile.setNick(profileDto.getNick());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());
         profile.setRespondTime(profileDto.getRespondTime());

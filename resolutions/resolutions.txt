@@ -1,4 +1,4 @@
-Fix bugs, do refactoring, and prepare for prod: messages, calls, menu
+
 
 
 TODO (General)

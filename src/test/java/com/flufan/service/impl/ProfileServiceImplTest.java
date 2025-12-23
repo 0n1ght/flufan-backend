@@ -82,33 +82,25 @@ class ProfileServiceImplTest {
     @Test
     void testEditProfile_Success() {
         ProfileDto dto = new ProfileDto();
-        dto.setNick("nick");
+        dto.setNick("newNick");
+        dto.setFirstName("John");
+        dto.setLastName("Doe");
+
         Account account = new Account();
         Profile profile = new Profile();
+        profile.setNick("nick");
         profile.setAccount(account);
+        account.setProfile(profile);
 
         when(authService.getAuthenticatedAccount()).thenReturn(account);
-        when(profileRepo.findByNick("nick")).thenReturn(Optional.of(profile));
 
         profileService.editProfile(dto);
 
         verify(profileRepo).save(profile);
-    }
 
-    @Test
-    void testEditProfile_NotOwned_Throws() {
-        ProfileDto dto = new ProfileDto();
-        dto.setNick("nick");
-        Account account = new Account();
-        Profile profile = new Profile();
-        profile.setAccount(new Account());
-
-        when(authService.getAuthenticatedAccount()).thenReturn(account);
-        when(profileRepo.findByNick("nick")).thenReturn(Optional.of(profile));
-
-        RuntimeException ex = assertThrows(RuntimeException.class,
-                () -> profileService.editProfile(dto));
-        assertEquals("You can not edit this profile", ex.getMessage());
+        assertEquals("newNick", profile.getNick());
+        assertEquals("John", profile.getFirstName());
+        assertEquals("Doe", profile.getLastName());
     }
 
     @Test

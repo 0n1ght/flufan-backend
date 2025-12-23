@@ -8,6 +8,7 @@ import java.util.List;
 public class ProfileDto {
     private String title;
     private boolean active;
+    private String nick;
     private String firstName;
     private String lastName;
     private int respondTime;
@@ -31,6 +32,14 @@ public class ProfileDto {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     public String getFirstName() {
