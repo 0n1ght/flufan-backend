@@ -26,9 +26,13 @@ public class VerificationToken {
 
     private LocalDateTime usedAt;
 
-    public VerificationToken(String token, String email) {
+    @ManyToOne
+    private Account account;
+
+    public VerificationToken(String token, String email, Account account) {
         this.token = token;
         this.email = email;
+        this.account = account;
         this.expiresAt = LocalDateTime.now().plusHours(24);
     }
 

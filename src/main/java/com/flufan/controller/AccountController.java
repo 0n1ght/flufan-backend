@@ -7,6 +7,7 @@ import com.flufan.service.AccountService;
 import com.flufan.service.FileStorageService;
 import com.flufan.service.MailSenderService;
 import com.flufan.service.VerificationTokenService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -24,27 +25,25 @@ import java.nio.file.Path;
 public class AccountController {
     private final AccountService accountService;
     private final VerificationTokenService tokenService;
-    private final MailSenderService mailService;
+    private final MailSenderService mailSender;
     private final AccountMapper accountMapper;
     private final FileStorageService fileStorageService;
 
-    public AccountController(AccountService accountService,
-                             VerificationTokenService tokenService,
-                             MailSenderService mailService,
-                             AccountMapper accountMapper,
-                             FileStorageService fileStorageService) {
+    @Value("${app.base-url}")
+    private String baseUrl;
+
+    public AccountController(AccountService accountService, VerificationTokenService tokenService, MailSenderService mailSender, AccountMapper accountMapper, FileStorageService fileStorageService) {
         this.accountService = accountService;
         this.tokenService = tokenService;
-        this.mailService = mailService;
+        this.mailSender = mailSender;
         this.accountMapper = accountMapper;
         this.fileStorageService = fileStorageService;
     }
 
     @PostMapping(value = "/signup", consumes = "application/json")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
-        accountService.saveAccount(registerDto);
-        String token = tokenService.generateToken(registerDto.getEmail());
-        String link = buildVerificationLink(registerDto.getEmail(), token);
+        String token = tokenService.generateToken(registerDto.getEmail(), accountService.saveAccount(registerDto));
+        String link = buildVerificationLink(token);
         sendVerificationEmail(registerDto.getEmail(), registerDto.getUsername(), link);
         return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
@@ -59,20 +58,9 @@ public class AccountController {
     }
 
     @PostMapping("/update/username")
-    public ResponseEntity<String> changeUsername(@RequestBody String newUsername) {
+    public ResponseEntity<String> updateUsername(@RequestBody String newUsername) {
         try {
-            accountService.changeUsername(newUsername);
-            return ResponseEntity.ok("Login data updated successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body("Failed to update login data: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/update/email")
-    public ResponseEntity<String> changeEmail(@RequestBody ChangeEmailRequest req) {
-        try {
-            accountService.changeEmail(req.getPassword(), req.getNewEmail());
+            accountService.updateUsername(newUsername);
             return ResponseEntity.ok("Login data updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -81,10 +69,24 @@ public class AccountController {
     }
 
     @PostMapping("/update/password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest req) {
+    public ResponseEntity<String> updatePassword(@RequestBody ChangePasswordRequest req) {
         try {
-            accountService.changePassword(req.getOldPassword(), req.getNewPassword());
+            accountService.updatePassword(req.getOldPassword(), req.getNewPassword());
             return ResponseEntity.ok("Login data updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body("Failed to update login data: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/request-email-update")
+    public ResponseEntity<String> updateEmail(@RequestBody ChangeEmailRequest req) {
+        try {
+            accountService.verifyEmailUpdateRequest(req.getPassword(), req.getNewEmail());
+            String token = tokenService.generateToken(req.getNewEmail(), accountService.getAuthenticatedAccount());
+            String link = buildVerificationLink(token);
+            sendVerificationEmail(req.getNewEmail(), accountService.getAuthenticatedAccount().getUsername(), link);
+            return ResponseEntity.ok("Verification email has been sent.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()
                     .body("Failed to update login data: " + e.getMessage());
@@ -140,14 +142,56 @@ public class AccountController {
                 .body(resource);
     }
 
-    private String buildVerificationLink(String email, String token) {
-        return String.format("http://localhost:8080/api/email-auth/verify-loader?email=%s&token=%s", email, token);
+    @GetMapping("/verify/{token}")
+    public ResponseEntity<String> verifyEmail(@PathVariable String token) {
+        if (token == null || token.isBlank()) {
+            return ResponseEntity.badRequest().body("Missing or invalid token");
+        }
+
+        boolean verified = tokenService.useToken(token);
+
+        if (!verified) {
+            return ResponseEntity.status(HttpStatus.GONE)
+                    .body("Verification token is invalid or expired");
+        }
+
+        return ResponseEntity.ok("Email successfully verified");
+    }
+
+    @PostMapping("/regenerate")
+    public ResponseEntity<String> regenerateToken() {
+        Account account = accountService.getAuthenticatedAccount();
+        if (account == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+
+        if (account.isVerifiedEmail()) {
+            return ResponseEntity.badRequest().body("Email already verified");
+        }
+
+        String token = tokenService.generateToken(account.getEmail(), account);
+        String verificationLink = baseUrl + "/api/email-auth/verify/" + token;
+
+        mailSender.sendEmail(
+                account.getEmail(),
+                "Email Verification",
+                String.format(
+                        "To verify your email for account %s, please click the link below:\n%s",
+                        account.getUsername(),
+                        verificationLink)
+        );
+
+        return ResponseEntity.ok("Verification email sent");
+    }
+
+    private String buildVerificationLink(String token) {
+        return String.format("http://localhost:8080/api/email-auth/verify/%s", token);
     }
 
     private void sendVerificationEmail(String email, String username, String link) {
-        String subject = "Account Verification";
-        String message = String.format("To verify your email for account %s, please click the link below:\n%s", username, link);
-        mailService.sendEmail(email, subject, message);
+        mailSender.sendEmail(email,
+                "Email Verification",
+                String.format("To verify your email for account %s, please click the link below:\n%s", username, link));
     }
 
     private void validateImage(MultipartFile file) throws IOException {

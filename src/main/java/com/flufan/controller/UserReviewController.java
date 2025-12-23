@@ -12,7 +12,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/reviews")
 public class UserReviewController {
-
     private final UserReviewService userReviewService;
 
     public UserReviewController(UserReviewService userReviewService) {

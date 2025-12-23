@@ -68,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public void saveAccount(RegisterDto accountDto) {
+    public Account saveAccount(RegisterDto accountDto) {
 
         if (accountRepo.findByEmail(accountDto.getEmail()).isPresent() ||
                 suspendedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
@@ -80,7 +80,12 @@ public class AccountServiceImpl implements AccountService {
             throw new IllegalArgumentException("Account is banned");
         }
 
-        accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), passwordEncoder.encode(accountDto.getPassword())));
+        return accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), passwordEncoder.encode(accountDto.getPassword())));
+    }
+
+    @Override
+    public Account saveAccount(Account account) {
+        return accountRepo.save(account);
     }
 
     @Override
@@ -199,11 +204,6 @@ public class AccountServiceImpl implements AccountService {
                 && !authenticatedAccount.getEmail().equals(newEmail)) {
             throw new IllegalArgumentException("Email is already in use");
         }
-    }
-
-    @Override
-    public void verifyAccountEmail(String email) {
-        accountRepo.findByEmail(email).orElseThrow().setVerifiedEmail(true);
     }
 
     @Override

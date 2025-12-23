@@ -6,7 +6,8 @@ import com.flufan.dto.RegisterDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AccountService extends UserDetailsService {
-    void saveAccount(RegisterDto accountDto);
+    Account saveAccount(RegisterDto accountDto);
+    Account saveAccount(Account account);
     void deleteAccount(LoginDto loginDto);
     Account getAuthenticatedAccount();
     String verify(LoginDto loginDto);
@@ -16,7 +17,6 @@ public interface AccountService extends UserDetailsService {
     void updatePassword(String oldPassword, String newPassword);
     void updateAccount(Account account);
     void verifyEmailUpdateRequest(String password, String newEmail);
-    void verifyAccountEmail(String email);
     Account findAccountByEmail(String email);
     Account loadOrCreateGoogleUser(String email);
 }
