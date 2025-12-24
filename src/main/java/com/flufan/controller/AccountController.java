@@ -7,6 +7,7 @@ import com.flufan.service.AccountService;
 import com.flufan.service.FileStorageService;
 import com.flufan.service.MailSenderService;
 import com.flufan.service.VerificationTokenService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -42,10 +43,13 @@ public class AccountController {
     }
 
     @PostMapping(value = "/signup", consumes = "application/json")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) throws MessagingException {
         String token = tokenService.generateToken(registerDto.getEmail(), accountService.saveAccount(registerDto));
-        String link = buildVerificationLink(token);
-        sendVerificationEmail(registerDto.getEmail(), registerDto.getUsername(), link);
+        mailSender.sendVerificationEmail(
+                registerDto.getEmail(),
+                registerDto.getUsername(),
+                String.format("http://localhost:8080/email-auth/verify/%s", token)
+        );
         return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
 
@@ -85,8 +89,11 @@ public class AccountController {
         try {
             accountService.verifyEmailUpdateRequest(req.getPassword(), req.getNewEmail());
             String token = tokenService.generateToken(req.getNewEmail(), accountService.getAuthenticatedAccount());
-            String link = buildVerificationLink(token);
-            sendVerificationEmail(req.getNewEmail(), accountService.getAuthenticatedAccount().getUsername(), link);
+            mailSender.sendVerificationEmail(
+                    req.getNewEmail(),
+                    accountService.getAuthenticatedAccount().getUsername(),
+                    String.format("http://localhost:8080/email-auth/verify/%s", token)
+            );
             return ResponseEntity.ok("Verification email has been sent.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -144,7 +151,7 @@ public class AccountController {
     }
 
     @PostMapping("/regenerate")
-    public ResponseEntity<String> regenerateToken() {
+    public ResponseEntity<String> regenerateToken() throws MessagingException {
         Account account = accountService.getAuthenticatedAccount();
         if (account == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
@@ -156,26 +163,13 @@ public class AccountController {
 
         String token = tokenService.generateToken(account.getEmail(), account);
 
-        mailSender.sendEmail(
+        mailSender.sendVerificationEmail(
                 account.getEmail(),
-                "Email Verification",
-                String.format(
-                        "To verify your email for account %s, please click the link below:\n%s",
-                        account.getUsername(),
-                        buildVerificationLink(token))
+                account.getUsername(),
+                String.format("http://localhost:8080/email-auth/verify/%s", token)
         );
 
         return ResponseEntity.ok("Verification email sent");
-    }
-
-    private String buildVerificationLink(String token) {
-        return String.format("http://localhost:8080/email-auth/verify/%s", token);
-    }
-
-    private void sendVerificationEmail(String email, String username, String link) {
-        mailSender.sendEmail(email,
-                "Email Verification",
-                String.format("To verify your email for account %s, please click the link below:\n%s", username, link));
     }
 
     private void validateImage(MultipartFile file) throws IOException {

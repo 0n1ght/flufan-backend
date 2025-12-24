@@ -37,19 +37,22 @@ class AccountControllerTest {
         field.set(controller, "http://localhost:8080");
     }
 
-
     @Test
-    void register_shouldReturnOk() {
+    void register_shouldReturnOk() throws Exception {
         RegisterDto dto = new RegisterDto();
         dto.setEmail("test@test.com");
         dto.setUsername("user");
+
         when(accountService.saveAccount(dto)).thenReturn(new Account());
-        when(tokenService.generateToken(anyString(), any())).thenReturn("token");
+        when(tokenService.generateToken(eq("test@test.com"), any())).thenReturn("token");
 
         ResponseEntity<String> response = controller.register(dto);
 
         assertEquals(200, response.getStatusCodeValue());
-        verify(mailSender).sendEmail(eq("test@test.com"), anyString(), contains("token"));
+        assertEquals("Registration successful. Verification email sent.", response.getBody());
+
+        verify(mailSender, times(1))
+                .sendVerificationEmail(eq("user"), eq("test@test.com"), contains("token"));
     }
 
     @Test
@@ -133,33 +136,47 @@ class AccountControllerTest {
     }
 
     @Test
-    void regenerateToken_success() {
+    void regenerateToken_success() throws Exception {
         Account account = new Account();
         account.setEmail("a@a.com");
         account.setUsername("user");
         account.setVerifiedEmail(false);
+
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
         when(tokenService.generateToken("a@a.com", account)).thenReturn("token");
 
         ResponseEntity<String> response = controller.regenerateToken();
+
         assertEquals(200, response.getStatusCodeValue());
-        verify(mailSender).sendEmail(eq("a@a.com"), anyString(), contains("token"));
+        assertEquals("Verification email sent", response.getBody());
+        verify(mailSender, times(1))
+                .sendVerificationEmail(eq("a@a.com"), eq("user"), contains("token"));
     }
 
     @Test
-    void regenerateToken_unauthorized() {
+    void regenerateToken_unauthorized() throws Exception {
         when(accountService.getAuthenticatedAccount()).thenReturn(null);
+
         ResponseEntity<String> response = controller.regenerateToken();
+
         assertEquals(401, response.getStatusCodeValue());
+        assertEquals("Unauthorized", response.getBody());
+        verifyNoInteractions(mailSender, tokenService);
     }
 
     @Test
-    void regenerateToken_alreadyVerified() {
+    void regenerateToken_alreadyVerified() throws Exception {
         Account account = new Account();
+        account.setEmail("a@a.com");
+        account.setUsername("user");
         account.setVerifiedEmail(true);
+
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
 
         ResponseEntity<String> response = controller.regenerateToken();
+
         assertEquals(400, response.getStatusCodeValue());
+        assertEquals("Email already verified", response.getBody());
+        verifyNoInteractions(mailSender, tokenService);
     }
 }
