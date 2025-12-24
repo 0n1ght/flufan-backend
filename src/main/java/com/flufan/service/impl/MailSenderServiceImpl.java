@@ -53,7 +53,7 @@ public class MailSenderServiceImpl implements MailSenderService {
                 "<p>Need help? Contact support: <a href='mailto:support@flufan.com'>support@flufan.com</a></p>" +
                 "</td></tr>" +
                 "<tr><td style='background-color:#f0f0f0; text-align:center; padding:20px; font-size:12px; color:#888;'>" +
-                "&copy; 2025 Flufan. All rights reserved.<br>123 Main Street, Your City" +
+                "&copy; 2025 Flufan. All rights reserved." +
                 "</td></tr>" +
                 "</table></td></tr></table></body></html>";
 
