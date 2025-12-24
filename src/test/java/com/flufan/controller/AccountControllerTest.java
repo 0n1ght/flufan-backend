@@ -11,6 +11,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.servlet.view.RedirectView;
+
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -128,26 +130,6 @@ class AccountControllerTest {
 
         ResponseEntity<Void> response = controller.removePfp();
         assertEquals(404, response.getStatusCodeValue());
-    }
-
-    @Test
-    void verifyEmail_invalidToken() {
-        ResponseEntity<String> response = controller.verifyEmail("");
-        assertEquals(400, response.getStatusCodeValue());
-    }
-
-    @Test
-    void verifyEmail_notVerified() {
-        when(tokenService.useToken("token")).thenReturn(false);
-        ResponseEntity<String> response = controller.verifyEmail("token");
-        assertEquals(410, response.getStatusCodeValue());
-    }
-
-    @Test
-    void verifyEmail_success() {
-        when(tokenService.useToken("token")).thenReturn(true);
-        ResponseEntity<String> response = controller.verifyEmail("token");
-        assertEquals(200, response.getStatusCodeValue());
     }
 
     @Test

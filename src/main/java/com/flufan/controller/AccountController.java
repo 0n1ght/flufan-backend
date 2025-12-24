@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -142,22 +143,6 @@ public class AccountController {
                 .body(resource);
     }
 
-    @GetMapping("/verify/{token}")
-    public ResponseEntity<String> verifyEmail(@PathVariable String token) {
-        if (token == null || token.isBlank()) {
-            return ResponseEntity.badRequest().body("Missing or invalid token");
-        }
-
-        boolean verified = tokenService.useToken(token);
-
-        if (!verified) {
-            return ResponseEntity.status(HttpStatus.GONE)
-                    .body("Verification token is invalid or expired");
-        }
-
-        return ResponseEntity.ok("Email successfully verified");
-    }
-
     @PostMapping("/regenerate")
     public ResponseEntity<String> regenerateToken() {
         Account account = accountService.getAuthenticatedAccount();
@@ -184,7 +169,7 @@ public class AccountController {
     }
 
     private String buildVerificationLink(String token) {
-        return String.format("http://localhost:8080/api/account/verify/%s", token);
+        return String.format("http://localhost:8080/email-auth/verify/%s", token);
     }
 
     private void sendVerificationEmail(String email, String username, String link) {
