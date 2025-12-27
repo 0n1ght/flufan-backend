@@ -1,5 +1,9 @@
 logo i ikona dla aplikacji
 
+w passwordresetservice zaimplementowac mailsenderservice
+passwordresetservice przerzucic do account service
+zrobic poprawki w accountcontroller
+
 1) kupowanie i realizacja uslug
 
 2) video rozmowy

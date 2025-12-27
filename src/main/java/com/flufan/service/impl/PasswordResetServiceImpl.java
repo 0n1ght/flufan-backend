@@ -69,6 +69,6 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         account.setPassword(passwordEncoder.encode(newPassword));
         accountRepo.save(account);
 
-        tokenRepo.delete(resetToken); // Usuwamy token po użyciu
+        tokenRepo.delete(resetToken);
     }
 }

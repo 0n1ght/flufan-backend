@@ -25,12 +25,12 @@ public class AuthController {
     @GetMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         passwordResetService.requestPasswordReset(email);
-        return ResponseEntity.ok("Reset link sent to your email");
+        return ResponseEntity.ok("Password change link sent to your email");
     }
 
     @PutMapping("/reset-password")
     public ResponseEntity<String> resetPassword(@RequestBody String token, @RequestBody String newPassword) {
         passwordResetService.resetPassword(token, newPassword);
-        return ResponseEntity.ok("Password successfully reset");
+        return ResponseEntity.ok("Password has been changed");
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,7 +47,7 @@ public class AccountController {
         mailSender.sendVerificationEmail(
                 registerDto.getEmail(),
                 registerDto.getUsername(),
-                String.format("http://localhost:8080/email-auth/verify/%s", token)
+                token
         );
         return ResponseEntity.ok("Registration successful. Verification email sent.");
     }
@@ -92,7 +91,7 @@ public class AccountController {
             mailSender.sendVerificationEmail(
                     req.getNewEmail(),
                     accountService.getAuthenticatedAccount().getUsername(),
-                    String.format("http://localhost:8080/email-auth/verify/%s", token)
+                    token
             );
             return ResponseEntity.ok("Verification email has been sent.");
         } catch (Exception e) {
@@ -166,7 +165,7 @@ public class AccountController {
         mailSender.sendVerificationEmail(
                 account.getEmail(),
                 account.getUsername(),
-                String.format("http://localhost:8080/email-auth/verify/%s", token)
+                String.format("%s/email-auth/verify/%s", baseUrl, token)
         );
 
         return ResponseEntity.ok("Verification email sent");

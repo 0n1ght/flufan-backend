@@ -3,6 +3,7 @@ package com.flufan.service.impl;
 import com.flufan.service.MailSenderService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,6 +13,9 @@ import org.springframework.stereotype.Service;
 public class MailSenderServiceImpl implements MailSenderService {
 
     private final JavaMailSender mailSender;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     public MailSenderServiceImpl(JavaMailSender mailSender) {
         this.mailSender = mailSender;
@@ -66,6 +70,6 @@ public class MailSenderServiceImpl implements MailSenderService {
     }
 
     private String buildVerificationLink(String token) {
-        return String.format("http://localhost:8080/email-auth/verify/%s", token);
+        return String.format("%s/email-auth/verify/%s", baseUrl, token);
     }
 }
