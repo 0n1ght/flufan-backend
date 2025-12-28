@@ -2,11 +2,11 @@ package com.flufan.controller;
 
 import com.flufan.dto.LoginDto;
 import com.flufan.service.AccountService;
-import com.flufan.service.PasswordResetService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,8 +15,6 @@ import static org.mockito.Mockito.*;
 class AuthControllerTest {
     @Mock
     private AccountService accountService;
-    @Mock
-    private PasswordResetService passwordResetService;
 
     @InjectMocks
     private AuthController authController;
@@ -46,20 +44,9 @@ class AuthControllerTest {
 
         ResponseEntity<String> response = authController.forgotPassword(email);
 
-        assertEquals(200, response.getStatusCodeValue());
-        assertTrue(response.getBody().contains("Reset link sent"));
-        verify(passwordResetService).requestPasswordReset(email);
-    }
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Password change link sent to your email", response.getBody());
 
-    @Test
-    void testResetPassword_Success() {
-        String token = "TOKEN";
-        String newPassword = "newPwd";
-
-        ResponseEntity<String> response = authController.resetPassword(token, newPassword);
-
-        assertEquals(200, response.getStatusCodeValue());
-        assertTrue(response.getBody().contains("Password successfully reset"));
-        verify(passwordResetService).resetPassword(token, newPassword);
+        verify(accountService, times(1)).requestPasswordReset(email);
     }
 }

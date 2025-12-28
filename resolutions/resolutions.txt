@@ -1,8 +1,6 @@
 logo i ikona dla aplikacji
-
-w passwordresetservice zaimplementowac mailsenderservice
-passwordresetservice przerzucic do account service
-zrobic poprawki w accountcontroller
+--
+fix: jezeli jakis request zostaje wysylany ponownie, wyskakuje error servera
 
 1) kupowanie i realizacja uslug
 

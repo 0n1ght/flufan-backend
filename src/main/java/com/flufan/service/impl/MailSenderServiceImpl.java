@@ -69,6 +69,43 @@ public class MailSenderServiceImpl implements MailSenderService {
         mailSender.send(message);
     }
 
+    @Override
+    public void sendPasswordResetEmail(String email, String username, String token) throws MessagingException {
+        String resetLink = String.format("%s/reset-password/%s", baseUrl, token);
+
+        String htmlContent = "<!DOCTYPE html>" +
+                "<html lang='en'>" +
+                "<body style='font-family: Arial, sans-serif; background-color: #f5f5f5; margin:0; padding:0;'>" +
+                "<table width='100%' cellpadding='0' cellspacing='0'>" +
+                "<tr><td align='center' style='padding:40px 0;'>" +
+                "<table width='600' cellpadding='0' cellspacing='0' style='background:#fff; border-radius:10px; overflow:hidden;'>" +
+                "<tr><td align='center' style='background-color:#6a1b9a; padding:30px;'>" +
+                "<h1 style='color:#fff; margin:0; font-size:32px;'>Flufan</h1>" +
+                "</td></tr>" +
+                "<tr><td style='padding:40px; color:#333;'>" +
+                "<h2 style='margin-top:0;'>Reset Your Password</h2>" +
+                "<p>Hello <strong>" + username + "</strong>,</p>" +
+                "<p>You requested a password reset. Click the button below to set a new password:</p>" +
+                "<p style='text-align:center; margin:30px 0;'>" +
+                "<a href='" + resetLink + "' style='background-color:#6a1b9a; color:#fff; padding:15px 25px; text-decoration:none; border-radius:5px; display:inline-block;'>Reset Password</a>" +
+                "</p>" +
+                "<p>This link will expire in <strong>1 hour</strong>.</p>" +
+                "<p>If you did not request a password reset, please ignore this email.</p>" +
+                "<p>Need help? Contact support: <a href='mailto:support@flufan.com'>support@flufan.com</a></p>" +
+                "</td></tr>" +
+                "<tr><td style='background-color:#f0f0f0; text-align:center; padding:20px; font-size:12px; color:#888;'>" +
+                "&copy; 2025 Flufan. All rights reserved." +
+                "</td></tr>" +
+                "</table></td></tr></table></body></html>";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setTo(email);
+        helper.setSubject("Flufan - Reset Password");
+        helper.setText(htmlContent, true);
+        mailSender.send(message);
+    }
+
     private String buildVerificationLink(String token) {
         return String.format("%s/email-auth/verify/%s", baseUrl, token);
     }

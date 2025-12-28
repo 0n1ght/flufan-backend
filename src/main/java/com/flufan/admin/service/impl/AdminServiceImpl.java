@@ -4,7 +4,7 @@ import com.flufan.admin.service.AdminService;
 import com.flufan.dto.*;
 import com.flufan.mapper.*;
 import com.flufan.repo.*;
-import com.flufan.service.PasswordResetService;
+import com.flufan.service.AccountService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,20 +27,19 @@ public class AdminServiceImpl implements AdminService {
     private final ProfileMapper profileMapper;
     private final UserReviewMapper userReviewMapper;
     private final MessageMapper messageMapper;
-    private final PasswordResetService passwordResetService;
+    private final AccountService accountService;
 
     public AdminServiceImpl(AccountRepo accountRepo,
                             BannedAccountRepo bannedAccountRepo,
                             SuspendedAccountRepo suspendedAccountRepo,
                             MessageRepo messageRepo,
-                            PasswordResetTokenRepo passwordResetTokenRepo,
                             ProfileRepo profileRepo,
                             UserReviewRepo userReviewRepo,
                             AccountMapper accountMapper,
                             ProfileMapper profileMapper,
                             UserReviewMapper userReviewMapper,
                             MessageMapper messageMapper,
-                            PasswordResetService passwordResetService) {
+                            AccountService accountService) {
         this.accountRepo = accountRepo;
         this.bannedAccountRepo = bannedAccountRepo;
         this.suspendedAccountRepo = suspendedAccountRepo;
@@ -51,7 +50,7 @@ public class AdminServiceImpl implements AdminService {
         this.profileMapper = profileMapper;
         this.userReviewMapper = userReviewMapper;
         this.messageMapper = messageMapper;
-        this.passwordResetService = passwordResetService;
+        this.accountService = accountService;
     }
 
     // --- Helpers ---
@@ -97,7 +96,7 @@ public class AdminServiceImpl implements AdminService {
 
     public void sendResetPassword(Long accountId) {
         String email = accountRepo.findById(accountId).orElseThrow().getEmail();
-        passwordResetService.requestPasswordReset(email);
+        accountService.requestPasswordReset(email);
     }
 
     // --- Profile Management ---

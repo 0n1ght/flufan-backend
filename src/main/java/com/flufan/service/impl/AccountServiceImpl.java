@@ -2,13 +2,16 @@ package com.flufan.service.impl;
 
 import com.flufan.dto.LoginDto;
 import com.flufan.entity.Account;
+import com.flufan.entity.PasswordResetToken;
 import com.flufan.exception.ResourceNotFoundException;
 import com.flufan.repo.AccountRepo;
 import com.flufan.repo.BannedAccountRepo;
+import com.flufan.repo.PasswordResetTokenRepo;
 import com.flufan.repo.SuspendedAccountRepo;
 import com.flufan.service.AccountService;
 import com.flufan.dto.RegisterDto;
 import com.flufan.service.JWTService;
+import com.flufan.service.MailSenderService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -34,17 +37,22 @@ public class AccountServiceImpl implements AccountService {
     private final SuspendedAccountRepo suspendedAccountRepo;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
+    private final MailSenderService mailService;
     private final PasswordEncoder passwordEncoder;
+    private final PasswordResetTokenRepo tokenRepo;
 
     public AccountServiceImpl(AccountRepo accountRepo, BannedAccountRepo bannedAccountRepo,
                               SuspendedAccountRepo suspendedAccountRepo, @Lazy AuthenticationManager authManager,
-                              JWTService jwtService, PasswordEncoder passwordEncoder) {
+                              JWTService jwtService, MailSenderService mailService,
+                              PasswordEncoder passwordEncoder, PasswordResetTokenRepo tokenRepo) {
         this.accountRepo = accountRepo;
         this.bannedAccountRepo = bannedAccountRepo;
         this.suspendedAccountRepo = suspendedAccountRepo;
         this.authManager = authManager;
         this.jwtService = jwtService;
+        this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
+        this.tokenRepo = tokenRepo;
     }
 
     @Override
@@ -84,8 +92,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account saveAccount(Account account) {
-        return accountRepo.save(account);
+    public void saveAccount(Account account) {
+        accountRepo.save(account);
     }
 
     @Override
@@ -226,5 +234,57 @@ public class AccountServiceImpl implements AccountService {
         accountRepo.save(newAccount);
 
         return newAccount;
+    }
+
+    @Override
+    public void requestPasswordReset(String email) {
+        Account account = accountRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        PasswordResetToken resetToken =
+                generatePasswordResetToken(account, LocalDateTime.now().plusHours(1));
+        tokenRepo.save(resetToken);
+
+        try {
+            mailService.sendPasswordResetEmail(account.getEmail(), account.getUsername(), resetToken.getToken());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to send password reset email", e);
+        }
+    }
+
+    @Override
+    public void resetPassword(String token, String newPassword) {
+        PasswordResetToken resetToken = tokenRepo.findByToken(token)
+                .orElseThrow(() -> new RuntimeException("Invalid token"));
+
+        if (resetToken.isExpired()) {
+            throw new RuntimeException("Token expired");
+        }
+
+        Account account = resetToken.getAccount();
+        account.setPassword(passwordEncoder.encode(newPassword));
+        accountRepo.save(account);
+
+        tokenRepo.delete(resetToken);
+    }
+
+    @Override
+    public boolean verifyPasswordResetToken(String token) {
+        return tokenRepo.existsByToken(token);
+    }
+
+    private PasswordResetToken generatePasswordResetToken(Account account, LocalDateTime expiryDate) {
+        PasswordResetToken resetToken = new PasswordResetToken();
+
+        String token;
+        do {
+            token = UUID.randomUUID().toString();
+        } while(tokenRepo.existsByToken(token));
+
+        resetToken.setToken(token);
+        resetToken.setAccount(account);
+        resetToken.setExpiryDate(expiryDate);
+
+        return resetToken;
     }
 }

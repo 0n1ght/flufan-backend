@@ -69,6 +69,7 @@ public class SecurityConfig {
                                 "/api/account/signup",
                                 "/api/auth/**",
                                 "/email-auth/**",
+                                "/reset-password/**",
                                 "/api/profiles/search/**",
                                 "/api/account/profile-pictures/**",
                                 "/api/reviews/get-profile-reviews/**",

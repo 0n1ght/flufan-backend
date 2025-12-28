@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.lang.reflect.Field;
 
@@ -52,7 +51,7 @@ class AccountControllerTest {
         assertEquals("Registration successful. Verification email sent.", response.getBody());
 
         verify(mailSender, times(1))
-                .sendVerificationEmail(eq("user"), eq("test@test.com"), contains("token"));
+                .sendVerificationEmail(eq("test@test.com"), eq("user"), contains("token"));
     }
 
     @Test

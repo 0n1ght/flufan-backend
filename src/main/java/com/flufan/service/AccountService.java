@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AccountService extends UserDetailsService {
     Account saveAccount(RegisterDto accountDto);
-    Account saveAccount(Account account);
+    void saveAccount(Account account);
     void deleteAccount(LoginDto loginDto);
     Account getAuthenticatedAccount();
     String verify(LoginDto loginDto);
@@ -18,4 +18,7 @@ public interface AccountService extends UserDetailsService {
     void updateAccount(Account account);
     void verifyEmailUpdateRequest(String password, String newEmail);
     Account loadOrCreateGoogleUser(String email);
+    void requestPasswordReset(String email);
+    void resetPassword(String token, String newPassword);
+    boolean verifyPasswordResetToken(String token);
 }

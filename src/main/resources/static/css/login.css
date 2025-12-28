@@ -155,10 +155,6 @@ button:hover {
         border-radius: 5px;
     }
 
-    #mainFrame {
-        box-shadow: none;
-    }
-
     #breakLine {
         margin-top: -20px;
     }

@@ -18,15 +18,15 @@ public class EmailVerificationController {
     @GetMapping("/verify/{token}")
     public String verifyEmail(@PathVariable String token) {
         if (token == null || token.isBlank()) {
-            return "expired";
+            return "email-verified.html";
         }
 
         boolean verified = tokenService.useToken(token);
 
         if (!verified) {
-            return "expired";
+            return "email-verification-expired";
         }
 
-        return "verified";
+        return "email-verified.html";
     }
 }
