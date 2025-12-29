@@ -1,29 +1,34 @@
-logo i ikona dla aplikacji
+app icon and logo
 --
-fix: jezeli jakis request zostaje wysylany ponownie, wyskakuje error servera
 
-1) kupowanie i realizacja uslug
+fix: if there is some error, requests return sign in page of OAuth2 instead of an error message
 
-2) video rozmowy
+separate css and js files
 
-3) weryfikacja kont social media, kont aplikacji
+2) jezeli jakis request zostaje wysylany ponownie, wyskakuje error servera
 
-4) usowanie konta, mozliwosc odzyskiwania konta jezeli usuniecie nastapilo mniej niz 30 dni temu
+- kupowanie i realizacja uslug
 
-5) odpowiadanie na wiadomości w formie głosówek
+- video rozmowy
 
-6) settings
+- weryfikacja kont social media, "market profile" kont
 
-7) Add admin role: assigning admin role, permissions, controller & service
+- usowanie konta, mozliwosc odzyskiwania konta jezeli usuniecie nastapilo mniej niz 30 dni temu
 
-8) wykup i zalozenie firmieych domen, kont i maila oraz ich implementacja do kodu
+- odpowiadanie na wiadomości w formie głosówek
 
-9) testy manualne (jednostkowe juz istnieja dla podstawowych funkcjonalnosci)
+- settings
 
-[grupowa składki]
+- Add admin role: assigning admin role, permissions, controller & service
+
+- wykup i zalozenie firmieych domen, kont i maila oraz ich implementacja do kodu
+
+- testy manualne (jednostkowe juz istnieja dla podstawowych funkcjonalnosci)
+
+[grupowe składki]
 
 todo:
-Add algorithm of returning list of profiles
+Add algorithm for returning list of profiles
 
 -----------------
 
