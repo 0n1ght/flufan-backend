@@ -8,6 +8,7 @@ import com.flufan.service.AccountService;
 import com.flufan.service.MessageService;
 import com.flufan.service.ProfileService;
 import com.flufan.service.UserReviewService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserReviewServiceImpl implements UserReviewService {
 
     private final UserReviewRepo userReviewRepo;
@@ -23,16 +25,6 @@ public class UserReviewServiceImpl implements UserReviewService {
     private final MessageService messageService;
     private final AccountService accountService;
     private final ProfileService profileService;
-
-    public UserReviewServiceImpl(UserReviewRepo userReviewRepo, UserReviewMapper userReviewMapper,
-                                 MessageService messageService, AccountService accountService,
-                                 ProfileService profileService) {
-        this.userReviewRepo = userReviewRepo;
-        this.userReviewMapper = userReviewMapper;
-        this.messageService = messageService;
-        this.accountService = accountService;
-        this.profileService = profileService;
-    }
 
     @Override
     public List<UserReviewDto> getReviewsForProfile(Long profileId) {

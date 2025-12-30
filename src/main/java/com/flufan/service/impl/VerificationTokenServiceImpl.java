@@ -6,6 +6,7 @@ import com.flufan.repo.VerificationTokenRepo;
 import com.flufan.service.AccountService;
 import com.flufan.service.VerificationTokenService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,14 +15,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final VerificationTokenRepo tokenRepo;
     private final AccountService accountService;
-
-    public VerificationTokenServiceImpl(VerificationTokenRepo tokenRepo, AccountService accountService) {
-        this.tokenRepo = tokenRepo;
-        this.accountService = accountService;
-    }
 
     @Override
     public String generateToken(String email, Account account) {

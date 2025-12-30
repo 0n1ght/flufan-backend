@@ -10,6 +10,7 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.flufan.dto.ProductRequest;
@@ -18,6 +19,7 @@ import com.flufan.dto.StripeResponse;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class StripeServiceImpl implements StripeService {
     private final AccountService accountService;
     private final ObjectMapper objectMapper;
@@ -30,11 +32,6 @@ public class StripeServiceImpl implements StripeService {
 
     @Value("${stripe.cancelUrl}")
     private String cancelUrl;
-
-    public StripeServiceImpl(AccountService accountService, ObjectMapper objectMapper) {
-        this.accountService = accountService;
-        this.objectMapper = objectMapper;
-    }
 
     public StripeResponse checkoutProducts(ProductRequest productRequest) throws JsonProcessingException {
         Account authenticatedAccount = accountService.getAuthenticatedAccount();

@@ -13,6 +13,7 @@ import com.flufan.model.Notification;
 import com.flufan.repo.MessageRepo;
 import com.flufan.service.AccountService;
 import com.flufan.service.MessageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,17 +21,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
     private final MessageRepo messageRepo;
     private final AccountService accountService;
     private final MessageMapper messageMapper;
-
-    public MessageServiceImpl(MessageRepo messageRepo, AccountService accountService,
-                              MessageMapper messageMapper) {
-        this.messageRepo = messageRepo;
-        this.accountService = accountService;
-        this.messageMapper = messageMapper;
-    }
 
     @Override
     public void sendMessage(Long receiverId, String content, MessageType messageType) {

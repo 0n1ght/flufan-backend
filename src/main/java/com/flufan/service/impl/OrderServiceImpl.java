@@ -5,19 +5,16 @@ import com.flufan.enums.MessageType;
 import com.flufan.service.AccountService;
 import com.flufan.service.MessageService;
 import com.flufan.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final AccountService accountService;
     private final MessageService messageService;
-
-    public OrderServiceImpl(AccountService accountService, MessageService messageService) {
-        this.accountService = accountService;
-        this.messageService = messageService;
-    }
 
     @Override
     public void realiseMessage(long buyerId, long sellerId, String content, String details) {

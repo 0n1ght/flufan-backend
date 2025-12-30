@@ -10,26 +10,20 @@ import com.flufan.repo.AccountRepo;
 import com.flufan.repo.ProfileRepo;
 import com.flufan.service.AccountService;
 import com.flufan.service.ProfileService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepo profileRepo;
     private final AccountRepo accountRepo;
     private final AccountService authService;
     private final ProfileMapper profileMapper;
-
-    public ProfileServiceImpl(ProfileRepo profileRepo, AccountRepo accountRepo,
-                              AccountService authService, ProfileMapper profileMapper) {
-        this.profileRepo = profileRepo;
-        this.accountRepo = accountRepo;
-        this.authService = authService;
-        this.profileMapper = profileMapper;
-    }
 
     @Override
     public void createProfile(ProfileDto profileDto) {
