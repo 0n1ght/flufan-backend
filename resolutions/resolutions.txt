@@ -1,38 +1,33 @@
 app icon and logo
 --
 
-fix: if there is some error, requests return sign in page of OAuth2 instead of an error message
-
-separate css and js files
-
-2) jezeli jakis request zostaje wysylany ponownie, wyskakuje error servera
-
-- kupowanie i realizacja uslug
-
-- video rozmowy
-
-- weryfikacja kont social media, "market profile" kont
-
-- usowanie konta, mozliwosc odzyskiwania konta jezeli usuniecie nastapilo mniej niz 30 dni temu
-
-- odpowiadanie na wiadomości w formie głosówek
+todo pozmieniac wstrzykiwanie parametrow w serwisach
+todo strona logowania i rejestracji
+fix: eye icon for hiding and showing password on password reset, login, and signup pages moves
+todo refactoring metod w folderze web, niektore do przerzucenia do api
 
 - settings
 
-- Add admin role: assigning admin role, permissions, controller & service
+2.
+- kupowanie i realizacja uslug
+- odpowiadanie na wiadomości w formie głosówek
+- video rozmowy
+[grupowe składki, propozycje od konsumentow]
+
+3)
+- weryfikacja kont social media, "market profile" kont
+- add algorithm for returning list of profiles
 
 - wykup i zalozenie firmieych domen, kont i maila oraz ich implementacja do kodu
 
-- testy manualne (jednostkowe juz istnieja dla podstawowych funkcjonalnosci)
+- Add admin role: assigning admin role, permissions, controller & service
 
-[grupowe składki]
-
-todo:
-Add algorithm for returning list of profiles
+4)
+-wyrzucenie produkcyjnych linijek kodu
+-zmiana bazy danych na PostgreSQL
+-testy
 
 -----------------
-
-TODO (General)
 1. Weryfikacja na social mediach podczas zakładania profilu
     -Weryfikacja konta użytkownika poprzez media społecznościowe.
 
@@ -60,12 +55,6 @@ TODO (General)
         jezeli odrzuci-> powiadomienie do kupujacego ze zwrotem pieniedzy
         jezeli zasugeruje zmiane-> powiadomienie do kupujacego zeby zaakceptowal, odrzucil, lub zasugerowal zmiane-> powtorz punkt 1 lub 2
 
-
-TODO: Quick Changes
-commit 5:
-
-commit 6:
-(Infrastructure and domains)
 -Domena, email, powiązanie kont
     -Wykupienie domeny i założenie maila firmowego <nazwa>@<nazwa-domeny>.com.
     -Powiązanie maila firmowego z kontami aplikacji 3rd party (np. Stripe, Google).
@@ -73,8 +62,6 @@ commit 6:
     -Migracja danych.
     -Optymalizacja bazy danych (indeksy, backupy).
 
-commit 7:
-(Preparing for production)
 -Przygotowanie kodu
     -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
     -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.), log, nazw itd.

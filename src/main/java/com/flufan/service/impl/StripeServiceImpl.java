@@ -19,8 +19,8 @@ import java.util.*;
 
 @Service
 public class StripeServiceImpl implements StripeService {
-    private AccountService accountService;
-    private ObjectMapper objectMapper;
+    private final AccountService accountService;
+    private final ObjectMapper objectMapper;
 
     @Value("${stripe.secretKey}")
     private String secretKey;

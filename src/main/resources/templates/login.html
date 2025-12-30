@@ -1,36 +1,216 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flufan- Login</title>
-    <link rel="stylesheet" href="../static/css/login.css" th:href="@{/css/login.css}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Gidugu&display=swap');
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 35px;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input {
+            padding: 10px;
+            border-style: none;
+            outline: none;
+            border-bottom: 2px solid rgb(150, 150, 150);
+            width: 300px;
+            height: 40px;
+            font-size: 16px;
+            color: #1d2129;
+            margin-bottom: 20px;
+        }
+
+        input::placeholder {
+            color: rgb(150, 150, 150);
+        }
+
+        a {
+            text-decoration: none;
+            color: #6a1b9a;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #42b72a;
+            color: WHITE;
+            font-weight: bold;
+            border-style: none;
+            border-radius: 10px;
+            height: 40px;
+            width: 350px;
+            transform: translateY(35px);
+        }
+
+        button:hover {
+            transition: 0.2s;
+            background-color: #3ca328;
+            cursor: pointer;
+        }
+
+        #logo {
+            margin-top: 5vh;
+            margin-bottom: 5px;
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 60px;
+            font-weight: 400;
+            font-style: normal;
+            color: #6a1b9a;
+            user-select: none;
+        }
+
+        #mainFrame {
+            height: 350px;
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: WHITE;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+        }
+
+        #password {
+            padding-right: 30px;
+        }
+
+        #email:focus, #password:focus {
+            border-bottom-color: #6a1b9a;
+        }
+
+        #togglePassword {
+            width: 4px;
+            transform: translateX(-30px);
+            color: rgb(150, 150, 150);
+        }
+
+        #submit {
+            margin-top: 10px;
+            height: 40px;
+            font-weight: bold;
+            border-style: none;
+            border-radius: 10px;
+            background-color: #6a1b9a;
+            color: WHITE;
+        }
+
+        #submit:hover {
+            transition: 0.2s;
+            background-color: #7b32a8;
+            cursor: pointer;
+        }
+
+        #breakLine {
+            display: flex;
+            justify-content: center;
+            transform: translateY(30px);
+            color: rgb(150, 150, 150);
+        }
+
+        #breakLine hr {
+            margin: 10px;
+            height: 1px;
+            width: 100px;
+            border-style: solid;
+            color: rgb(150, 150, 150);
+        }
+
+        @media screen and (max-width: 767px) {
+
+            body {
+                background-color: WHITE;
+                justify-content: unset;
+            }
+
+            input {
+                border-style: solid;
+                border-color: #1d2129;
+                border-width: 1px;
+                border-radius: 5px;
+            }
+
+            #breakLine {
+                margin-top: -20px;
+            }
+
+            #breakLine hr {
+                width: 72px;
+            }
+
+            #createAccBt {
+                width: 300px;
+                margin-bottom: 80px;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
 </head>
 
 <body>
-<h1 id="logo"><a href="/" style="text-decoration: none">Flufan</a></h1>
-<div id="mainFrame">
-    <h2>Login</h2>
-    <form action="/login" method="post">
-        <input type="email" name="username" id="email" placeholder="Email" required>
-        <div>
-            <input type="password" name="password" id="password" placeholder="Password" required>
-            <i class="far fa-eye" id="togglePassword"></i>
-        </div>
-        <br>
-        <input type="submit" name="submit" id="submit" value="Submit">
-    </form>
-    <a href="">Forgot password?</a>
-</div>
-<div id="breakLine">
-    <hr>
-    <p style="white-space: nowrap;">New to Flufan?</p>
-    <hr>
-</div>
-<button onclick="window.location.href='/req/signup'" id="createAccBt">Create an account</button>
-<div style="height: 80px"></div>
+    <h1 id="logo"><a href="/" style="text-decoration: none">Flufan</a></h1>
+    <div id="mainFrame">
+        <h2>Login</h2>
+        <form action="/login" method="post">
+            <input type="email" name="username" id="email" placeholder="Email" required>
+            <div>
+                <input type="password" name="password" id="password" placeholder="Password" required>
+                <i class="fas fa-eye-slash" id="togglePassword"></i>
+            </div>
+            <br>
+            <input type="submit" name="submit" id="submit" value="Submit">
+        </form>
+        <a href="">Forgot password?</a>
+    </div>
+    <div id="breakLine">
+        <hr>
+        <p style="white-space: nowrap;">New to Flufan?</p>
+        <hr>
+    </div>
+    <button onclick="window.location.href='/req/signup'" id="createAccBt">Create an account</button>
+    <div style="height: 80px"></div>
 
-<script src="../static/js/toggle_password.js" th:src="@{/js/toggle_password.js}"></script>
+    <script>
+        const togglePassword = document.querySelector("#togglePassword");
+        const password = document.querySelector("#password");
+
+        togglePassword.addEventListener("click", () => {
+            const type = password.getAttribute("type") === "password" ? "text" : "password";
+            password.setAttribute("type", type);
+            togglePassword.classList.toggle("fa-eye");
+            togglePassword.classList.toggle("fa-eye-slash");
+        });
+    </script>
 </body>
 </html>

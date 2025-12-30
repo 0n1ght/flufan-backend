@@ -100,12 +100,6 @@ public class AccountController {
         }
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteAccount(@RequestBody LoginDto loginDto) {
-        accountService.deleteAccount(loginDto);
-        return ResponseEntity.ok("Account deleted successfully.");
-    }
-
     @PutMapping("/update-pfp")
     public ResponseEntity<String> updatePfp(@RequestParam("file") MultipartFile file) throws IOException {
         Account account = accountService.getAuthenticatedAccount();
@@ -149,7 +143,7 @@ public class AccountController {
                 .body(resource);
     }
 
-    @PostMapping("/regenerate")
+    @PostMapping("/regenerate-verification")
     public ResponseEntity<String> regenerateToken() throws MessagingException {
         Account account = accountService.getAuthenticatedAccount();
         if (account == null) {
@@ -169,6 +163,21 @@ public class AccountController {
         );
 
         return ResponseEntity.ok("Verification email sent");
+    }
+
+    @DeleteMapping("/delete-account")
+    public ResponseEntity<String> deleteAccount(@RequestBody PasswordDto passwordDto) {
+
+        accountService.deleteAccount(passwordDto.getPassword());
+
+        Account account = accountService.getAuthenticatedAccount();
+        mailSender.sendAccountDelInfo(account.getEmail(), account.getUsername());
+
+        return ResponseEntity.ok(
+                "Your account has been scheduled for deletion. " +
+                        "It will be permanently deleted in 30 days. " +
+                        "You can log in anytime before that to reactivate it."
+        );
     }
 
     private void validateImage(MultipartFile file) throws IOException {

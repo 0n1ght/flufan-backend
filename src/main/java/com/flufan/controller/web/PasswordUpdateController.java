@@ -17,7 +17,7 @@ public class PasswordUpdateController {
     }
 
     @GetMapping("/reset-password/{token}")
-    public String getPasswordResetSite(@PathVariable String token, Model model) {
+    public String getPasswordResetPage(@PathVariable String token, Model model) {
         if (accountService.verifyPasswordResetToken(token)) {
             model.addAttribute("token", token);
             return "password-reset";

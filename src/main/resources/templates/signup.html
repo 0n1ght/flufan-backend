@@ -4,69 +4,165 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flufan- Sign Up</title>
-    <link rel="stylesheet" href="../static/css/signup.css" th:href="@{/css/signup.css}">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gidugu&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Tilt+Warp&display=swap');
+
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 35px;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input {
+            padding: 10px;
+            border: none;
+            outline: none;
+            border-bottom: 2px solid rgb(150, 150, 150);
+            width: 300px;
+            height: 40px;
+            font-size: 16px;
+            color: #1d2129;
+            margin-bottom: 20px;
+        }
+
+        input::placeholder {
+            color: rgb(150, 150, 150);
+        }
+
+        form label {
+            font-size: 15px;
+            color: #1d2129;
+        }
+
+        a {
+            text-decoration: none;
+            color: #6a1b9a;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #logo {
+            margin-bottom: 5px;
+            font-family: "Tilt Warp", sans-serif;
+            font-size: 60px;
+            font-weight: 400;
+            font-style: normal;
+            color: #6a1b9a;
+            user-select: none;
+        }
+
+        #mainFrame {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: WHITE;
+            width: 400px;
+            height: 540px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+        }
+
+        #username:focus, #email:focus, #password:focus, #confirmPassword:focus {
+            border-bottom-color: #6a1b9a;
+        }
+
+        #submit {
+            margin-top: 10px;
+            background-color: #6a1b9a;
+            color: WHITE;
+            font-weight: bold;
+            border-style: none;
+            border-radius: 10px;
+            height: 40px;
+        }
+
+        #submit:hover {
+            transition: 0.2s;
+            background-color: #0866ff;
+            cursor: pointer;
+        }
+
+        #termsAccept {
+            width: 20px;
+        }
+
+        @media screen and (max-width: 767px) {
+
+            body {
+                background-color: WHITE;
+            }
+
+            input {
+                border-style: solid;
+                border-width: 1px;
+                border-radius: 5px;
+            }
+
+            #mainFrame {
+                box-shadow: none;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
     <script src="../static/js/sign_up.js" th:src="@{/js/sign_up.js}"></script>
 </head>
 
 <body>
-<h1 id="logo"><a href="/" style="text-decoration: none">Flufan</a></h1>
-<div id="mainFrame">
-    <h2>Sign Up</h2>
-    <form action="/sign-up" method="post">
-        <input type="text" name="username" placeholder="Username" id="username" required>
-        <input type="email" name="email" placeholder="Email" id="email" required>
-        <input type="password" name="password" placeholder="Password" id="password" required>
-        <input type="password" name="confirmPassword" placeholder="Repeat password" id="confirmPassword" required>
-        <div id="errors" style="color: rgb(255, 80, 80)">
-            <div th:if="${emailExists}" id="emailInUsePrompt">
-                <p>🥶 Email already in use. Try to sign in</p>
+    <h1 id="logo"><a href="/" style="text-decoration: none">Flufan</a></h1>
+    <div id="mainFrame">
+        <h2>Sign Up</h2>
+        <form action="/sign-up" method="post">
+            <input type="text" name="username" placeholder="Username" id="username" required>
+            <input type="email" name="email" placeholder="Email" id="email" required>
+            <input type="password" name="password" placeholder="Password" id="password" required>
+            <input type="password" name="confirmPassword" placeholder="Repeat password" id="confirmPassword" required>
+            <div id="errors" style="color: rgb(255, 80, 80)">
+                <div th:if="${emailExists}" id="emailInUsePrompt">
+                    <p>🥶 Email already in use. Try to sign in</p>
+                </div>
+                <div th:if="${passwordMatch}" id="passwordMatchPrompt">
+                    <p>🥶 Passwords do not match</p>
+                </div>
             </div>
-            <div th:if="${passwordMatch}" id="passwordMatchPrompt">
-                <p>🥶 Passwords do not match</p>
-            </div>
-        </div>
-        <div style="height: 10px"></div>
-        <br>
-        <label>By creating an account, you agree to Flufan's <br> <a href="/terms/conditions-of-use">Conditions of Use</a> and <a href="/terms/privacy-notice">Privacy Notice</a>.</label>
-        <br>
-        <br>
-        <input type="submit" id="submit" value="Submit">
-    </form>
-    <label>Already have an account? <a href="/login">Sign in</a></label>
-</div>
-<div style="height: 40px"></div>
+            <div style="height: 10px"></div>
+            <br>
+            <label>By creating an account, you agree to Flufan's <br> <a href="/terms/conditions-of-use">Conditions of Use</a> and <a href="/terms/privacy-notice">Privacy Notice</a>.</label>
+            <br>
+            <br>
+            <input type="submit" id="submit" value="Submit">
+        </form>
+        <label>Already have an account? <a href="/login">Sign in</a></label>
+    </div>
+    <div style="height: 40px"></div>
+
+    <script>
+    </script>
 </body>
 </html>
-<script>
-    const submitButton = document.getElementById("submit");
-    submitButton.addEventListener('click',()=>{
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirmPassword').value;
-      const email = document.getElementById('email').value;
-      const data ={
-        username,
-        email,
-        password
-      }
-
-      if(password == confirmPassword){
-        const jsonData = JSON.stringify(data);
-        fetch('/req/signup', {
-          method: 'POST',
-          headers:{
-            'Content-Type': 'application/json'
-          },
-          body: jsonData
-        })
-        .then(response =>{
-          //alert('successful');
-          //if(response.status == 200){
-            //alert('successful');
-          //xs}
-        })
-      }
-
-    })
-</script>

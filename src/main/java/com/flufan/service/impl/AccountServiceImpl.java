@@ -3,7 +3,6 @@ package com.flufan.service.impl;
 import com.flufan.dto.LoginDto;
 import com.flufan.entity.Account;
 import com.flufan.entity.PasswordResetToken;
-import com.flufan.exception.ResourceNotFoundException;
 import com.flufan.repo.AccountRepo;
 import com.flufan.repo.BannedAccountRepo;
 import com.flufan.repo.PasswordResetTokenRepo;
@@ -97,50 +96,34 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteAccount(LoginDto loginDto) {
-        Optional<Account> account = accountRepo.findByEmail(loginDto.getEmail());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (account.isEmpty()) {
-            throw new ResourceNotFoundException("Account with the given email not found");
-        }
-
-        if (!authentication.getName().equals(account.get().getEmail())) {
-            throw new AccessDeniedException("You are not authorized to delete this account");
-        }
+    public void deleteAccount(String password) {
+        Account account = getAuthenticatedAccount();
 
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        if (!passwordEncoder.matches(loginDto.getPassword(), account.get().getPassword())) {
+        if (!passwordEncoder.matches(password, account.getPassword())) {
             throw new AccessDeniedException("Incorrect password");
         }
 
-        accountRepo.delete(account.get());
-    }
-
-    @Override
-    public Account getAuthenticatedAccount() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-
-        return accountRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Logged in user not found"));
+        account.setDeletedAt(LocalDateTime.now());
+        accountRepo.save(account);
     }
 
     @Override
     public String verify(LoginDto loginDto) {
-
-        String email;
-        if (loginDto.getEmail() != null) {
-            email = loginDto.getEmail();
-        } else {
-            email = accountRepo.findByUsername(loginDto.getUsername()).orElseThrow().getEmail();
-        }
+        Account account = loginDto.getEmail() != null
+                ? accountRepo.findByEmail(loginDto.getEmail()).orElseThrow()
+                : accountRepo.findByUsername(loginDto.getUsername()).orElseThrow();
 
         Authentication authentication =
-                authManager.authenticate(new UsernamePasswordAuthenticationToken(email, loginDto.getPassword()));
+                authManager.authenticate(new UsernamePasswordAuthenticationToken(account.getEmail(), loginDto.getPassword()));
 
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(email);
+            if (account.getDeletedAt() != null) {
+                account.setDeletedAt(null);
+                accountRepo.save(account);
+            }
+
+            return jwtService.generateToken(account.getEmail());
         }
 
         return "Fail";
@@ -271,6 +254,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean verifyPasswordResetToken(String token) {
         return tokenRepo.existsByToken(token);
+    }
+
+    @Override
+    public Account getAuthenticatedAccount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        return accountRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Logged in user not found"));
     }
 
     private PasswordResetToken generatePasswordResetToken(Account account, LocalDateTime expiryDate) {

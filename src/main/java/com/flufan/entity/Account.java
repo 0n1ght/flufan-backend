@@ -40,8 +40,10 @@ public class Account {
     @Column(name = "message_count")
     private Map<Long, Long> availableReplies = new HashMap<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;
+
+    private LocalDateTime deletedAt;
 
     public Account(String username, String email, String password) {
         this.username = username;

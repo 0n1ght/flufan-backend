@@ -8,8 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface AccountService extends UserDetailsService {
     Account saveAccount(RegisterDto accountDto);
     void saveAccount(Account account);
-    void deleteAccount(LoginDto loginDto);
-    Account getAuthenticatedAccount();
+    void deleteAccount(String password);
     String verify(LoginDto loginDto);
     Account findById(Long id);
     Account findByUsername(String username);
@@ -21,4 +20,5 @@ public interface AccountService extends UserDetailsService {
     void requestPasswordReset(String email);
     void resetPassword(String token, String newPassword);
     boolean verifyPasswordResetToken(String token);
+    Account getAuthenticatedAccount();
 }

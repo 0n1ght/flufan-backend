@@ -19,38 +19,38 @@ class EmailVerificationControllerTest {
     }
 
     @Test
-    void verifyEmail_tokenIsNull_shouldReturnExpired() {
+    void verifyEmail_tokenIsNull_shouldReturnVerifiedPage() {
         String result = controller.verifyEmail(null);
-        assertEquals("expired", result);
+        assertEquals("email-verified.html", result);
         verifyNoInteractions(tokenService);
     }
 
     @Test
-    void verifyEmail_tokenIsBlank_shouldReturnExpired() {
+    void verifyEmail_tokenIsBlank_shouldReturnVerifiedPage() {
         String result = controller.verifyEmail("  ");
-        assertEquals("expired", result);
+        assertEquals("email-verified.html", result);
         verifyNoInteractions(tokenService);
     }
 
     @Test
-    void verifyEmail_tokenInvalid_shouldReturnExpired() {
+    void verifyEmail_tokenInvalid_shouldReturnExpiredPage() {
         String token = "invalidToken";
         when(tokenService.useToken(token)).thenReturn(false);
 
         String result = controller.verifyEmail(token);
 
-        assertEquals("expired", result);
+        assertEquals("email-verification-expired", result);
         verify(tokenService, times(1)).useToken(token);
     }
 
     @Test
-    void verifyEmail_tokenValid_shouldReturnVerified() {
+    void verifyEmail_tokenValid_shouldReturnVerifiedPage() {
         String token = "validToken";
         when(tokenService.useToken(token)).thenReturn(true);
 
         String result = controller.verifyEmail(token);
 
-        assertEquals("verified", result);
+        assertEquals("email-verified.html", result);
         verify(tokenService, times(1)).useToken(token);
     }
 }
