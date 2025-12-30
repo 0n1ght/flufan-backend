@@ -1,10 +1,8 @@
 app icon and logo
 --
 
-todo refactoring metod w folderze web, niektore do przerzucenia do api
-
-todo strona logowania i rejestracji
 fix: eye icon for hiding and showing password on password reset, login, and signup pages moves
+todo strona logowania i rejestracji
 
 - settings
 
