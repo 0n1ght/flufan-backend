@@ -1,8 +1,10 @@
 app icon and logo
 --
 
-feat: login and registration pages displayes errors
-todo strona logowania i rejestracji
+dopasowanie stron pod mniejsze urzadzenia, skalowanie elementow
+pokazywanie errorow
+opcje logowania, rejestracji z facebook, google, apple
+feat: login and registration pages
 
 - settings
 
