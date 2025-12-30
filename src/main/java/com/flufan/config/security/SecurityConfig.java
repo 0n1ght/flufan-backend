@@ -69,6 +69,7 @@ public class SecurityConfig {
                                 "/",
                                 "/login",
                                 "/signup",
+                                "/forgot-password",
                                 "/api/account/signup",
                                 "/api/auth/**",
                                 "/email-auth/**",

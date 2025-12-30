@@ -11,6 +11,8 @@ import com.flufan.service.AccountService;
 import com.flufan.dto.RegisterDto;
 import com.flufan.service.JWTService;
 import com.flufan.service.MailSenderService;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,6 +33,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;
     private final SuspendedAccountRepo suspendedAccountRepo;
@@ -250,18 +253,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional
     public void requestPasswordReset(String email) {
-        Account account = accountRepo.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new RuntimeException("Account not found"));
+        Optional<Account> optionalAccount = accountRepo.findByEmailIgnoreCase(email);
 
-        PasswordResetToken resetToken =
-                generatePasswordResetToken(account, LocalDateTime.now().plusHours(1));
-        tokenRepo.save(resetToken);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
 
-        try {
-            mailService.sendPasswordResetEmail(account.getEmail(), account.getUsername(), resetToken.getToken());
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to send password reset email", e);
+            tokenRepo.deleteByAccount(account);
+
+            PasswordResetToken resetToken =
+                    generatePasswordResetToken(account, LocalDateTime.now().plusHours(1));
+            tokenRepo.save(resetToken);
+
+            try {
+                mailService.sendPasswordResetEmail(
+                        account.getEmail(),
+                        account.getUsername(),
+                        resetToken.getToken()
+                );
+            } catch (Exception e) {
+                log.warn("Failed to send password reset email to {}", email, e);
+            }
         }
     }
 

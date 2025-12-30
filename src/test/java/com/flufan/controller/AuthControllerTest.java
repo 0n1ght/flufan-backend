@@ -9,6 +9,7 @@ import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,11 +47,13 @@ class AuthControllerTest {
     @Test
     void testForgotPassword_Success() {
         String email = "test@test.com";
+        Map<String, String> body = new HashMap<>();
+        body.put("email", email);
 
-        ResponseEntity<String> response = authController.forgotPassword(email);
+        ResponseEntity<String> response = authController.forgotPassword(body);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Password change link sent to your email", response.getBody());
+        assertEquals("A password reset link has been sent to your email.", response.getBody());
 
         verify(accountService, times(1)).requestPasswordReset(email);
     }

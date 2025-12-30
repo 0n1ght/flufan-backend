@@ -1,7 +1,6 @@
 app icon and logo
 --
 todo:
-podniesc lekko elementy do gory na stronach linkowych
 feat: add forgot password page
 feat: add facebook, google and apple options on login and registration pages
 
