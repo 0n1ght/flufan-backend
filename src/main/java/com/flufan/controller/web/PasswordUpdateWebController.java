@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class PasswordUpdateController {
+public class PasswordUpdateWebController {
     private final AccountService accountService;
 
-    public PasswordUpdateController(AccountService accountService) {
+    public PasswordUpdateWebController(AccountService accountService) {
         this.accountService = accountService;
     }
 

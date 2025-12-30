@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/email-auth")
-public class EmailVerificationController {
+public class EmailVerificationWebController {
     private final VerificationTokenService tokenService;
 
-    public EmailVerificationController(VerificationTokenService tokenService) {
+    public EmailVerificationWebController(VerificationTokenService tokenService) {
         this.tokenService = tokenService;
     }
 

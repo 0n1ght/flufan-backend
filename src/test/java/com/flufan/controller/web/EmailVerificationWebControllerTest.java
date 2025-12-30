@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
-class EmailVerificationControllerTest {
+class EmailVerificationWebControllerTest {
 
     private VerificationTokenService tokenService;
-    private EmailVerificationController controller;
+    private EmailVerificationWebController controller;
 
     @BeforeEach
     void setUp() {
         tokenService = mock(VerificationTokenService.class);
-        controller = new EmailVerificationController(tokenService);
+        controller = new EmailVerificationWebController(tokenService);
     }
 
     @Test
