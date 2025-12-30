@@ -76,18 +76,27 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account saveAccount(RegisterDto accountDto) {
+        String username = accountDto.getUsername();
+
+        if (!username.matches("^[A-Za-z0-9_]+$")) {
+            throw new IllegalArgumentException("Username contains invalid characters. Allowed: letters, digits, underscore.");
+        }
 
         if (accountRepo.findByEmail(accountDto.getEmail()).isPresent() ||
                 suspendedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already in use");
-        } else if (accountRepo.findByUsername(accountDto.getUsername()).isPresent() ||
-                suspendedAccountRepo.findByUsername(accountDto.getUsername()).isPresent()) {
+        } else if (accountRepo.findByUsername(username).isPresent() ||
+                suspendedAccountRepo.findByUsername(username).isPresent()) {
             throw new IllegalArgumentException("Username is already in use");
         } else if (bannedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Account is banned");
         }
 
-        return accountRepo.save(new Account(accountDto.getUsername(), accountDto.getEmail(), passwordEncoder.encode(accountDto.getPassword())));
+        return accountRepo.save(new Account(
+                username,
+                accountDto.getEmail(),
+                passwordEncoder.encode(accountDto.getPassword())
+        ));
     }
 
     @Override

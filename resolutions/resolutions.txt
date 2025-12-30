@@ -1,7 +1,7 @@
 app icon and logo
 --
 
-fix: eye icon for hiding and showing password on password reset, login, and signup pages moves
+feat: login and registration pages displayes errors
 todo strona logowania i rejestracji
 
 - settings

@@ -5,6 +5,9 @@ import com.flufan.service.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -15,8 +18,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto) {
-        return accountService.verify(loginDto);
+    public Map<String, String> login(@RequestBody LoginDto loginDto) {
+        String token = accountService.verify(loginDto);
+        return Collections.singletonMap("token", token);
     }
 
     @GetMapping("/forgot-password")

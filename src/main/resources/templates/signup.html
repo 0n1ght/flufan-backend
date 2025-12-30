@@ -53,6 +53,25 @@
             color: rgb(150, 150, 150);
         }
 
+        .password-field {
+            position: relative;
+            width: 300px;
+        }
+
+        .password-field input {
+            width: 100%;
+            padding-right: 40px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-120%);
+            cursor: pointer;
+            color: rgb(150, 150, 150);
+        }
+
         form label {
             font-size: 15px;
             color: #1d2129;
@@ -105,7 +124,7 @@
 
         #submit:hover {
             transition: 0.2s;
-            background-color: #0866ff;
+            background-color: #7b32a8;
             cursor: pointer;
         }
 
@@ -141,8 +160,14 @@
         <form action="/sign-up" method="post">
             <input type="text" name="username" placeholder="Username" id="username" required>
             <input type="email" name="email" placeholder="Email" id="email" required>
-            <input type="password" name="password" placeholder="Password" id="password" required>
-            <input type="password" name="confirmPassword" placeholder="Repeat password" id="confirmPassword" required>
+            <div class="password-field">
+                <input type="password" name="password" placeholder="Password" id="password" required>
+                <i class="fas fa-eye-slash toggle-password" data-target="password"></i>
+            </div>
+            <div class="password-field">
+                <input type="password" name="confirmPassword" placeholder="Repeat password" id="confirmPassword" required>
+                <i class="fas fa-eye-slash toggle-password" data-target="confirmPassword"></i>
+            </div>
             <div id="errors" style="color: rgb(255, 80, 80)">
                 <div th:if="${emailExists}" id="emailInUsePrompt">
                     <p>🥶 Email already in use. Try to sign in</p>

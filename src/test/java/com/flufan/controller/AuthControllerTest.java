@@ -9,6 +9,8 @@ import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -32,9 +34,9 @@ class AuthControllerTest {
 
         when(accountService.verify(dto)).thenReturn("JWT-TOKEN");
 
-        String token = authController.login(dto);
+        Map<String, String> response = authController.login(dto);
 
-        assertEquals("JWT-TOKEN", token);
+        assertEquals("JWT-TOKEN", response.get("token"));
         verify(accountService).verify(dto);
     }
 
