@@ -1,8 +1,6 @@
 app icon and logo
 --
 
-- settings
-
 2.
 - kupowanie i realizacja uslug
 - odpowiadanie na wiadomości w formie głosówek
@@ -16,6 +14,7 @@ app icon and logo
 - wykupienie i zalozenie firmowych domen, kont i maila oraz ich implementacja do kodu
 
 - Add admin role: assigning admin role, permissions, controller & service
+- roles and permissions
 
 4)
 -wyrzucenie produkcyjnych linijek kodu

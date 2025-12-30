@@ -176,9 +176,9 @@ public class AccountController {
     }
 
     @DeleteMapping("/delete-account")
-    public ResponseEntity<String> deleteAccount(@RequestBody PasswordDto passwordDto) {
+    public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> request) {
 
-        accountService.deleteAccount(passwordDto.getPassword());
+        accountService.deleteAccount(request.get("password"));
 
         Account account = accountService.getAuthenticatedAccount();
         mailSender.sendAccountDelInfo(account.getEmail(), account.getUsername());
