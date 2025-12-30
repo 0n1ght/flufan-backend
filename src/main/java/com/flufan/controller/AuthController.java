@@ -35,6 +35,6 @@ public class AuthController {
     @GetMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestParam String email) {
         accountService.requestPasswordReset(email);
-        return ResponseEntity.ok("Password change link sent to your email");
+        return ResponseEntity.ok("A password reset link has been sent to your email.");
     }
 }
