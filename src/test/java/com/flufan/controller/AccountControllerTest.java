@@ -13,6 +13,7 @@ import org.mockito.*;
 import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Field;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -45,13 +46,14 @@ class AccountControllerTest {
         when(accountService.saveAccount(dto)).thenReturn(new Account());
         when(tokenService.generateToken(eq("test@test.com"), any())).thenReturn("token");
 
-        ResponseEntity<String> response = controller.register(dto);
+        ResponseEntity<Map<String, String>> response = controller.register(dto);
 
         assertEquals(200, response.getStatusCodeValue());
-        assertEquals("Registration successful. Verification email sent.", response.getBody());
+        assertNotNull(response.getBody());
+        assertEquals("Registration successful. Verification email sent.", response.getBody().get("message"));
 
         verify(mailSender, times(1))
-                .sendVerificationEmail(eq("test@test.com"), eq("user"), contains("token"));
+                .sendVerificationEmail(eq("test@test.com"), eq("user"), eq("token"));
     }
 
     @Test

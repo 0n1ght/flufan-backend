@@ -33,7 +33,6 @@ import java.util.UUID;
 @Service
 public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;
-    private final BannedAccountRepo bannedAccountRepo;
     private final SuspendedAccountRepo suspendedAccountRepo;
     private final AuthenticationManager authManager;
     private final JWTService jwtService;
@@ -41,12 +40,11 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
     private final PasswordResetTokenRepo tokenRepo;
 
-    public AccountServiceImpl(AccountRepo accountRepo, BannedAccountRepo bannedAccountRepo,
-                              SuspendedAccountRepo suspendedAccountRepo, @Lazy AuthenticationManager authManager,
-                              JWTService jwtService, MailSenderService mailService,
-                              PasswordEncoder passwordEncoder, PasswordResetTokenRepo tokenRepo) {
+    public AccountServiceImpl(AccountRepo accountRepo, SuspendedAccountRepo suspendedAccountRepo,
+                              @Lazy AuthenticationManager authManager, JWTService jwtService,
+                              MailSenderService mailService, PasswordEncoder passwordEncoder,
+                              PasswordResetTokenRepo tokenRepo) {
         this.accountRepo = accountRepo;
-        this.bannedAccountRepo = bannedAccountRepo;
         this.suspendedAccountRepo = suspendedAccountRepo;
         this.authManager = authManager;
         this.jwtService = jwtService;
@@ -57,7 +55,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Account> account = accountRepo.findByEmail(username);
+        Optional<Account> account = accountRepo.findByEmailIgnoreCase(username);
         if (account.isPresent()) {
             var accountObj = account.get();
 
@@ -79,18 +77,20 @@ public class AccountServiceImpl implements AccountService {
     public Account saveAccount(RegisterDto accountDto) {
         String username = accountDto.getUsername();
 
+        if (username.length() < 4) {
+            throw new IllegalArgumentException("Username must be at least 4 characters long.");
+        }
+
         if (!username.matches("^[A-Za-z0-9_]+$")) {
             throw new IllegalArgumentException("Username contains invalid characters. Allowed: letters, digits, underscore.");
         }
 
-        if (accountRepo.findByEmail(accountDto.getEmail()).isPresent() ||
-                suspendedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
+        if (accountRepo.findByEmailIgnoreCase(accountDto.getEmail()).isPresent() ||
+                suspendedAccountRepo.findByEmailIgnoreCase(accountDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already in use");
-        } else if (accountRepo.findByUsername(username).isPresent() ||
-                suspendedAccountRepo.findByUsername(username).isPresent()) {
+        } else if (accountRepo.findByUsernameIgnoreCase(username).isPresent() ||
+                suspendedAccountRepo.findByUsernameIgnoreCase(username).isPresent()) {
             throw new IllegalArgumentException("Username is already in use");
-        } else if (bannedAccountRepo.findByEmail(accountDto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Account is banned");
         }
 
         return accountRepo.save(new Account(
@@ -124,10 +124,10 @@ public class AccountServiceImpl implements AccountService {
             Account account;
 
             if (loginDto.getEmail() != null) {
-                account = accountRepo.findByEmail(loginDto.getEmail())
+                account = accountRepo.findByEmailIgnoreCase(loginDto.getEmail())
                         .orElseThrow(() -> new IllegalArgumentException("Account with this email does not exist"));
             } else {
-                account = accountRepo.findByUsername(loginDto.getUsername())
+                account = accountRepo.findByUsernameIgnoreCase(loginDto.getUsername())
                         .orElseThrow(() -> new IllegalArgumentException("Account with this username does not exist"));
             }
 
@@ -166,7 +166,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account findByUsername(String username) {
-        return accountRepo.findByUsername(username).orElseThrow(() -> new RuntimeException("Account not found"));
+        return accountRepo.findByUsernameIgnoreCase(username).orElseThrow(() -> new RuntimeException("Account not found"));
     }
 
     @Override
@@ -182,7 +182,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }
 
-        if (accountRepo.findByUsername(newUsername).isPresent()
+        if (accountRepo.findByUsernameIgnoreCase(newUsername).isPresent()
                 && !authenticatedAccount.getUsername().equals(newUsername)) {
             throw new IllegalArgumentException("Username is taken");
         }
@@ -221,7 +221,7 @@ public class AccountServiceImpl implements AccountService {
             throw new AccessDeniedException("Incorrect password");
         }
 
-        if (accountRepo.findByEmail(newEmail).isPresent()
+        if (accountRepo.findByEmailIgnoreCase(newEmail).isPresent()
                 && !authenticatedAccount.getEmail().equals(newEmail)) {
             throw new IllegalArgumentException("Email is already in use");
         }
@@ -229,7 +229,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account loadOrCreateGoogleUser(String email) {
-        Optional<Account> existing = accountRepo.findByEmail(email);
+        Optional<Account> existing = accountRepo.findByEmailIgnoreCase(email);
 
         if (existing.isPresent()) {
             return existing.get();
@@ -251,7 +251,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void requestPasswordReset(String email) {
-        Account account = accountRepo.findByEmail(email)
+        Account account = accountRepo.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("Account not found"));
 
         PasswordResetToken resetToken =
@@ -291,7 +291,7 @@ public class AccountServiceImpl implements AccountService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
 
-        return accountRepo.findByEmail(email)
+        return accountRepo.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("Logged in user not found"));
     }
 

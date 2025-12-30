@@ -1,7 +1,7 @@
 app icon and logo
 --
-
-na stronach login,registration dodaj opcje logowania, rejestracji z facebook, google, apple
+todo:
+feat: facebook, google, apple options on login and registration websites
 
 - settings
 

@@ -8,6 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface BannedAccountRepo extends JpaRepository<Account, Long> {
-    Optional<Account> findByEmail(String email);
-    Optional<Account> findByUsername(String username);
+    Optional<Account> findByEmailIgnoreCase(String email);
+    Optional<Account> findByUsernameIgnoreCase(String username);
 }

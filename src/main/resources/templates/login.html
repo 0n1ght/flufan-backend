@@ -246,7 +246,7 @@
     <h1 id="logo"><a href="/" style="text-decoration: none">Flufan</a></h1>
     <div id="mainFrame">
         <h2>Login</h2>
-        <form id="loginForm" action="/api/auth/login" method="post">
+        <form id="loginForm" method="post" action="/api/auth/login">
             <input
                     type="text"
                     name="username"
@@ -265,7 +265,7 @@
                 >
                 <i class="fas fa-eye-slash" id="togglePassword"></i>
             </div>
-            <div id="errors" style="color: rgb(255, 80, 80); margin-bottom: 10px; display: none;"></div>
+            <div id="errors"></div>
             <br>
             <input type="submit" id="submit" value="Submit">
         </form>

@@ -42,7 +42,7 @@ class AccountServiceImplTest {
     void loadUserByUsername_existingUser_shouldReturnUserDetails() {
         Account account = new Account("user1", "user1@email.com", "pwd");
         account.setVerifiedEmail(true);
-        when(accountRepo.findByEmail("user1@email.com")).thenReturn(Optional.of(account));
+        when(accountRepo.findByEmailIgnoreCase("user1@email.com")).thenReturn(Optional.of(account));
 
         var userDetails = accountService.loadUserByUsername("user1@email.com");
 
@@ -52,7 +52,7 @@ class AccountServiceImplTest {
 
     @Test
     void loadUserByUsername_notFound_shouldThrow() {
-        when(accountRepo.findByEmail("notfound@email.com")).thenReturn(Optional.empty());
+        when(accountRepo.findByEmailIgnoreCase("notfound@email.com")).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> accountService.loadUserByUsername("notfound@email.com"));
     }
 
@@ -63,11 +63,11 @@ class AccountServiceImplTest {
         dto.setUsername("user");
         dto.setPassword("pwd");
 
-        when(accountRepo.findByEmail("a@b.com")).thenReturn(Optional.empty());
-        when(accountRepo.findByUsername("user")).thenReturn(Optional.empty());
-        when(bannedAccountRepo.findByEmail("a@b.com")).thenReturn(Optional.empty());
-        when(suspendedAccountRepo.findByEmail("a@b.com")).thenReturn(Optional.empty());
-        when(suspendedAccountRepo.findByUsername("user")).thenReturn(Optional.empty());
+        when(accountRepo.findByEmailIgnoreCase("a@b.com")).thenReturn(Optional.empty());
+        when(accountRepo.findByUsernameIgnoreCase("user")).thenReturn(Optional.empty());
+        when(bannedAccountRepo.findByEmailIgnoreCase("a@b.com")).thenReturn(Optional.empty());
+        when(suspendedAccountRepo.findByEmailIgnoreCase("a@b.com")).thenReturn(Optional.empty());
+        when(suspendedAccountRepo.findByUsernameIgnoreCase("user")).thenReturn(Optional.empty());
         when(passwordEncoder.encode("pwd")).thenReturn("encodedPwd");
         when(accountRepo.save(any(Account.class))).thenAnswer(i -> i.getArguments()[0]);
 
@@ -85,7 +85,7 @@ class AccountServiceImplTest {
         dto.setPassword("pwd");
         Account account = new Account("user", "email@test.com", "pwd");
 
-        when(accountRepo.findByEmail("email@test.com")).thenReturn(Optional.of(account));
+        when(accountRepo.findByEmailIgnoreCase("email@test.com")).thenReturn(Optional.of(account));
         Authentication auth = mock(Authentication.class);
         when(auth.isAuthenticated()).thenReturn(true);
         when(authManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(auth);
@@ -100,7 +100,7 @@ class AccountServiceImplTest {
     void loadOrCreateGoogleUser_existingUser_shouldReturnAccount() {
         Account existing = new Account();
         existing.setEmail("a@b.com");
-        when(accountRepo.findByEmail("a@b.com")).thenReturn(Optional.of(existing));
+        when(accountRepo.findByEmailIgnoreCase("a@b.com")).thenReturn(Optional.of(existing));
 
         Account result = accountService.loadOrCreateGoogleUser("a@b.com");
 
@@ -110,7 +110,7 @@ class AccountServiceImplTest {
 
     @Test
     void loadOrCreateGoogleUser_newUser_shouldCreateAndSave() {
-        when(accountRepo.findByEmail("new@b.com")).thenReturn(Optional.empty());
+        when(accountRepo.findByEmailIgnoreCase("new@b.com")).thenReturn(Optional.empty());
         when(passwordEncoder.encode(anyString())).thenReturn("encodedRandom");
         when(accountRepo.save(any(Account.class))).thenAnswer(i -> i.getArguments()[0]);
 
@@ -126,7 +126,7 @@ class AccountServiceImplTest {
         Account account = new Account();
         account.setEmail("a@b.com");
         account.setUsername("user");
-        when(accountRepo.findByEmail("a@b.com")).thenReturn(Optional.of(account));
+        when(accountRepo.findByEmailIgnoreCase("a@b.com")).thenReturn(Optional.of(account));
         when(tokenRepo.existsByToken(anyString())).thenReturn(false);
         doNothing().when(mailService).sendPasswordResetEmail(anyString(), anyString(), anyString());
         when(tokenRepo.save(any(PasswordResetToken.class))).thenAnswer(i -> i.getArguments()[0]);

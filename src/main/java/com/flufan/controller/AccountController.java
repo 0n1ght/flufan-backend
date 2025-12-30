@@ -20,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/account")
@@ -42,14 +44,22 @@ public class AccountController {
     }
 
     @PostMapping(value = "/signup", consumes = "application/json")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) throws MessagingException {
-        String token = tokenService.generateToken(registerDto.getEmail(), accountService.saveAccount(registerDto));
-        mailSender.sendVerificationEmail(
-                registerDto.getEmail(),
-                registerDto.getUsername(),
-                token
-        );
-        return ResponseEntity.ok("Registration successful. Verification email sent.");
+    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDto registerDto) {
+        try {
+            Account savedAccount = accountService.saveAccount(registerDto);
+            String token = tokenService.generateToken(registerDto.getEmail(), savedAccount);
+            mailSender.sendVerificationEmail(registerDto.getEmail(), registerDto.getUsername(), token);
+            return ResponseEntity.ok(Collections.singletonMap("message", "Registration successful. Verification email sent."));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("message", e.getMessage()));
+        } catch (MessagingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Failed to send verification email"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "An error occurred. Please try again later"));
+        }
     }
 
     @GetMapping("/this-account")
