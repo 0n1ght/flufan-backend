@@ -2,6 +2,7 @@ package com.flufan.controller;
 
 import com.flufan.dto.LoginDto;
 import com.flufan.service.AccountService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +19,17 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, String> login(@RequestBody LoginDto loginDto) {
-        String token = accountService.verify(loginDto);
-        return Collections.singletonMap("token", token);
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDto loginDto) {
+        try {
+            String token = accountService.verify(loginDto);
+            return ResponseEntity.ok(Collections.singletonMap("token", token));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(Collections.singletonMap("message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "An error occurred. Please try again later"));
+        }
     }
 
     @GetMapping("/forgot-password")

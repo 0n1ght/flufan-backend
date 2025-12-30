@@ -1,10 +1,7 @@
 app icon and logo
 --
 
-dopasowanie stron pod mniejsze urzadzenia, skalowanie elementow
-pokazywanie errorow
-opcje logowania, rejestracji z facebook, google, apple
-feat: login and registration pages
+na stronach login,registration dodaj opcje logowania, rejestracji z facebook, google, apple
 
 - settings
 

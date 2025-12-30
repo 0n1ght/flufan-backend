@@ -66,6 +66,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(registry -> registry
                         .requestMatchers(
+                                "/",
+                                "/login",
+                                "/signup",
                                 "/api/account/signup",
                                 "/api/auth/**",
                                 "/email-auth/**",
@@ -75,7 +78,6 @@ public class SecurityConfig {
                                 "/api/reviews/get-profile-reviews/**",
                                 "/api/reviews/get-review/**",
                                 "/oauth2/**",
-                                "/login/**",
                                 "/css/**",
                                 "/js/**",
                                 "/h2-console/**"
@@ -92,6 +94,7 @@ public class SecurityConfig {
                 )
 
                 .oauth2Login(oauth -> oauth
+                        .loginPage("/oauth2-login")
                         .successHandler(successHandler)
                 )
 

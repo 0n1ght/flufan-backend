@@ -34,9 +34,12 @@ class AuthControllerTest {
 
         when(accountService.verify(dto)).thenReturn("JWT-TOKEN");
 
-        Map<String, String> response = authController.login(dto);
+        ResponseEntity<Map<String, String>> response = authController.login(dto);
 
-        assertEquals("JWT-TOKEN", response.get("token"));
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("JWT-TOKEN", response.getBody().get("token"));
+
         verify(accountService).verify(dto);
     }
 

@@ -14,6 +14,7 @@ import com.flufan.service.MailSenderService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -119,24 +120,44 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String verify(LoginDto loginDto) {
-        Account account = loginDto.getEmail() != null
-                ? accountRepo.findByEmail(loginDto.getEmail()).orElseThrow()
-                : accountRepo.findByUsername(loginDto.getUsername()).orElseThrow();
+        try {
+            Account account;
 
-        Authentication authentication =
-                authManager.authenticate(new UsernamePasswordAuthenticationToken(account.getEmail(), loginDto.getPassword()));
+            if (loginDto.getEmail() != null) {
+                account = accountRepo.findByEmail(loginDto.getEmail())
+                        .orElseThrow(() -> new IllegalArgumentException("Account with this email does not exist"));
+            } else {
+                account = accountRepo.findByUsername(loginDto.getUsername())
+                        .orElseThrow(() -> new IllegalArgumentException("Account with this username does not exist"));
+            }
 
-        if (authentication.isAuthenticated()) {
+            Authentication authentication = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            account.getEmail(),
+                            loginDto.getPassword()
+                    )
+            );
+
+            if (!authentication.isAuthenticated()) {
+                throw new IllegalArgumentException("Incorrect password");
+            }
+
             if (account.getDeletedAt() != null) {
                 account.setDeletedAt(null);
                 accountRepo.save(account);
             }
 
             return jwtService.generateToken(account.getEmail());
-        }
 
-        return "Fail";
+        } catch (BadCredentialsException e) {
+            throw new IllegalArgumentException("Incorrect password");
+        } catch (IllegalArgumentException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred. Please try again later");
+        }
     }
+
 
     @Override
     public Account findById(Long id) {

@@ -110,6 +110,7 @@
 
         #password {
             padding-right: 40px;
+            width: 100%;
         }
 
 
@@ -171,6 +172,14 @@
             color: rgb(150, 150, 150);
         }
 
+        #errors {
+            display: none;
+            color: rgb(255, 80, 80);
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
         @media (max-width: 430px) {
             body {
                 background-color: white;
@@ -199,7 +208,13 @@
                 height: 35px;
                 margin-left: 10px;
             }
-            #loginForm, #breakLine, #createAccBt {
+            #passwordBlock {
+                margin-right: 10px;
+            }
+            #togglePassword {
+                margin-right: -10px;
+            }
+            #loginForm, #passwordBlock, #breakLine, #createAccBt {
                 width: 90%;
             }
             #logo {
@@ -250,6 +265,7 @@
                 >
                 <i class="fas fa-eye-slash" id="togglePassword"></i>
             </div>
+            <div id="errors" style="color: rgb(255, 80, 80); margin-bottom: 10px; display: none;"></div>
             <br>
             <input type="submit" id="submit" value="Submit">
         </form>
@@ -260,47 +276,52 @@
         <p style="white-space: nowrap;">New to Flufan?</p>
         <hr>
     </div>
-    <button onclick="window.location.href='/req/signup'" id="createAccBt">Create an account</button>
+    <button onclick="window.location.href='/signup'" id="createAccBt">Create an account</button>
     <div style="height: 80px"></div>
 
     <script>
         const togglePassword = document.querySelector("#togglePassword");
-        const password = document.querySelector("#password");
+        const passwordInput = document.querySelector("#password");
+        const form = document.querySelector("#loginForm");
+        const errorsDiv = document.querySelector("#errors");
+        const mainFrame = document.querySelector("#mainFrame");
 
         togglePassword.addEventListener("click", () => {
-            const type = password.getAttribute("type") === "password" ? "text" : "password";
-            password.setAttribute("type", type);
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
             togglePassword.classList.toggle("fa-eye");
             togglePassword.classList.toggle("fa-eye-slash");
         });
 
-        const form = document.querySelector("#loginForm");
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            const input = document.querySelector("#email").value.trim();
-            const password = document.querySelector("#password").value;
 
-            // Sprawdzamy, czy wpisany tekst wygląda jak email
-            const isEmail = input.includes("@");
-            const body = isEmail
-                ? { email: input, password }
-                : { username: input, password };
+            const inputValue = document.querySelector("#email").value.trim();
+            const password = passwordInput.value;
+            const isEmail = inputValue.includes("@");
+            const body = isEmail ? { email: inputValue, password } : { username: inputValue, password };
 
-            const response = await fetch("/api/auth/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(body)
-            });
+            try {
+                const response = await fetch("/api/auth/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(body)
+                });
 
-            if (response.ok) {
                 const data = await response.json();
-                console.log("Token:", data.token);
-                localStorage.setItem("token", data.token);
-                window.location.href = "/";
-            } else {
-                alert("Login failed");
+
+                if (response.ok) {
+                    localStorage.setItem("token", data.token);
+                    window.location.href = "/";
+                } else {
+                    errorsDiv.textContent = "🥶 " + (data.message || "Login failed");
+                    errorsDiv.style.display = "block";
+                    mainFrame.style.height = (340 + errorsDiv.offsetHeight + 10) + "px";
+                }
+            } catch (error) {
+                errorsDiv.textContent = "🥶 An error occurred. Please try again later.";
+                errorsDiv.style.display = "block";
+                mainFrame.style.height = (340 + errorsDiv.offsetHeight + 10) + "px";
             }
         });
     </script>
