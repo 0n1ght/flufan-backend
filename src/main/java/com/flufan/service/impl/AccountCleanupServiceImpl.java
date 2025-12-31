@@ -17,9 +17,9 @@ public class AccountCleanupServiceImpl implements AccountCleanupService {
 
     private final AccountRepo accountRepo;
 
-    @Override
     @Transactional
     @Scheduled(cron = "0 0 0 * * *")
+    @Override
     public void purgeDeletedAccounts() {
         LocalDateTime cutoff = LocalDateTime.now().minusDays(30);
 

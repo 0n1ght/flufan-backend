@@ -57,4 +57,23 @@ public class ProfileMapper {
                 profile.getAccount().getId()
                 );
     }
+
+    public Profile updateProfileFromDto(Profile profile, ProfileDto profileDto) {
+        profile.setTitle(profileDto.getTitle());
+        profile.setVerified(false);
+        profile.setActive(profileDto.isActive());
+        profile.setNick(profileDto.getNick());
+        profile.setFirstName(profileDto.getFirstName());
+        profile.setLastName(profileDto.getLastName());
+        profile.setRespondTime(profileDto.getRespondTime());
+        profile.setMessagePrice(profileDto.getMessagePrice());
+        profile.setCallPrice(profileDto.getCallPrice());
+        profile.setLinkedAccounts(profileDto.getLinkedAccounts());
+        profile.setMenu(
+                profileDto.getMenu().stream()
+                        .map(serviceMapper::toService)
+                        .toList());
+
+        return profile;
+    }
 }

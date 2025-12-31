@@ -21,4 +21,5 @@ public interface AccountService extends UserDetailsService {
     void resetPassword(String token, String newPassword);
     boolean verifyPasswordResetToken(String token);
     Account getAuthenticatedAccount();
+    void authenticatePassword(String password);
 }

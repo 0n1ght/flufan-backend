@@ -10,6 +10,7 @@ import org.mockito.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -50,11 +51,11 @@ class ProfileControllerTest {
 
     @Test
     void testDeleteProfile_Success() {
-        ResponseEntity<String> response = profileController.deleteProfile();
+        ResponseEntity<String> response = profileController.deleteProfile(Map.of("password", ""));
 
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Profile deleted successfully"));
-        verify(profileService).removeProfile();
+        verify(profileService).removeProfile("");
     }
 
     @Test

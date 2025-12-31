@@ -74,7 +74,7 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/email-auth/**",
                                 "/reset-password/**",
-                                "/api/profiles/search/**",
+                                "/api/market-profiles/search/**",
                                 "/api/account/profile-pictures/**",
                                 "/api/reviews/get-profile-reviews/**",
                                 "/api/reviews/get-review/**",
@@ -87,11 +87,10 @@ public class SecurityConfig {
                                 "/api/account/**",
                                 "/api/messages/**",
                                 "/product/v1/**",
-                                "/api/profiles/**",
+                                "/api/market-profiles/**",
                                 "/api/stripe/**",
                                 "/api/reviews"
-                        ).permitAll() //todo
-//                        ).hasRole("VERIFIED_USER")
+                        ).hasRole("VERIFIED_USER")
                         .anyRequest().hasRole("ADMIN")
                 )
 

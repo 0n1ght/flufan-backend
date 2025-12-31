@@ -102,6 +102,7 @@ public class AccountServiceImpl implements AccountService {
         ));
     }
 
+    @Transactional
     @Override
     public void saveAccount(Account account) {
         accountRepo.save(account);
@@ -251,8 +252,8 @@ public class AccountServiceImpl implements AccountService {
         return newAccount;
     }
 
-    @Override
     @Transactional
+    @Override
     public void requestPasswordReset(String email) {
         Optional<Account> optionalAccount = accountRepo.findByEmailIgnoreCase(email);
 
@@ -305,6 +306,14 @@ public class AccountServiceImpl implements AccountService {
 
         return accountRepo.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new RuntimeException("Logged in user not found"));
+    }
+
+    @Override
+    public void authenticatePassword(String password) {
+        String authAccPassword = getAuthenticatedAccount().getPassword();
+        if (!passwordEncoder.matches(password, authAccPassword)) {
+            throw new RuntimeException("Password is incorrect");
+        }
     }
 
     private PasswordResetToken generatePasswordResetToken(Account account, LocalDateTime expiryDate) {

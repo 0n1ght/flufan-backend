@@ -26,8 +26,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         return token.getToken();
     }
 
-    @Override
     @Transactional
+    @Override
     public boolean useToken(String token) {
         return tokenRepo.findByToken(token)
                 .filter(t -> !t.isExpired() && t.getUsedAt() == null)

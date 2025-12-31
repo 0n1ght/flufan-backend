@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/market-profiles")
@@ -25,13 +26,14 @@ public class ProfileController {
 
     @PutMapping("/edit")
     public ResponseEntity<String> editProfile(@RequestBody ProfileDto profileDto) {
+        System.out.println("tutaj wchodzi");
         profileService.editProfile(profileDto);
         return ResponseEntity.ok("Profile updated successfully");
     }
 
-    @DeleteMapping("/delete-profile")
-    public ResponseEntity<String> deleteProfile() {
-        profileService.removeProfile();
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteProfile(@RequestBody Map<String, String> passwordContainer) {
+        profileService.removeProfile(passwordContainer.get("password"));
         return ResponseEntity.ok("Profile deleted successfully");
     }
 

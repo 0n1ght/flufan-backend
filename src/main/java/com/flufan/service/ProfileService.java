@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProfileService {
     void createProfile(ProfileDto profileDto);
-    void removeProfile();
+    void removeProfile(String password);
     void editProfile(ProfileDto profileDto);
     List<ProfileResDto> searchProfiles(String searchVal);
     Profile findById(Long profileId);

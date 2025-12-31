@@ -72,7 +72,7 @@ class ProfileServiceImplTest {
         account.setProfile(profile);
         when(authService.getAuthenticatedAccount()).thenReturn(account);
 
-        profileService.removeProfile();
+        profileService.removeProfile("");
 
         verify(profileRepo).delete(profile);
         verify(accountRepo).save(account);

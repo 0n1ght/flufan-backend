@@ -23,15 +23,13 @@ import java.util.Optional;
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepo profileRepo;
-    private final AccountRepo accountRepo;
-    private final AccountService authService;
+    private final AccountService accountService;
     private final ProfileMapper profileMapper;
-    private final ServiceMapper serviceMapper;
 
     @Override
     @Transactional
     public void createProfile(ProfileDto profileDto) {
-        Account account = authService.getAuthenticatedAccount();
+        Account account = accountService.getAuthenticatedAccount();
 
         if (account.getProfile() != null) {
             throw new RuntimeException("Your profile is already created");
@@ -39,37 +37,26 @@ public class ProfileServiceImpl implements ProfileService {
 
         Profile profile = profileMapper.toProfile(profileDto);
         profile.setAccount(account);
-        profile.setNick(profileDto.getNick());
 
         account.setProfile(profile);
-        accountRepo.save(account);
+        accountService.saveAccount(account);
     }
 
     @Override
-    public void removeProfile() {
-        Account account = authService.getAuthenticatedAccount();
+    public void removeProfile(String password) {
+        accountService.authenticatePassword(password);
+        Account account = accountService.getAuthenticatedAccount();
         profileRepo.delete(account.getProfile());
     }
 
     @Override
     public void editProfile(ProfileDto profileDto) {
-        Account account = authService.getAuthenticatedAccount();
-        Profile profile = account.getProfile();
-
-        profile.setNick(account.getUsername());
-        profile.setTitle(profileDto.getTitle());
-        profile.setFirstName(profileDto.getFirstName());
-        profile.setLastName(profileDto.getLastName());
-        profile.setRespondTime(profileDto.getRespondTime());
-        profile.setMessagePrice(profileDto.getMessagePrice());
-        profile.setCallPrice(profileDto.getCallPrice());
-        profile.setLinkedAccounts(profileDto.getLinkedAccounts());
-        profile.setMenu(
-                profileDto.getMenu().stream()
-                        .map(serviceMapper::toService)
-                        .toList());
-
-        profileRepo.save(profile);
+        Account account = accountService.getAuthenticatedAccount();
+        Profile profile = profileMapper.toProfile(profileDto);
+        // account.setProfile(profileMapper.updateProfileFromDto(account.getProfile(), profileDto));
+        profile.setAccount(account);
+        account.setProfile(profile);
+        accountService.saveAccount(account);
     }
 
     @Override

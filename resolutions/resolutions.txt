@@ -1,6 +1,6 @@
 app icon and logo
 --
-
+tokeny logowania, dodac token odnawiania, jak wogole dzialaja?
 - kupowanie i realizacja uslug:
 kupowanie
 przesylanie wiadomosci
