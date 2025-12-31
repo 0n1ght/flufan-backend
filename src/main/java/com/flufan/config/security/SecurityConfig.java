@@ -90,7 +90,8 @@ public class SecurityConfig {
                                 "/api/profiles/**",
                                 "/api/stripe/**",
                                 "/api/reviews"
-                        ).hasRole("VERIFIED_USER")
+                        ).permitAll() //todo
+//                        ).hasRole("VERIFIED_USER")
                         .anyRequest().hasRole("ADMIN")
                 )
 

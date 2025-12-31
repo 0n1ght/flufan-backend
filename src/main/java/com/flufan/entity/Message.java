@@ -4,6 +4,7 @@ import com.flufan.enums.MessageType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -28,8 +29,7 @@ public class Message {
     private String content;
     private boolean readStatus = false;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date sentAt = new Date();
+    private Instant sentAt;
 
     private MessageType messageType;
 }

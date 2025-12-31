@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -70,14 +71,22 @@ class MessageServiceImplTest {
     }
 
     @Test
-    void testMarkAsRead_Success() {
-        Message message = new Message();
-        when(messageRepo.findById(1L)).thenReturn(Optional.of(message));
+    void testMarkAsReadById_Success() {
+        Instant limit = Instant.now();
+        Long senderId = 1L;
+        Long receiverId = 2L;
 
-        messageService.markAsRead(1L);
+        Account sender = new Account();
+        sender.setId(senderId);
 
-        verify(messageRepo).save(message);
-        assertTrue(message.isReadStatus());
+        when(accountService.getAuthenticatedAccount()).thenReturn(sender);
+        when(messageRepo.markAsReadUpTo(senderId, receiverId, limit)).thenReturn(5);
+
+        int updatedCount = messageService.markAsRead(limit, receiverId);
+
+        assertEquals(5, updatedCount);
+        verify(messageRepo).markAsReadUpTo(senderId, receiverId, limit);
+        verify(accountService).getAuthenticatedAccount();
     }
 
     @Test

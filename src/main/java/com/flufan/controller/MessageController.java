@@ -1,6 +1,7 @@
 package com.flufan.controller;
 
 import com.flufan.dto.MessageDto;
+import com.flufan.dto.ReadMarkerDto;
 import com.flufan.service.MessageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +30,9 @@ public class MessageController {
         return ResponseEntity.ok(conversation);
     }
 
-    @PutMapping("/read/{messageId}")
-    public ResponseEntity<String> markAsRead(@PathVariable Long messageId) {
-        messageService.markAsRead(messageId);
-        return ResponseEntity.ok("Message marked as read");
+    @PutMapping("/read-conversation")
+    public ResponseEntity<String> markAsRead(@RequestBody ReadMarkerDto readMarkerDto) {
+        int messagesMarkedAsRead = messageService.markAsRead(readMarkerDto.getDate(), readMarkerDto.getReceiverId());
+        return ResponseEntity.ok(messagesMarkedAsRead + "messages marked as read");
     }
 }

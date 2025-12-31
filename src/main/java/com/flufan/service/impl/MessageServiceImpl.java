@@ -18,6 +18,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,16 +39,16 @@ public class MessageServiceImpl implements MessageService {
         }
 
         Account sender = accountService.getAuthenticatedAccount();
+        Account receiver = accountService.findById(receiverId);
 
         long availableMessages = sender.getAvailableReplies().getOrDefault(receiverId, 0L);
         if (availableMessages < 1) {
             throw new InsufficientMessagesException("You can't send any messages to this receiver yet");
         }
 
-        sender.getAvailableReplies().put(receiverId, availableMessages - 1);
+        sender.getAvailableReplies().put(receiver.getId(), availableMessages - 1);
         accountService.updateAccount(sender);
 
-        Account receiver = accountService.findById(receiverId);
         Message message = new Message();
         message.setSender(sender);
         message.setReceiver(receiver);
@@ -67,11 +69,9 @@ public class MessageServiceImpl implements MessageService {
 
 
     @Override
-    public void markAsRead(Long messageId) {
-        Message message = messageRepo.findById(messageId)
-                .orElseThrow(() -> new RuntimeException("Message not found"));
-        message.setReadStatus(true);
-        messageRepo.save(message);
+    public int markAsRead(Instant date, Long receiverId) {
+        Long senderId = accountService.getAuthenticatedAccount().getId();
+        return messageRepo.markAsReadUpTo(senderId, receiverId, date);
     }
 
     @Override

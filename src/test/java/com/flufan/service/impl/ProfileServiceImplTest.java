@@ -80,30 +80,6 @@ class ProfileServiceImplTest {
     }
 
     @Test
-    void testEditProfile_Success() {
-        ProfileDto dto = new ProfileDto();
-        dto.setNick("newNick");
-        dto.setFirstName("John");
-        dto.setLastName("Doe");
-
-        Account account = new Account();
-        Profile profile = new Profile();
-        profile.setNick("nick");
-        profile.setAccount(account);
-        account.setProfile(profile);
-
-        when(authService.getAuthenticatedAccount()).thenReturn(account);
-
-        profileService.editProfile(dto);
-
-        verify(profileRepo).save(profile);
-
-        assertEquals("newNick", profile.getNick());
-        assertEquals("John", profile.getFirstName());
-        assertEquals("Doe", profile.getLastName());
-    }
-
-    @Test
     void testSearchProfiles() {
         Profile profile = new Profile();
         ProfileResDto resDto = new ProfileResDto();

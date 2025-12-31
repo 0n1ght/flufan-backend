@@ -57,7 +57,7 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void saveAccount_newAccount_shouldSaveAndReturn() {
+    void saveAccount_newAccount_shouldCreateAndReturn() {
         RegisterDto dto = new RegisterDto();
         dto.setEmail("a@b.com");
         dto.setUsername("user");
