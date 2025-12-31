@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/profiles")
+@RequestMapping("/api/market-profiles")
 public class ProfileController {
     private final ProfileService profileService;
 
@@ -19,7 +19,6 @@ public class ProfileController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createProfile(@RequestBody ProfileDto profileDto) {
-        System.out.println("tutaj wchodzi 1");
         profileService.createProfile(profileDto);
         return ResponseEntity.ok("Profile created successfully");
     }
@@ -30,8 +29,8 @@ public class ProfileController {
         return ResponseEntity.ok("Profile updated successfully");
     }
 
-    @DeleteMapping("/remove")
-    public ResponseEntity<String> removeProfile() {
+    @DeleteMapping("/delete-profile")
+    public ResponseEntity<String> deleteProfile() {
         profileService.removeProfile();
         return ResponseEntity.ok("Profile deleted successfully");
     }

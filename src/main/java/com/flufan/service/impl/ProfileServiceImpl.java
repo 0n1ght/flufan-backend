@@ -41,7 +41,6 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setAccount(account);
         profile.setNick(profileDto.getNick());
 
-        profileRepo.save(profile);
         account.setProfile(profile);
         accountRepo.save(account);
     }
@@ -57,6 +56,7 @@ public class ProfileServiceImpl implements ProfileService {
         Account account = authService.getAuthenticatedAccount();
         Profile profile = account.getProfile();
 
+        profile.setNick(account.getUsername());
         profile.setTitle(profileDto.getTitle());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());

@@ -49,8 +49,8 @@ class ProfileControllerTest {
     }
 
     @Test
-    void testRemoveProfile_Success() {
-        ResponseEntity<String> response = profileController.removeProfile();
+    void testDeleteProfile_Success() {
+        ResponseEntity<String> response = profileController.deleteProfile();
 
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Profile deleted successfully"));

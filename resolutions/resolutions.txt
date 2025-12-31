@@ -1,7 +1,6 @@
 app icon and logo
 --
-profile is not creating properly problem with account accountRepo.save(account); line
-2.
+
 - kupowanie i realizacja uslug:
 kupowanie
 przesylanie wiadomosci
