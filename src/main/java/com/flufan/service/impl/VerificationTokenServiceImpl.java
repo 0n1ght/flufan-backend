@@ -5,13 +5,11 @@ import com.flufan.entity.VerificationToken;
 import com.flufan.repo.VerificationTokenRepo;
 import com.flufan.service.AccountService;
 import com.flufan.service.VerificationTokenService;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

@@ -1,22 +1,26 @@
 app icon and logo
 --
-
+profile is not creating properly problem with account accountRepo.save(account); line
 2.
-- kupowanie i realizacja uslug
+- kupowanie i realizacja uslug:
+kupowanie
+przesylanie wiadomosci
+przesylanie zdjec, filmow
 - odpowiadanie na wiadomości w formie głosówek
+- propozycje od konsumentow
+- grupowe składki
 - video rozmowy
-[grupowe składki, propozycje od konsumentow]
 
 3)
 - weryfikacja kont social media, "market profile" kont
 - add algorithm for returning list of profiles
 
+---- finish
 - wykupienie i zalozenie firmowych domen, kont i maila oraz ich implementacja do kodu
 
 - Add admin role: assigning admin role, permissions, controller & service
 - roles and permissions
 
-4)
 -wyrzucenie produkcyjnych linijek kodu
 -zmiana bazy danych na PostgreSQL
 -testy

@@ -43,4 +43,11 @@ public class Profile {
 
     @OneToOne(mappedBy = "profile")
     private Account account;
+
+    @PreRemove
+    private void preRemove() {
+        if (account != null) {
+            account.setProfile(null);
+        }
+    }
 }

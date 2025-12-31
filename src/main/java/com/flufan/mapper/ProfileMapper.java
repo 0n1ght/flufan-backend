@@ -3,10 +3,13 @@ package com.flufan.mapper;
 import com.flufan.dto.ProfileDto;
 import com.flufan.dto.ProfileResDto;
 import com.flufan.entity.Profile;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class ProfileMapper {
+    private final ServiceMapper serviceMapper;
 
     public Profile toProfile(ProfileDto profileDto) {
         Profile profile = new Profile();
@@ -22,7 +25,10 @@ public class ProfileMapper {
         profile.setMessagePrice(profileDto.getMessagePrice());
         profile.setCallPrice(profileDto.getCallPrice());
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
-        profile.setMenu(profileDto.getMenu());
+        profile.setMenu(
+                profileDto.getMenu().stream()
+                        .map(serviceMapper::toService)
+                        .toList());
 
         return profile;
     }

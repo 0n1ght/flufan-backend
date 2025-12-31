@@ -1,7 +1,6 @@
 package com.flufan.dto;
 
 import com.flufan.model.LinkedAccount;
-import com.flufan.entity.Service;
 import lombok.Data;
 
 import java.util.List;
@@ -16,7 +15,6 @@ public class ProfileDto {
     private int respondTime;
     private int messagePrice;
     private int callPrice;
-    private String profilePicturePath;
     private List<LinkedAccount> linkedAccounts;
-    private List<Service> menu;
+    private List<ServiceDto> menu;
 }

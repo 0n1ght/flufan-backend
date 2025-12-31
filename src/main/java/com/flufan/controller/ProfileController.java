@@ -19,6 +19,7 @@ public class ProfileController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createProfile(@RequestBody ProfileDto profileDto) {
+        System.out.println("tutaj wchodzi 1");
         profileService.createProfile(profileDto);
         return ResponseEntity.ok("Profile created successfully");
     }

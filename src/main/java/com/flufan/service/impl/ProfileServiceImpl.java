@@ -6,12 +6,14 @@ import com.flufan.entity.Account;
 import com.flufan.entity.Profile;
 import com.flufan.exception.ProfileNotFoundException;
 import com.flufan.mapper.ProfileMapper;
+import com.flufan.mapper.ServiceMapper;
 import com.flufan.repo.AccountRepo;
 import com.flufan.repo.ProfileRepo;
 import com.flufan.service.AccountService;
 import com.flufan.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,8 +26,10 @@ public class ProfileServiceImpl implements ProfileService {
     private final AccountRepo accountRepo;
     private final AccountService authService;
     private final ProfileMapper profileMapper;
+    private final ServiceMapper serviceMapper;
 
     @Override
+    @Transactional
     public void createProfile(ProfileDto profileDto) {
         Account account = authService.getAuthenticatedAccount();
 
@@ -46,8 +50,6 @@ public class ProfileServiceImpl implements ProfileService {
     public void removeProfile() {
         Account account = authService.getAuthenticatedAccount();
         profileRepo.delete(account.getProfile());
-        account.setProfile(null);
-        accountRepo.save(account);
     }
 
     @Override
@@ -55,14 +57,17 @@ public class ProfileServiceImpl implements ProfileService {
         Account account = authService.getAuthenticatedAccount();
         Profile profile = account.getProfile();
 
-        profile.setNick(profileDto.getNick());
+        profile.setTitle(profileDto.getTitle());
         profile.setFirstName(profileDto.getFirstName());
         profile.setLastName(profileDto.getLastName());
         profile.setRespondTime(profileDto.getRespondTime());
         profile.setMessagePrice(profileDto.getMessagePrice());
         profile.setCallPrice(profileDto.getCallPrice());
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
-        profile.setMenu(profileDto.getMenu());
+        profile.setMenu(
+                profileDto.getMenu().stream()
+                        .map(serviceMapper::toService)
+                        .toList());
 
         profileRepo.save(profile);
     }
