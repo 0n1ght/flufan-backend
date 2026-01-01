@@ -1,6 +1,5 @@
 app icon and logo
 --
-feat: refresh token reuse detection
 feat: add device binding security for refresh token system
 feat: add global logout security for refresh token system
 
