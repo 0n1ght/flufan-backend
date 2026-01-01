@@ -1,9 +1,6 @@
 package com.flufan.dto;
 
-import lombok.Data;
-
-@Data
-public class ChangePasswordDto {
-    private String oldPassword;
-    private String newPassword;
-}
+public record ChangePasswordDto(
+        String oldPassword,
+        String newPassword
+) {}

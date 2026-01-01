@@ -1,9 +1,6 @@
 package com.flufan.dto;
 
-import lombok.Data;
-
-@Data
-public class ChangeEmailDto {
-    private String password;
-    private String newEmail;
-}
+public record ChangeEmailDto(
+        String password,
+        String newEmail
+) {}

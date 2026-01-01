@@ -77,7 +77,7 @@ public class AccountController {
     @PostMapping("/update/password")
     public ResponseEntity<String> updatePassword(@RequestBody ChangePasswordDto req) {
         try {
-            accountService.updatePassword(req.getOldPassword(), req.getNewPassword());
+            accountService.updatePassword(req.oldPassword(), req.newPassword());
             return ResponseEntity.ok("Login data updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()
@@ -88,10 +88,10 @@ public class AccountController {
     @PostMapping("/request-email-update")
     public ResponseEntity<String> updateEmail(@RequestBody ChangeEmailDto req) {
         try {
-            accountService.verifyEmailUpdateRequest(req.getPassword(), req.getNewEmail());
-            String token = tokenService.generateToken(req.getNewEmail(), accountService.getAuthenticatedAccount());
+            accountService.verifyEmailUpdateRequest(req.password(), req.newEmail());
+            String token = tokenService.generateToken(req.newEmail(), accountService.getAuthenticatedAccount());
             mailSender.sendVerificationEmail(
-                    req.getNewEmail(),
+                    req.newEmail(),
                     accountService.getAuthenticatedAccount().getUsername(),
                     token
             );
