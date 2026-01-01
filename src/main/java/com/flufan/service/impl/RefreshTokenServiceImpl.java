@@ -8,7 +8,6 @@ import com.flufan.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +20,7 @@ import java.util.Base64;
 @RequiredArgsConstructor
 public class RefreshTokenServiceImpl implements RefreshTokenService {
 
-    private static final int MAX_ACTIVE_TOKENS = 5;
-    private static final Duration EXPIRATION = Duration.ofDays(7);
+    private static final Duration EXPIRATION = Duration.ofDays(60);
 
     private final RefreshTokenRepo refreshTokenRepo;
     private final TokenHashUtil tokenHashUtil;
