@@ -1,6 +1,5 @@
 app icon and logo
 --
-feat: update tests
 feat: add UUIDs
 
 
