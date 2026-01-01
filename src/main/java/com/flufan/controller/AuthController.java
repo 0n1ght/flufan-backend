@@ -44,33 +44,29 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(@RequestBody Map<String, String> body) {
+    public ResponseEntity<String> logout(@RequestBody Map<String, String> body) {
         String refreshToken = body.get("refreshToken");
 
         if (refreshToken == null || refreshToken.isBlank()) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("message", "refreshToken is required"));
+                    .body("refreshToken is required");
         }
 
         boolean invalidated = refreshTokenService.invalidateToken(refreshToken);
 
         if (invalidated) {
-            return ResponseEntity.ok(
-                    Map.of("message", "Logged out successfully")
-            );
+            return ResponseEntity.ok("Logged out successfully");
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(Map.of("message", "Invalid or already used refresh token"));
+                .body("Invalid or already used refresh token");
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> body) {
+    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> body) {
         String email = body.get("email");
         accountService.requestPasswordReset(email);
-        return ResponseEntity.ok(Collections.singletonMap("message",
-                "A password reset link has been sent to your email.")
-        );
+        return ResponseEntity.ok("A password reset link has been sent to your email.");
     }
 
     @PostMapping("/refresh")

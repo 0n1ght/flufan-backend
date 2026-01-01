@@ -44,21 +44,21 @@ public class AccountController {
     }
 
     @PostMapping(value = "/signup", consumes = "application/json")
-    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         try {
             Account savedAccount = accountService.saveAccount(registerDto);
             String token = tokenService.generateToken(registerDto.getEmail(), savedAccount);
             mailSender.sendVerificationEmail(registerDto.getEmail(), registerDto.getUsername(), token);
-            return ResponseEntity.ok(Collections.singletonMap("message", "Registration successful. Verification email sent."));
+            return ResponseEntity.ok("Registration successful. Verification email sent.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Collections.singletonMap("message", e.getMessage()));
+                    .body(e.getMessage());
         } catch (MessagingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "Failed to send verification email"));
+                    .body("Failed to send verification email");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Collections.singletonMap("message", "An error occurred. Please try again later"));
+                    .body("An error occurred. Please try again later");
         }
     }
 
@@ -72,13 +72,13 @@ public class AccountController {
     }
 
     @PostMapping("/update/username")
-    public ResponseEntity<Map<String, String>> updateUsername(@RequestBody UpdateUsernameRequest usernameRequest) {
+    public ResponseEntity<String> updateUsername(@RequestBody UpdateUsernameRequest usernameRequest) {
         try {
             accountService.updateUsername(usernameRequest.username());
-            return ResponseEntity.ok(Collections.singletonMap("message", "Login data updated successfully."));
+            return ResponseEntity.ok("Login data updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest()
-                    .body(Collections.singletonMap("message", ("Failed to update login data: " + e.getMessage())));
+                    .body("Failed to update login data: " + e.getMessage());
         }
     }
 

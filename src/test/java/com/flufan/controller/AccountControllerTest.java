@@ -10,6 +10,7 @@ import com.flufan.service.VerificationTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Field;
@@ -46,11 +47,11 @@ class AccountControllerTest {
         when(accountService.saveAccount(dto)).thenReturn(new Account());
         when(tokenService.generateToken(eq("test@test.com"), any())).thenReturn("token");
 
-        ResponseEntity<Map<String, String>> response = controller.register(dto);
+        ResponseEntity<String> response = controller.register(dto);
 
         assertEquals(200, response.getStatusCodeValue());
         assertNotNull(response.getBody());
-        assertEquals("Registration successful. Verification email sent.", response.getBody().get("message"));
+        assertEquals("Registration successful. Verification email sent.", response.getBody());
 
         verify(mailSender, times(1))
                 .sendVerificationEmail(eq("test@test.com"), eq("user"), eq("token"));
@@ -82,16 +83,16 @@ class AccountControllerTest {
     void updateUsername_success() {
         UpdateUsernameRequest request = new UpdateUsernameRequest("newName");
 
-        doNothing().when(accountService).updateUsername(request.username());
+        doNothing().when(accountService).updateUsername("newName");
 
-        ResponseEntity<Map<String, String>> response = controller.updateUsername(request);
+        ResponseEntity<String> response = controller.updateUsername(request);
 
-        assertEquals(200, response.getStatusCodeValue());
-        assertNotNull(response.getBody());
-        assertEquals("Login data updated successfully", response.getBody().get("message"));
-        assertEquals("newName", response.getBody().get("value"));
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Login data updated successfully.", response.getBody());
+
+        verify(accountService).updateUsername("newName");
+        verifyNoMoreInteractions(accountService);
     }
-
 
     @Test
     void updateUsername_failure() {
@@ -100,13 +101,12 @@ class AccountControllerTest {
 
         UpdateUsernameRequest request = new UpdateUsernameRequest("newName");
 
-        ResponseEntity<Map<String, String>> response = controller.updateUsername(request);
+        ResponseEntity<String> response = controller.updateUsername(request);
 
-        assertEquals(400, response.getStatusCodeValue());
-
+        assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatusCodeValue());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().get("message").contains("error"));
-        assertTrue(response.getBody().get("message").startsWith("Failed to update login data"));
+        assertTrue(response.getBody().startsWith("Failed to update login data"));
+        assertTrue(response.getBody().contains("error"));
     }
 
     @Test

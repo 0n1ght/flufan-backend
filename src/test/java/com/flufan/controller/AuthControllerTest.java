@@ -98,11 +98,11 @@ class AuthControllerTest {
 
         doNothing().when(accountService).requestPasswordReset("test@test.com");
 
-        ResponseEntity<Map<String, String>> response = authController.forgotPassword(body);
+        ResponseEntity<String> response = authController.forgotPassword(body);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("A password reset link has been sent to your email.",
-                response.getBody().get("message"));
+        assertNotNull(response.getBody());
+        assertEquals("A password reset link has been sent to your email.", response.getBody());
 
         verify(accountService, times(1)).requestPasswordReset("test@test.com");
     }
