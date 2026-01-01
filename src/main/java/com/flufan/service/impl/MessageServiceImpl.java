@@ -75,14 +75,14 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public boolean wasConversation(long user1Id, long user2Id) {
-        List<Message> messages = messageRepo.findConversation(user1Id, user2Id, Pageable.unpaged()).getContent();
+    public boolean wasConversation(long senderId, long receiverId) {
+        List<Message> messages = messageRepo.findConversation(senderId, receiverId, Pageable.unpaged()).getContent();
 
         boolean hasUser1ToUser2 = messages.stream()
-                .anyMatch(m -> m.getSender().getId() == user1Id && m.getReceiver().getId() == user2Id);
+                .anyMatch(m -> m.getSender().getId() == senderId && m.getReceiver().getId() == receiverId);
 
         boolean hasUser2ToUser1 = messages.stream()
-                .anyMatch(m -> m.getSender().getId() == user2Id && m.getReceiver().getId() == user1Id);
+                .anyMatch(m -> m.getSender().getId() == receiverId && m.getReceiver().getId() == senderId);
 
         return hasUser1ToUser2 && hasUser2ToUser1;
     }

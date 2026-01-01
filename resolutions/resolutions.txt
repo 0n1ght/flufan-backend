@@ -1,6 +1,6 @@
 app icon and logo
 --
-feat: add UUIDs
+feat: add UUID to Account
 
 
 - kupowanie i realizacja uslug:

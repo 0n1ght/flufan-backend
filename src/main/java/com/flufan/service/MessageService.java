@@ -11,5 +11,5 @@ public interface MessageService {
     void sendMessage(Long receiverId, String content, MessageType messageType);
     Page<MessageDto> getConversation(Long userId, Pageable pageable);
     int markAsRead(Instant date, Long receiverId);
-    boolean wasConversation(long user1Id, long user2Id);
+    boolean wasConversation(long senderId, long receiverId);
 }

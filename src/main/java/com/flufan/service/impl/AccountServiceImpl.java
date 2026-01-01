@@ -78,8 +78,8 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public Account saveAccount(RegisterDto accountDto) {
-        String username = accountDto.getUsername();
+    public Account saveAccount(RegisterDto registerDto) {
+        String username = registerDto.getUsername();
 
         if (username.length() < 4) {
             throw new IllegalArgumentException("Username must be at least 4 characters long.");
@@ -89,8 +89,8 @@ public class AccountServiceImpl implements AccountService {
             throw new IllegalArgumentException("Username contains invalid characters. Allowed: letters, digits, underscore.");
         }
 
-        if (accountRepo.findByEmailIgnoreCase(accountDto.getEmail()).isPresent() ||
-                suspendedAccountRepo.findByEmailIgnoreCase(accountDto.getEmail()).isPresent()) {
+        if (accountRepo.findByEmailIgnoreCase(registerDto.getEmail()).isPresent() ||
+                suspendedAccountRepo.findByEmailIgnoreCase(registerDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email is already in use");
         } else if (accountRepo.findByUsernameIgnoreCase(username).isPresent() ||
                 suspendedAccountRepo.findByUsernameIgnoreCase(username).isPresent()) {
@@ -99,8 +99,8 @@ public class AccountServiceImpl implements AccountService {
 
         return accountRepo.save(new Account(
                 username,
-                accountDto.getEmail(),
-                passwordEncoder.encode(accountDto.getPassword())
+                registerDto.getEmail(),
+                passwordEncoder.encode(registerDto.getPassword())
         ));
     }
 
