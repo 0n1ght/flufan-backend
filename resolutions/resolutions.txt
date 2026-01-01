@@ -1,7 +1,6 @@
 app icon and logo
 --
-feat: add device binding security for refresh token system
-feat: add global logout security for refresh token system
+refactoring: change returned by endpoints values to maps
 
 todo przy logoucie uniewznienie refresh tokena
 

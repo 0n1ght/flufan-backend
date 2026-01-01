@@ -43,6 +43,27 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(@RequestBody Map<String, String> body) {
+        String refreshToken = body.get("refreshToken");
+
+        if (refreshToken == null || refreshToken.isBlank()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("message", "refreshToken is required"));
+        }
+
+        boolean invalidated = refreshTokenService.invalidateToken(refreshToken);
+
+        if (invalidated) {
+            return ResponseEntity.ok(
+                    Map.of("message", "Logged out successfully")
+            );
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("message", "Invalid or already used refresh token"));
+    }
+
     @PostMapping("/forgot-password")
     public ResponseEntity<Map<String, String>> forgotPassword(@RequestBody Map<String, String> body) {
         String email = body.get("email");

@@ -75,6 +75,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         }
     }
 
+    @Transactional
+    @Override
+    public boolean invalidateToken(String rawToken) {
+        String hash = tokenHashUtil.hash(rawToken);
+        return refreshTokenRepo.invalidateByHash(hash) == 1;
+    }
+
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
     public void cleanup() {
