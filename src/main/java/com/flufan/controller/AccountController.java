@@ -72,13 +72,13 @@ public class AccountController {
     }
 
     @PostMapping("/update/username")
-    public ResponseEntity<String> updateUsername(@RequestBody String newUsername) {
+    public ResponseEntity<Map<String, String>> updateUsername(@RequestBody UpdateUsernameRequest usernameRequest) {
         try {
-            accountService.updateUsername(newUsername);
-            return ResponseEntity.ok("Login data updated successfully.");
+            accountService.updateUsername(usernameRequest.username());
+            return ResponseEntity.ok(Collections.singletonMap("message", "Login data updated successfully."));
         } catch (Exception e) {
             return ResponseEntity.badRequest()
-                    .body("Failed to update login data: " + e.getMessage());
+                    .body(Collections.singletonMap("message", ("Failed to update login data: " + e.getMessage())));
         }
     }
 

@@ -80,16 +80,33 @@ class AccountControllerTest {
 
     @Test
     void updateUsername_success() {
-        ResponseEntity<String> response = controller.updateUsername("newName");
+        UpdateUsernameRequest request = new UpdateUsernameRequest("newName");
+
+        doNothing().when(accountService).updateUsername(request.username());
+
+        ResponseEntity<Map<String, String>> response = controller.updateUsername(request);
+
         assertEquals(200, response.getStatusCodeValue());
+        assertNotNull(response.getBody());
+        assertEquals("Login data updated successfully", response.getBody().get("message"));
+        assertEquals("newName", response.getBody().get("value"));
     }
+
 
     @Test
     void updateUsername_failure() {
-        doThrow(new RuntimeException("error")).when(accountService).updateUsername(anyString());
-        ResponseEntity<String> response = controller.updateUsername("newName");
+        doThrow(new RuntimeException("error"))
+                .when(accountService).updateUsername(anyString());
+
+        UpdateUsernameRequest request = new UpdateUsernameRequest("newName");
+
+        ResponseEntity<Map<String, String>> response = controller.updateUsername(request);
+
         assertEquals(400, response.getStatusCodeValue());
-        assertTrue(response.getBody().contains("error"));
+
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().get("message").contains("error"));
+        assertTrue(response.getBody().get("message").startsWith("Failed to update login data"));
     }
 
     @Test
