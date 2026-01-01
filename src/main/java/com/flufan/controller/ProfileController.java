@@ -26,7 +26,6 @@ public class ProfileController {
 
     @PutMapping("/edit")
     public ResponseEntity<String> editProfile(@RequestBody ProfileDto profileDto) {
-        System.out.println("tutaj wchodzi");
         profileService.editProfile(profileDto);
         return ResponseEntity.ok("Profile updated successfully");
     }

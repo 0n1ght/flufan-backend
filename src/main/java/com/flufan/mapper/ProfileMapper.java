@@ -69,10 +69,13 @@ public class ProfileMapper {
         profile.setMessagePrice(profileDto.getMessagePrice());
         profile.setCallPrice(profileDto.getCallPrice());
         profile.setLinkedAccounts(profileDto.getLinkedAccounts());
-        profile.setMenu(
+
+        profile.getMenu().clear();
+        profile.getMenu().addAll(
                 profileDto.getMenu().stream()
                         .map(serviceMapper::toService)
-                        .toList());
+                        .toList()
+        );
 
         return profile;
     }

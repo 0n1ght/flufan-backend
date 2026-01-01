@@ -1,12 +1,7 @@
 app icon and logo
 --
-refactoring: change returned by endpoints values to maps
-
-fix: access token used to contain info about email address, now it contains account id
-fix: profile_id in account is null after editing profile
-feat: add UUIDs
-
 feat: update tests
+feat: add UUIDs
 
 
 - kupowanie i realizacja uslug:

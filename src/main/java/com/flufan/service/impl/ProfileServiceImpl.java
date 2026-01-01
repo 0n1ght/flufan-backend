@@ -6,8 +6,6 @@ import com.flufan.entity.Account;
 import com.flufan.entity.Profile;
 import com.flufan.exception.ProfileNotFoundException;
 import com.flufan.mapper.ProfileMapper;
-import com.flufan.mapper.ServiceMapper;
-import com.flufan.repo.AccountRepo;
 import com.flufan.repo.ProfileRepo;
 import com.flufan.service.AccountService;
 import com.flufan.service.ProfileService;
@@ -49,12 +47,11 @@ public class ProfileServiceImpl implements ProfileService {
         profileRepo.delete(account.getProfile());
     }
 
-    //todo
     @Override
     public void editProfile(ProfileDto profileDto) {
         Account account = accountService.getAuthenticatedAccount();
-        Profile profile = profileMapper.toProfile(profileDto);
-        // account.setProfile(profileMapper.updateProfileFromDto(account.getProfile(), profileDto));
+        Profile profile = profileMapper.updateProfileFromDto(account.getProfile(), profileDto);
+
         profile.setAccount(account);
         account.setProfile(profile);
         accountService.saveAccount(account);
