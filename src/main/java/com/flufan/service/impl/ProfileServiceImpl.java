@@ -49,6 +49,7 @@ public class ProfileServiceImpl implements ProfileService {
         profileRepo.delete(account.getProfile());
     }
 
+    //todo
     @Override
     public void editProfile(ProfileDto profileDto) {
         Account account = accountService.getAuthenticatedAccount();

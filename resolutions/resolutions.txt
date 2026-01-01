@@ -1,6 +1,10 @@
 app icon and logo
 --
-tokeny logowania, dodac token odnawiania, jak wogole dzialaja?
+feat: add refresh token
+fix: profile_id in account is null after editing profile
+feat: UUIDs
+
+
 - kupowanie i realizacja uslug:
 kupowanie
 przesylanie wiadomosci
