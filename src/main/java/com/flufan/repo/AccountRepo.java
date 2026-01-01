@@ -10,7 +10,10 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Long> {
+
     Optional<Account> findByEmailIgnoreCase(String email);
+
     Optional<Account> findByUsernameIgnoreCase(String username);
+
     List<Account> findAllByDeletedAtBefore(LocalDateTime date);
 }

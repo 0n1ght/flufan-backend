@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -50,10 +51,13 @@ class AuthControllerTest {
         Map<String, String> body = new HashMap<>();
         body.put("email", email);
 
-        ResponseEntity<String> response = authController.forgotPassword(body);
+        ResponseEntity<Map<String, String>> response = authController.forgotPassword(body);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("A password reset link has been sent to your email.", response.getBody());
+        assertEquals(
+                "A password reset link has been sent to your email.",
+                Objects.requireNonNull(response.getBody()).get("message")
+        );
 
         verify(accountService, times(1)).requestPasswordReset(email);
     }

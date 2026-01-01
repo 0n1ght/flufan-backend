@@ -5,11 +5,13 @@ import com.flufan.entity.Account;
 import com.flufan.dto.RegisterDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Map;
+
 public interface AccountService extends UserDetailsService {
     Account saveAccount(RegisterDto accountDto);
     void saveAccount(Account account);
     void deleteAccount(String password);
-    String verify(LoginDto loginDto);
+    Map<String, Object> verify(LoginDto loginDto);
     Account findById(Long id);
     Account findByUsername(String username);
     void updateUsername(String newUsername);

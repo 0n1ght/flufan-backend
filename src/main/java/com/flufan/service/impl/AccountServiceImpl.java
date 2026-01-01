@@ -28,6 +28,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -122,7 +124,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public String verify(LoginDto loginDto) {
+    public Map<String, Object> verify(LoginDto loginDto) {
         try {
             Account account;
 
@@ -150,7 +152,13 @@ public class AccountServiceImpl implements AccountService {
                 accountRepo.save(account);
             }
 
-            return jwtService.generateToken(account.getEmail());
+            String token = jwtService.generateToken(account.getEmail());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("account", account);
+
+            return response;
 
         } catch (BadCredentialsException e) {
             throw new IllegalArgumentException("Incorrect password");

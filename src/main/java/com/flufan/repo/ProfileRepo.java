@@ -10,8 +10,11 @@ import java.util.Optional;
 
 @Repository
 public interface ProfileRepo extends JpaRepository<Profile, Long> {
+
     Optional<Profile> findById(Long id);
+
     Optional<Profile> findByNick(String nick);
+
     @Query("SELECT DISTINCT p FROM Profile p LEFT JOIN p.linkedAccounts la WHERE " +
             "p.active = true AND (" +
             "LOWER(p.nick) LIKE LOWER(CONCAT('%', :searchVal, '%')) OR " +
