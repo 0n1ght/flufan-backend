@@ -13,7 +13,7 @@ import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.flufan.dto.ProductRequest;
+import com.flufan.dto.ProductDto;
 import com.flufan.dto.StripeResponse;
 
 import java.util.*;
@@ -33,19 +33,19 @@ public class StripeServiceImpl implements StripeService {
     @Value("${stripe.cancelUrl}")
     private String cancelUrl;
 
-    public StripeResponse checkoutProducts(ProductRequest productRequest) throws JsonProcessingException {
+    public StripeResponse checkoutProducts(ProductDto productDto) throws JsonProcessingException {
         Account authenticatedAccount = accountService.getAuthenticatedAccount();
-        Account sellerAccount = accountService.findById(productRequest.getSellerId());
+        Account sellerAccount = accountService.findByPublicId(productDto.sellerPublicId());
 
-        if (productRequest.getQuantity() == null || productRequest.getQuantity() <= 0 ||
-                productRequest.getName() == null || productRequest.getName().isEmpty() ||
-                (productRequest.getProductType() == ProductType.MESSAGE &&
-                        (sellerAccount.getProfile().getMessagePrice() == -1 || productRequest.getQuantity() != 1)) ||
-                (productRequest.getProductType() == ProductType.CALL &&
-                        (sellerAccount.getProfile().getCallPrice() == -1 || productRequest.getQuantity() != 1)) ||
-                (productRequest.getProductType() == ProductType.SERVICE && sellerAccount.getProfile().getMenu().stream()
-                        .noneMatch(service -> productRequest.getName().equalsIgnoreCase(service.getTitle()))) ||
-                (productRequest.getProductType() == ProductType.MESSAGE && productRequest.getName().length() > 700) ||
+        if (productDto.quantity() == null || productDto.quantity() <= 0 ||
+                productDto.name() == null || productDto.name().isEmpty() ||
+                (productDto.productType() == ProductType.MESSAGE &&
+                        (sellerAccount.getProfile().getMessagePrice() == -1 || productDto.quantity() != 1)) ||
+                (productDto.productType() == ProductType.CALL &&
+                        (sellerAccount.getProfile().getCallPrice() == -1 || productDto.quantity() != 1)) ||
+                (productDto.productType() == ProductType.SERVICE && sellerAccount.getProfile().getMenu().stream()
+                        .noneMatch(service -> productDto.name().equalsIgnoreCase(service.getTitle()))) ||
+                (productDto.productType() == ProductType.MESSAGE && productDto.name().length() > 700) ||
                 !sellerAccount.getProfile().isActive()) {
             return new StripeResponse("FAILED", "Invalid request parameters", null, null);
         }
@@ -54,21 +54,21 @@ public class StripeServiceImpl implements StripeService {
 
         SessionCreateParams.LineItem.PriceData.ProductData productData =
                 SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                        .setName(productRequest.getName())
+                        .setName(productDto.name())
                         .build();
 
-        long priceAmount = getPriceAmount(productRequest, sellerAccount);
+        long priceAmount = getPriceAmount(productDto, sellerAccount);
 
         SessionCreateParams.LineItem.PriceData priceData =
                 SessionCreateParams.LineItem.PriceData.builder()
-                        .setCurrency(productRequest.getCurrency() != null ? productRequest.getCurrency() : "PLN")
+                        .setCurrency(productDto.currency() != null ? productDto.currency() : "PLN")
                         .setUnitAmount(priceAmount)
                         .setProductData(productData)
                         .build();
 
         SessionCreateParams.LineItem lineItem =
                 SessionCreateParams.LineItem.builder()
-                        .setQuantity(productRequest.getQuantity())
+                        .setQuantity(productDto.quantity())
                         .setPriceData(priceData)
                         .build();
 
@@ -81,17 +81,17 @@ public class StripeServiceImpl implements StripeService {
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.CARD)
                 .addPaymentMethodType(SessionCreateParams.PaymentMethodType.PAYPAL)
                 .addLineItem(lineItem)
-                .putMetadata("product_type", productRequest.getProductType() != null ? productRequest.getProductType().name() : "unknown")
-                .putMetadata("product_name", productRequest.getName() != null ? productRequest.getName() : "unknown")
-                .putMetadata("product_details", productRequest.getDetails() != null ? productRequest.getDetails() : "unknown")
+                .putMetadata("product_type", productDto.productType() != null ? productDto.productType().name() : "unknown")
+                .putMetadata("product_name", productDto.name())
+                .putMetadata("product_details", productDto.details() != null ? productDto.details() : "unknown")
                 .putMetadata("buyer_id", authenticatedAccount.getId() != null ? String.valueOf(authenticatedAccount.getId()) : "-1")
-                .putMetadata("seller_id", productRequest.getSellerId() != null ? String.valueOf(productRequest.getSellerId()) : "-1")
-                .putMetadata("quantity", String.valueOf(productRequest.getQuantity()))
+                .putMetadata("seller_id", productDto.sellerPublicId() != null ? String.valueOf(productDto.sellerPublicId()) : "-1")
+                .putMetadata("quantity", String.valueOf(productDto.quantity()))
                 .putMetadata("email", authenticatedAccount.getEmail() != null ? authenticatedAccount.getEmail() : "not_provided")
                 .setCustomerEmail(authenticatedAccount.getEmail());
 
-        if (productRequest.getProductType() == ProductType.SERVICE) {
-            Map<String, String> purchaseQa = getStringStringMap(productRequest, sellerAccount);
+        if (productDto.productType() == ProductType.SERVICE) {
+            Map<String, String> purchaseQa = getStringStringMap(productDto, sellerAccount);
 
             paramsBuilder.putMetadata("purchase_qa", objectMapper.writeValueAsString(purchaseQa));
         }
@@ -104,16 +104,16 @@ public class StripeServiceImpl implements StripeService {
         }
     }
 
-    private static Map<String, String> getStringStringMap(ProductRequest productRequest, Account sellerAccount) {
+    private static Map<String, String> getStringStringMap(ProductDto productDto, Account sellerAccount) {
         List<String> questions = new ArrayList<>();
         for (com.flufan.entity.Service service : sellerAccount.getProfile().getMenu()) {
-            if (productRequest.getName().equalsIgnoreCase(service.getTitle())) {
+            if (productDto.name().equalsIgnoreCase(service.getTitle())) {
                 questions = service.getOptionalQuestions();
                 break;
             }
         }
         Map<String, String> purchaseQa = new HashMap<>();
-        List<String> answers = productRequest.getOptionalAnswers();
+        List<String> answers = productDto.optionalAnswers();
         if (answers != null && questions.size() == answers.size()) {
             for (int i = 0; i < questions.size(); i++) {
                 if (!"".equals(answers.get(i))) {
@@ -124,19 +124,19 @@ public class StripeServiceImpl implements StripeService {
         return purchaseQa;
     }
 
-    private static long getPriceAmount(ProductRequest productRequest, Account sellerAccount) {
+    private static long getPriceAmount(ProductDto productDto, Account sellerAccount) {
         long priceAmount = 0;
-        switch (productRequest.getProductType()) {
+        switch (productDto.productType()) {
             case MESSAGE -> priceAmount = sellerAccount.getProfile().getMessagePrice();
             case CALL -> priceAmount = sellerAccount.getProfile().getCallPrice();
             case SERVICE -> {
                 for (com.flufan.entity.Service service : sellerAccount.getProfile().getMenu()) {
-                    if (productRequest.getName().equalsIgnoreCase(service.getTitle())) {
+                    if (productDto.name().equalsIgnoreCase(service.getTitle())) {
                         priceAmount = service.getPrice();
                     }
                 }
             }
-            default -> throw new IllegalArgumentException("Incorrect Product Type: " + productRequest.getProductType());
+            default -> throw new IllegalArgumentException("Incorrect Product Type: " + productDto.productType());
         }
         return priceAmount;
     }

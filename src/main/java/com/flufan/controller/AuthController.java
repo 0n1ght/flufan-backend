@@ -1,6 +1,9 @@
 package com.flufan.controller;
 
+import com.flufan.dto.ForgotPasswordDto;
 import com.flufan.dto.LoginDto;
+import com.flufan.dto.LogoutDto;
+import com.flufan.dto.RefreshTokenDto;
 import com.flufan.entity.Account;
 import com.flufan.service.AccountService;
 import com.flufan.service.JWTService;
@@ -44,8 +47,8 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody Map<String, String> body) {
-        String refreshToken = body.get("refreshToken");
+    public ResponseEntity<String> logout(@RequestBody LogoutDto logoutDto) {
+        String refreshToken = logoutDto.refreshToken();
 
         if (refreshToken == null || refreshToken.isBlank()) {
             return ResponseEntity.badRequest()
@@ -63,15 +66,14 @@ public class AuthController {
     }
 
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody Map<String, String> body) {
-        String email = body.get("email");
-        accountService.requestPasswordReset(email);
+    public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDto forgotPasswordDto) {
+        accountService.requestPasswordReset(forgotPasswordDto.email());
         return ResponseEntity.ok("A password reset link has been sent to your email.");
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<Map<String, String>> refresh(@RequestBody Map<String, String> req) {
-        String refreshToken = req.get("refreshToken");
+    public ResponseEntity<Map<String, String>> refresh(@RequestBody RefreshTokenDto refreshTokenDto) {
+        String refreshToken = refreshTokenDto.refreshToken();
         if (refreshToken == null || refreshToken.isBlank()) {
             return ResponseEntity.badRequest().build();
         }

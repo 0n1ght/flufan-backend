@@ -1,5 +1,5 @@
 package com.flufan.dto;
 
-public record UpdateUsernameRequest(
+public record UpdateUsernameDto(
         String username
 ) {}

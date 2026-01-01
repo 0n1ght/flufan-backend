@@ -1,5 +1,6 @@
 package com.flufan.service.impl;
 
+import com.flufan.dto.MessageDto;
 import com.flufan.entity.Account;
 import com.flufan.entity.Message;
 import com.flufan.enums.MessageType;
@@ -9,114 +10,206 @@ import com.flufan.exception.MessageLengthException;
 import com.flufan.mapper.MessageMapper;
 import com.flufan.repo.MessageRepo;
 import com.flufan.service.AccountService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class MessageServiceImplTest {
+
     @Mock
     private MessageRepo messageRepo;
+
     @Mock
     private AccountService accountService;
+
     @Mock
     private MessageMapper messageMapper;
 
     @InjectMocks
     private MessageServiceImpl messageService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
-    void testSendMessage_EmptyContent_Throws() {
+    void sendMessage_success() {
+        UUID senderPublicId = UUID.randomUUID();
+        UUID receiverPublicId = UUID.randomUUID();
+
         Account sender = new Account();
-        sender.setAvailableReplies(Map.of(2L, 1L));
-        when(accountService.getAuthenticatedAccount()).thenReturn(sender);
+        sender.setPublicId(senderPublicId);
+        sender.setUsername("sender");
+        sender.setAvailableReplies(new java.util.HashMap<>());
+        sender.getAvailableReplies().put(receiverPublicId, 1L);
 
-        assertThrows(MessageLengthException.class,
-                () -> messageService.sendMessage(2L, "", MessageType.TEXT));
+        Account receiver = new Account();
+        receiver.setPublicId(receiverPublicId);
+        receiver.setNotifications(new java.util.ArrayList<>());
+
+        when(accountService.getAuthenticatedAccount()).thenReturn(sender);
+        when(accountService.findByPublicId(receiverPublicId)).thenReturn(receiver);
+
+        messageService.sendMessage(receiverPublicId, "hello", MessageType.TEXT);
+
+        assertEquals(0L, sender.getAvailableReplies().get(receiverPublicId));
+
+        verify(messageRepo).save(argThat(msg ->
+                msg.getSender().equals(sender) &&
+                        msg.getReceiver().equals(receiver) &&
+                        msg.getContent().equals("hello") &&
+                        msg.getMessageType() == MessageType.TEXT
+        ));
+
+        ArgumentCaptor<Account> captor = ArgumentCaptor.forClass(Account.class);
+        verify(accountService, times(2)).updateAccount(captor.capture());
+
+        List<Account> updatedAccounts = captor.getAllValues();
+        assertTrue(updatedAccounts.contains(sender));
+        assertTrue(updatedAccounts.contains(receiver));
+
+        assertEquals(1, receiver.getNotifications().size());
+        assertEquals("sender: hello", receiver.getNotifications().get(0).getContent());
     }
 
     @Test
-    void testSendMessage_BoughtService_Throws() {
+    void sendMessage_emptyContent_throwsException() {
+        assertThrows(
+                MessageLengthException.class,
+                () -> messageService.sendMessage(UUID.randomUUID(), "", MessageType.TEXT)
+        );
+    }
+
+    @Test
+    void sendMessage_textTooLong_throwsException() {
+        String content = "a".repeat(5001);
+
+        assertThrows(
+                MessageLengthException.class,
+                () -> messageService.sendMessage(UUID.randomUUID(), content, MessageType.TEXT)
+        );
+    }
+
+    @Test
+    void sendMessage_wrongMessageType_throwsException() {
+        assertThrows(
+                MessageDoesNotExist.class,
+                () -> messageService.sendMessage(UUID.randomUUID(), "x", MessageType.BOUGHT_SERVICE)
+        );
+    }
+
+    @Test
+    void sendMessage_noAvailableReplies_throwsException() {
+        UUID receiverPublicId = UUID.randomUUID();
+
         Account sender = new Account();
-        sender.setAvailableReplies(Map.of(2L, 1L));
-        when(accountService.getAuthenticatedAccount()).thenReturn(sender);
+        sender.setPublicId(UUID.randomUUID());
 
-        assertThrows(MessageDoesNotExist.class,
-                () -> messageService.sendMessage(2L, "Any", MessageType.BOUGHT_SERVICE));
+        when(accountService.getAuthenticatedAccount()).thenReturn(sender);
+        when(accountService.findByPublicId(receiverPublicId)).thenReturn(new Account());
+
+        assertThrows(
+                InsufficientMessagesException.class,
+                () -> messageService.sendMessage(receiverPublicId, "hi", MessageType.TEXT)
+        );
     }
 
     @Test
-    void testSendMessage_InsufficientMessages_Throws() {
-        Account sender = new Account();
-        sender.setAvailableReplies(Map.of(2L, 0L));
-        when(accountService.getAuthenticatedAccount()).thenReturn(sender);
+    void getConversation_success() {
+        UUID currentUserId = UUID.randomUUID();
+        UUID otherUserId = UUID.randomUUID();
 
-        assertThrows(InsufficientMessagesException.class,
-                () -> messageService.sendMessage(2L, "Hello", MessageType.TEXT));
+        Account current = new Account();
+        current.setPublicId(currentUserId);
+
+        Message message = new Message();
+        Page<Message> page = new PageImpl<>(List.of(message));
+
+        when(accountService.getAuthenticatedAccount()).thenReturn(current);
+        when(messageRepo.findConversation(eq(currentUserId), eq(otherUserId), any()))
+                .thenReturn(page);
+        when(messageMapper.toMessageDto(message)).thenReturn(new MessageDto());
+
+        Page<MessageDto> result = messageService.getConversation(otherUserId, Pageable.unpaged());
+
+        assertEquals(1, result.getTotalElements());
+        verify(messageRepo).findConversation(currentUserId, otherUserId, Pageable.unpaged());
     }
 
     @Test
-    void testMarkAsReadById_Success() {
+    void markAsRead_success() {
+        UUID senderPublicId = UUID.randomUUID();
+        UUID receiverPublicId = UUID.randomUUID();
         Instant limit = Instant.now();
-        Long senderId = 1L;
-        Long receiverId = 2L;
 
         Account sender = new Account();
-        sender.setId(senderId);
+        sender.setPublicId(senderPublicId);
 
         when(accountService.getAuthenticatedAccount()).thenReturn(sender);
-        when(messageRepo.markAsReadUpTo(senderId, receiverId, limit)).thenReturn(5);
+        when(messageRepo.markAsReadUpTo(senderPublicId, receiverPublicId, limit))
+                .thenReturn(3);
 
-        int updatedCount = messageService.markAsRead(limit, receiverId);
+        int result = messageService.markAsRead(limit, receiverPublicId);
 
-        assertEquals(5, updatedCount);
-        verify(messageRepo).markAsReadUpTo(senderId, receiverId, limit);
-        verify(accountService).getAuthenticatedAccount();
+        assertEquals(3, result);
+        verify(messageRepo).markAsReadUpTo(senderPublicId, receiverPublicId, limit);
     }
 
     @Test
-    void testWasConversation_ReturnsTrue() {
-        Account user1 = new Account();
-        user1.setId(1L);
-        Account user2 = new Account();
-        user2.setId(2L);
+    void wasConversation_true_whenBothDirectionsExist() {
+        UUID user1 = UUID.randomUUID();
+        UUID user2 = UUID.randomUUID();
 
-        Message m1 = new Message(); m1.setSender(user1); m1.setReceiver(user2);
-        Message m2 = new Message(); m2.setSender(user2); m2.setReceiver(user1);
+        Account a1 = new Account();
+        a1.setPublicId(user1);
+
+        Account a2 = new Account();
+        a2.setPublicId(user2);
+
+        Message m1 = new Message();
+        m1.setSender(a1);
+        m1.setReceiver(a2);
+
+        Message m2 = new Message();
+        m2.setSender(a2);
+        m2.setReceiver(a1);
 
         Page<Message> page = new PageImpl<>(List.of(m1, m2));
-        when(messageRepo.findConversation(1L, 2L, Pageable.unpaged())).thenReturn(page);
 
-        assertTrue(messageService.wasConversation(1L, 2L));
+        when(messageRepo.findConversation(eq(user1), eq(user2), eq(Pageable.unpaged())))
+                .thenReturn(page);
+
+        assertTrue(messageService.wasConversation(user1, user2));
     }
 
     @Test
-    void testWasConversation_ReturnsFalse() {
-        Account user1 = new Account();
-        user1.setId(1L);
-        Account user2 = new Account();
-        user2.setId(2L);
+    void wasConversation_false_whenOneDirectionMissing() {
+        UUID user1 = UUID.randomUUID();
+        UUID user2 = UUID.randomUUID();
 
-        Message m1 = new Message(); m1.setSender(user1); m1.setReceiver(user2);
+        Account a1 = new Account();
+        a1.setPublicId(user1);
+
+        Account a2 = new Account();
+        a2.setPublicId(user2);
+
+        Message m1 = new Message();
+        m1.setSender(a1);
+        m1.setReceiver(a2);
 
         Page<Message> page = new PageImpl<>(List.of(m1));
-        when(messageRepo.findConversation(1L, 2L, Pageable.unpaged())).thenReturn(page);
 
-        assertFalse(messageService.wasConversation(1L, 2L));
+        when(messageRepo.findConversation(eq(user1), eq(user2), eq(Pageable.unpaged())))
+                .thenReturn(page);
+
+        assertFalse(messageService.wasConversation(user1, user2));
     }
 }

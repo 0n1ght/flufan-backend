@@ -19,8 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class MessageServiceImpl implements MessageService {
     private final MessageMapper messageMapper;
 
     @Override
-    public void sendMessage(Long receiverId, String content, MessageType messageType) {
+    public void sendMessage(UUID receiverPublicId, String content, MessageType messageType) {
         if (content.isEmpty() || (messageType == MessageType.TEXT && content.length() > 5000)) {
             throw new MessageLengthException("Message has wrong length");
         }
@@ -39,14 +39,14 @@ public class MessageServiceImpl implements MessageService {
         }
 
         Account sender = accountService.getAuthenticatedAccount();
-        Account receiver = accountService.findById(receiverId);
+        Account receiver = accountService.findByPublicId(receiverPublicId);
 
-        long availableMessages = sender.getAvailableReplies().getOrDefault(receiverId, 0L);
+        long availableMessages = sender.getAvailableReplies().getOrDefault(receiverPublicId, 0L);
         if (availableMessages < 1) {
             throw new InsufficientMessagesException("You can't send any messages to this receiver yet");
         }
 
-        sender.getAvailableReplies().put(receiver.getId(), availableMessages - 1);
+        sender.getAvailableReplies().put(receiver.getPublicId(), availableMessages - 1);
         accountService.updateAccount(sender);
 
         Message message = new Message();
@@ -54,6 +54,7 @@ public class MessageServiceImpl implements MessageService {
         message.setReceiver(receiver);
         message.setContent(content);
         message.setMessageType(messageType);
+        message.setSentAt(Instant.now());
         messageRepo.save(message);
 
         receiver.getNotifications().add(new Notification(NotificationType.NEW_MESSAGE, sender.getUsername()+": "+content));
@@ -61,28 +62,32 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public Page<MessageDto> getConversation(Long userId, Pageable pageable) {
+    public Page<MessageDto> getConversation(UUID userPublicId, Pageable pageable) {
         Account currentUser = accountService.getAuthenticatedAccount();
-        Page<Message> messagesPage = messageRepo.findConversation(currentUser.getId(), userId, pageable);
+        Page<Message> messagesPage = messageRepo.findConversation(currentUser.getPublicId(), userPublicId, pageable);
         return messagesPage.map(messageMapper::toMessageDto);
     }
 
 
     @Override
-    public int markAsRead(Instant date, Long receiverId) {
-        Long senderId = accountService.getAuthenticatedAccount().getId();
-        return messageRepo.markAsReadUpTo(senderId, receiverId, date);
+    public int markAsRead(Instant date, UUID receiverPublicId) {
+        UUID senderPublicId = accountService.getAuthenticatedAccount().getPublicId();
+        return messageRepo.markAsReadUpTo(senderPublicId, receiverPublicId, date);
     }
 
     @Override
-    public boolean wasConversation(long senderId, long receiverId) {
-        List<Message> messages = messageRepo.findConversation(senderId, receiverId, Pageable.unpaged()).getContent();
+    public boolean wasConversation(UUID senderPublicId, UUID receiverPublicId) {
+        List<Message> messages = messageRepo.findConversation(senderPublicId, receiverPublicId, Pageable.unpaged()).getContent();
 
         boolean hasUser1ToUser2 = messages.stream()
-                .anyMatch(m -> m.getSender().getId() == senderId && m.getReceiver().getId() == receiverId);
+                .anyMatch(m ->
+                        m.getSender().getPublicId() == senderPublicId &&
+                                m.getReceiver().getPublicId() == receiverPublicId);
 
         boolean hasUser2ToUser1 = messages.stream()
-                .anyMatch(m -> m.getSender().getId() == receiverId && m.getReceiver().getId() == senderId);
+                .anyMatch(m ->
+                        m.getSender().getPublicId() == receiverPublicId &&
+                                m.getReceiver().getPublicId() == senderPublicId);
 
         return hasUser1ToUser2 && hasUser2ToUser1;
     }

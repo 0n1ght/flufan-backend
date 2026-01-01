@@ -11,25 +11,35 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Repository
 public interface MessageRepo extends JpaRepository<Message, Long> {
 
-    @Query("SELECT m FROM Message m WHERE (m.sender.id = :userId AND m.receiver.id = :otherUserId) OR (m.sender.id = :otherUserId AND m.receiver.id = :userId) ORDER BY m.sentAt ASC")
-    Page<Message> findConversation(@Param("userId") Long userId, @Param("otherUserId") Long otherUserId, Pageable pageable);
+    @Query("""
+    SELECT m FROM Message m
+    WHERE (m.sender.publicId = :userPublicId AND m.receiver.publicId = :otherPublicId)
+       OR (m.sender.publicId = :otherPublicId AND m.receiver.publicId = :userPublicId)
+    ORDER BY m.sentAt ASC
+""")
+    Page<Message> findConversation(
+            @Param("userPublicId") UUID userPublicId,
+            @Param("otherPublicId") UUID otherPublicId,
+            Pageable pageable
+    );
 
     @Modifying
     @Query("""
     UPDATE Message m
     SET m.readStatus = true
-    WHERE m.sender.id = :senderId
-      AND m.receiver.id = :receiverId
+    WHERE m.sender.publicId = :senderPublicId
+      AND m.receiver.publicId = :receiverPublicId
       AND m.readStatus = false
       AND m.sentAt <= :limit
 """)
     int markAsReadUpTo(
-            @Param("senderId") Long senderId,
-            @Param("receiverId") Long receiverId,
+            @Param("senderPublicId") UUID senderPublicId,
+            @Param("receiverPublicId") UUID receiverPublicId,
             @Param("limit") Instant limit
     );
 }

@@ -1,5 +1,6 @@
 package com.flufan.controller;
 
+import com.flufan.dto.DeleteProfileDto;
 import com.flufan.dto.ProfileDto;
 import com.flufan.dto.ProfileResDto;
 import com.flufan.service.ProfileService;
@@ -10,7 +11,6 @@ import org.mockito.*;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -51,7 +51,9 @@ class ProfileControllerTest {
 
     @Test
     void testDeleteProfile_Success() {
-        ResponseEntity<String> response = profileController.deleteProfile(Map.of("password", ""));
+        DeleteProfileDto request = new DeleteProfileDto("");
+
+        ResponseEntity<String> response = profileController.deleteProfile(request);
 
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody().contains("Profile deleted successfully"));

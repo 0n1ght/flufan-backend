@@ -40,7 +40,7 @@ public class ProfileMapper {
         }
 
         return new ProfileResDto(
-                profile.getId(),
+                profile.getPublicId(),
                 profile.getNick(),
                 profile.getTitle(),
                 profile.isVerified(),

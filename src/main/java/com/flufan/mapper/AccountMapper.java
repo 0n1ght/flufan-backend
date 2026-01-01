@@ -11,7 +11,7 @@ public class AccountMapper {
     public AccountDto toAccountDto(Account account) {
         AccountDto accountDto = new AccountDto();
 
-        accountDto.setId(account.getId());
+        accountDto.setPublicId(account.getPublicId());
         accountDto.setUsername(account.getUsername());
 
         if (account.getProfile() != null) {

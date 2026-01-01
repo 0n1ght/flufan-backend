@@ -7,11 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface ProfileRepo extends JpaRepository<Profile, Long> {
 
-    Optional<Profile> findById(Long id);
+    Optional<Profile> findByPublicId(UUID publicId);
 
     Optional<Profile> findByNick(String nick);
 

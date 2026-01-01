@@ -175,6 +175,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account findByPublicId(UUID publicId) {
+        Optional<Account> account = accountRepo.findByPublicId(publicId);
+        if (account.isPresent()) {
+            return account.get();
+        }
+        throw new RuntimeException("Account not found");
+    }
+
+    @Override
     public Account findByUsername(String username) {
         return accountRepo.findByUsernameIgnoreCase(username).orElseThrow(() -> new RuntimeException("Account not found"));
     }

@@ -6,6 +6,7 @@ import com.stripe.model.Event;
 import com.stripe.model.checkout.Session;
 import com.stripe.net.Webhook;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,20 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/stripe")
+@RequiredArgsConstructor
 public class StripeWebhookController {
 
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
 
     private final OrderService orderService;
-
-    public StripeWebhookController(OrderService orderService) {
-        this.orderService = orderService;
-    }
 
     @PostMapping("/webhook")
     public ResponseEntity<String> handleStripeWebhook(HttpServletRequest request) throws IOException {
@@ -47,8 +46,8 @@ public class StripeWebhookController {
                 String productType = session.getMetadata().get("product_type");
                 String productName = session.getMetadata().get("product_name");
                 String details = session.getMetadata().get("product_details");
-                long buyerId = Long.parseLong(session.getMetadata().get("buyer_id"));
-                long sellerId = Long.parseLong(session.getMetadata().get("seller_id"));
+                UUID buyerId = UUID.fromString(session.getMetadata().get("buyer_id"));
+                UUID sellerId = UUID.fromString(session.getMetadata().get("seller_id"));
                 long quantity = Long.parseLong(session.getMetadata().get("quantity"));
 
                 switch (productType.toLowerCase()) {

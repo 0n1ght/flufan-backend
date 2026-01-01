@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Entity
 @Getter
@@ -22,6 +19,9 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @Column(unique = true, updatable = false, nullable = false)
+    private UUID publicId = UUID.randomUUID();
 
     @Column(unique = true)
     private String username;
@@ -38,7 +38,7 @@ public class Account {
     @ElementCollection
     @MapKeyColumn(name = "receiver_id")
     @Column(name = "message_count")
-    private Map<Long, Long> availableReplies = new HashMap<>();
+    private Map<UUID, Long> availableReplies = new HashMap<>();
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private Profile profile;

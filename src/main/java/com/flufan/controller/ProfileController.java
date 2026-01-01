@@ -1,22 +1,20 @@
 package com.flufan.controller;
 
+import com.flufan.dto.DeleteProfileDto;
 import com.flufan.dto.ProfileDto;
 import com.flufan.dto.ProfileResDto;
 import com.flufan.service.ProfileService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/market-profiles")
+@RequiredArgsConstructor
 public class ProfileController {
     private final ProfileService profileService;
-
-    public ProfileController(ProfileService profileService) {
-        this.profileService = profileService;
-    }
 
     @PostMapping("/create")
     public ResponseEntity<String> createProfile(@RequestBody ProfileDto profileDto) {
@@ -31,8 +29,8 @@ public class ProfileController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteProfile(@RequestBody Map<String, String> passwordContainer) {
-        profileService.removeProfile(passwordContainer.get("password"));
+    public ResponseEntity<String> deleteProfile(@RequestBody DeleteProfileDto deleteProfileDto) {
+        profileService.removeProfile(deleteProfileDto.password());
         return ResponseEntity.ok("Profile deleted successfully");
     }
 

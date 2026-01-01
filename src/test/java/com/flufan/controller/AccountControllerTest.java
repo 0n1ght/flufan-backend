@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.lang.reflect.Field;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -81,7 +80,7 @@ class AccountControllerTest {
 
     @Test
     void updateUsername_success() {
-        UpdateUsernameRequest request = new UpdateUsernameRequest("newName");
+        UpdateUsernameDto request = new UpdateUsernameDto("newName");
 
         doNothing().when(accountService).updateUsername("newName");
 
@@ -99,7 +98,7 @@ class AccountControllerTest {
         doThrow(new RuntimeException("error"))
                 .when(accountService).updateUsername(anyString());
 
-        UpdateUsernameRequest request = new UpdateUsernameRequest("newName");
+        UpdateUsernameDto request = new UpdateUsernameDto("newName");
 
         ResponseEntity<String> response = controller.updateUsername(request);
 
@@ -111,7 +110,7 @@ class AccountControllerTest {
 
     @Test
     void updatePassword_success() {
-        ChangePasswordRequest req = new ChangePasswordRequest();
+        ChangePasswordDto req = new ChangePasswordDto();
         req.setOldPassword("old");
         req.setNewPassword("new");
 
@@ -121,7 +120,7 @@ class AccountControllerTest {
 
     @Test
     void updatePassword_failure() {
-        ChangePasswordRequest req = new ChangePasswordRequest();
+        ChangePasswordDto req = new ChangePasswordDto();
         req.setOldPassword("old");
         req.setNewPassword("new");
         doThrow(new RuntimeException("fail")).when(accountService).updatePassword(anyString(), anyString());

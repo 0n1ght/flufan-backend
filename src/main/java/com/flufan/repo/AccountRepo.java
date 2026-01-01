@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface AccountRepo extends JpaRepository<Account, Long> {
@@ -16,4 +17,6 @@ public interface AccountRepo extends JpaRepository<Account, Long> {
     Optional<Account> findByUsernameIgnoreCase(String username);
 
     List<Account> findAllByDeletedAtBefore(LocalDateTime date);
+
+    Optional<Account> findByPublicId(UUID publicId);
 }

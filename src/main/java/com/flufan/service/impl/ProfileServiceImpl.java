@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -64,8 +65,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Profile findById(Long profileId) {
-        Optional<Profile> profile = profileRepo.findById(profileId);
+    public Profile findByPublicId(UUID publicProfileId) {
+        Optional<Profile> profile = profileRepo.findByPublicId(publicProfileId);
         if (profile.isEmpty()) {
             throw new ProfileNotFoundException("Profile not found");
         }

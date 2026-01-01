@@ -2,9 +2,11 @@ package com.flufan.dto;
 
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 public class AccountDto {
-    private Long id;
+    private UUID publicId;
     private String username;
     private ProfileDto profile;
 }

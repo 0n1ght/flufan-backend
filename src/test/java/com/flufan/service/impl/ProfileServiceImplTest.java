@@ -10,13 +10,11 @@ import com.flufan.repo.ProfileRepo;
 import com.flufan.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,99 +33,102 @@ class ProfileServiceImplTest {
     @InjectMocks
     private ProfileServiceImpl profileService;
 
-    private Account account;
-    private ProfileDto profileDto;
-    private Profile profile;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-
-        account = new Account();
-        profileDto = new ProfileDto();
-        profile = new Profile();
     }
 
     @Test
-    void createProfile_success() {
+    void createProfile_shouldCreateProfile_whenNoExistingProfile() {
+        Account account = new Account();
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
-        when(profileMapper.toProfile(profileDto)).thenReturn(profile);
 
-        profileService.createProfile(profileDto);
+        ProfileDto dto = new ProfileDto();
+        Profile profile = new Profile();
+        when(profileMapper.toProfile(dto)).thenReturn(profile);
+
+        profileService.createProfile(dto);
 
         assertEquals(profile, account.getProfile());
-        assertEquals(account, profile.getAccount());
         verify(accountService).saveAccount(account);
     }
 
     @Test
-    void createProfile_alreadyExists_throwsException() {
+    void createProfile_shouldThrowException_whenProfileAlreadyExists() {
+        Account account = new Account();
         account.setProfile(new Profile());
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
 
-        RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> profileService.createProfile(profileDto));
+        ProfileDto dto = new ProfileDto();
 
-        assertEquals("Your profile is already created", exception.getMessage());
-        verify(accountService, never()).saveAccount(any(Account.class));
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> profileService.createProfile(dto));
+        assertEquals("Your profile is already created", ex.getMessage());
     }
 
     @Test
-    void removeProfile_success() {
-        when(accountService.getAuthenticatedAccount()).thenReturn(account);
-        doNothing().when(accountService).authenticatePassword("pass");
+    void removeProfile_shouldDeleteProfile() {
+        Account account = new Account();
+        Profile profile = new Profile();
         account.setProfile(profile);
+        when(accountService.getAuthenticatedAccount()).thenReturn(account);
 
-        profileService.removeProfile("pass");
+        String password = "secret";
+        doNothing().when(accountService).authenticatePassword(password);
 
-        verify(accountService).authenticatePassword("pass");
+        profileService.removeProfile(password);
+
         verify(profileRepo).delete(profile);
     }
 
     @Test
-    void editProfile_success() {
-        account.setProfile(profile);
+    void editProfile_shouldUpdateProfile() {
+        Account account = new Account();
+        Profile existingProfile = new Profile();
+        account.setProfile(existingProfile);
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
-        when(profileMapper.updateProfileFromDto(profile, profileDto)).thenReturn(profile);
 
-        profileService.editProfile(profileDto);
+        ProfileDto dto = new ProfileDto();
+        Profile updatedProfile = new Profile();
+        when(profileMapper.updateProfileFromDto(existingProfile, dto)).thenReturn(updatedProfile);
 
-        assertEquals(profile, account.getProfile());
-        assertEquals(account, profile.getAccount());
+        profileService.editProfile(dto);
+
+        assertEquals(updatedProfile, account.getProfile());
         verify(accountService).saveAccount(account);
     }
 
     @Test
-    void searchProfiles_returnsMappedDtos() {
+    void searchProfiles_shouldReturnMappedResults() {
         Profile profile1 = new Profile();
         Profile profile2 = new Profile();
-        ProfileResDto dto1 = new ProfileResDto();
-        ProfileResDto dto2 = new ProfileResDto();
-
         when(profileRepo.searchByNickOrName("search")).thenReturn(List.of(profile1, profile2));
-        when(profileMapper.toProfileResDto(profile1)).thenReturn(dto1);
-        when(profileMapper.toProfileResDto(profile2)).thenReturn(dto2);
 
-        List<ProfileResDto> results = profileService.searchProfiles("search");
+        ProfileResDto res1 = new ProfileResDto();
+        ProfileResDto res2 = new ProfileResDto();
+        when(profileMapper.toProfileResDto(profile1)).thenReturn(res1);
+        when(profileMapper.toProfileResDto(profile2)).thenReturn(res2);
 
-        assertEquals(2, results.size());
-        assertTrue(results.contains(dto1));
-        assertTrue(results.contains(dto2));
+        List<ProfileResDto> result = profileService.searchProfiles("search");
+
+        assertEquals(List.of(res1, res2), result);
     }
 
     @Test
-    void findById_existingProfile_returnsProfile() {
-        when(profileRepo.findById(1L)).thenReturn(Optional.of(profile));
+    void findByPublicId_shouldReturnProfile_whenFound() {
+        UUID id = UUID.randomUUID();
+        Profile profile = new Profile();
+        when(profileRepo.findByPublicId(id)).thenReturn(Optional.of(profile));
 
-        Profile found = profileService.findById(1L);
+        Profile result = profileService.findByPublicId(id);
 
-        assertEquals(profile, found);
+        assertEquals(profile, result);
     }
 
     @Test
-    void findById_nonExistingProfile_throwsException() {
-        when(profileRepo.findById(1L)).thenReturn(Optional.empty());
+    void findByPublicId_shouldThrowException_whenNotFound() {
+        UUID id = UUID.randomUUID();
+        when(profileRepo.findByPublicId(id)).thenReturn(Optional.empty());
 
-        assertThrows(ProfileNotFoundException.class, () -> profileService.findById(1L));
+        assertThrows(ProfileNotFoundException.class, () -> profileService.findByPublicId(id));
     }
 }

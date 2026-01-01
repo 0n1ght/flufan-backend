@@ -3,7 +3,7 @@ package com.flufan.dto;
 import lombok.Data;
 
 @Data
-public class ChangeEmailRequest {
+public class ChangeEmailDto {
     private String password;
     private String newEmail;
 }

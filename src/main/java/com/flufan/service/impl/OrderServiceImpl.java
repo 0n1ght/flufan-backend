@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -17,13 +18,13 @@ public class OrderServiceImpl implements OrderService {
     private final MessageService messageService;
 
     @Override
-    public void realiseMessage(long buyerId, long sellerId, String content, String details) {
-        messageService.sendMessage(sellerId, content, MessageType.valueOf(details.toUpperCase()));
-        addRepliesToAcc(sellerId, buyerId, 1);
+    public void realiseMessage(UUID buyerPublicId, UUID sellerPublicId, String content, String details) {
+        messageService.sendMessage(sellerPublicId, content, MessageType.valueOf(details.toUpperCase()));
+        addRepliesToAcc(sellerPublicId, buyerPublicId, 1);
     }
 
     @Override
-    public void realiseCall(long buyerId, long sellerId) {
+    public void realiseCall(UUID buyerPublicId, UUID sellerPublicId) {
         //todo
         // powiadomienie dla influencera
         // na chacie pokazuje sie mini kalendarzyk, jaka godzine zaproponowal kupujacy
@@ -32,20 +33,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void realiseService(long buyerId, long sellerId, String productName, long quantity, String details) {
-        messageService.sendMessage(sellerId, productName+"\n"+details, MessageType.BOUGHT_SERVICE);
-        addRepliesToAcc(sellerId, buyerId, quantity);
+    public void realiseService(UUID buyerPublicId, UUID sellerPublicId, String productName, long quantity, String details) {
+        messageService.sendMessage(sellerPublicId, productName+"\n"+details, MessageType.BOUGHT_SERVICE);
+        addRepliesToAcc(sellerPublicId, buyerPublicId, quantity);
     }
 
-    private void addRepliesToAcc(long senderId, long receiverId, long quantity) {
-        Account acc = accountService.findById(senderId);
+    private void addRepliesToAcc(UUID senderPublicId, UUID receiverPublicId, long quantity) {
+        Account acc = accountService.findByPublicId(senderPublicId);
 
-        Map<Long, Long> buyerAvailableReplies = acc.getAvailableReplies();
-        Long buyerCurrentCount = buyerAvailableReplies.get(receiverId);
+        Map<UUID, Long> buyerAvailableReplies = acc.getAvailableReplies();
+        Long buyerCurrentCount = buyerAvailableReplies.get(receiverPublicId);
         if (buyerCurrentCount == null) {
             buyerCurrentCount = 0L;
         }
-        buyerAvailableReplies.put(receiverId, buyerCurrentCount + quantity);
+        buyerAvailableReplies.put(receiverPublicId, buyerCurrentCount + quantity);
         acc.setAvailableReplies(buyerAvailableReplies);
         accountService.updateAccount(acc);
     }

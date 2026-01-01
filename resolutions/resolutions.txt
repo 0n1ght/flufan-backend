@@ -1,8 +1,10 @@
 app icon and logo
 --
-feat: add UUID to Account
 
 
+feat: change dtos classes into records
+
+1 {
 - kupowanie i realizacja uslug:
 kupowanie
 przesylanie wiadomosci
@@ -11,20 +13,25 @@ przesylanie zdjec, filmow
 - propozycje od konsumentow
 - grupowe składki
 - video rozmowy
+}
 
-3)
+
+2 {
 - weryfikacja kont social media, "market profile" kont
 - add algorithm for returning list of profiles
+}
 
----- finish
+3 {
 - wykupienie i zalozenie firmowych domen, kont i maila oraz ich implementacja do kodu
-
 - Add admin role: assigning admin role, permissions, controller & service
 - roles and permissions
+}
 
+4 {
 -wyrzucenie produkcyjnych linijek kodu
 -zmiana bazy danych na PostgreSQL
 -testy
+}
 
 -----------------
 1. Weryfikacja na social mediach podczas zakładania profilu

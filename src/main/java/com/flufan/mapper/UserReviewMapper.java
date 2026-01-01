@@ -22,19 +22,19 @@ public class UserReviewMapper {
     public UserReviewDto toUserReviewDto(UserReview review) {
         return new UserReviewDto(
                 review.getId(),
-                review.getProfile().getId(),
-                review.getReviewer().getId(),
+                review.getProfile().getPublicId(),
+                review.getReviewer().getPublicId(),
                 review.getRating(),
                 review.getComment()
         );
     }
 
     public UserReview toUserReview(UserReviewDto reviewDto) {
-        Profile profile = profileRepo.findById(reviewDto.getProfileId())
-                .orElseThrow(() -> new IllegalArgumentException("Profile not found with ID: " + reviewDto.getProfileId()));
+        Profile profile = profileRepo.findByPublicId(reviewDto.getProfilePublicId())
+                .orElseThrow(() -> new IllegalArgumentException("Profile not found with ID: " + reviewDto.getProfilePublicId()));
 
-        Account reviewer = accountRepo.findById(reviewDto.getReviewerId())
-                .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " + reviewDto.getReviewerId()));
+        Account reviewer = accountRepo.findByPublicId(reviewDto.getReviewerPublicId())
+                .orElseThrow(() -> new IllegalArgumentException("Account not found with ID: " + reviewDto.getReviewerPublicId()));
 
         return new UserReview(
                 profile,

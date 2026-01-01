@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,8 +28,8 @@ public class UserReviewServiceImpl implements UserReviewService {
     private final ProfileService profileService;
 
     @Override
-    public List<UserReviewDto> getReviewsForProfile(Long profileId) {
-        List<UserReview> reviews = userReviewRepo.findByProfileId(profileId);
+    public List<UserReviewDto> getReviewsForProfile(UUID publicProfileId) {
+        List<UserReview> reviews = userReviewRepo.findByProfileId(profileService.findByPublicId(publicProfileId).getId());
         return reviews.stream()
                 .map(userReviewMapper::toUserReviewDto)
                 .collect(Collectors.toList());
@@ -42,12 +43,12 @@ public class UserReviewServiceImpl implements UserReviewService {
 
     @Override
     public void saveReview(UserReviewDto reviewDto) {
-        reviewDto.setReviewerId(accountService.getAuthenticatedAccount().getId());
+        reviewDto.setReviewerPublicId(accountService.getAuthenticatedAccount().getPublicId());
 
-        if (messageService.wasConversation(reviewDto.getReviewerId(),
-                profileService.findById(reviewDto.getProfileId()).getAccount().getId()) &&
-                getReviewsForProfile(reviewDto.getProfileId()).stream()
-                        .noneMatch(userReviewDto -> Objects.equals(userReviewDto.getReviewerId(), reviewDto.getId()))) {
+        if (messageService.wasConversation(reviewDto.getReviewerPublicId(),
+                profileService.findByPublicId(reviewDto.getProfilePublicId()).getAccount().getPublicId()) &&
+                getReviewsForProfile(reviewDto.getProfilePublicId()).stream()
+                        .noneMatch(userReviewDto -> Objects.equals(userReviewDto.getReviewerPublicId(), reviewDto.getReviewerPublicId()))) {
             UserReview review = userReviewMapper.toUserReview(reviewDto);
             UserReview savedReview = userReviewRepo.save(review);
             userReviewMapper.toUserReviewDto(savedReview);

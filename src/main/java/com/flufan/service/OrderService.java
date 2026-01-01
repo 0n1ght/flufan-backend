@@ -1,7 +1,9 @@
 package com.flufan.service;
 
+import java.util.UUID;
+
 public interface OrderService {
-    void realiseMessage(long buyerId, long sellerId, String content, String details);
-    void realiseCall(long buyerId, long sellerId);
-    void realiseService(long buyerId, long sellerId, String productName, long quantity, String details);
+    void realiseMessage(UUID buyerPublicId, UUID sellerPublicId, String content, String details);
+    void realiseCall(UUID buyerPublicId, UUID sellerPublicId);
+    void realiseService(UUID buyerPublicId, UUID sellerPublicId, String productName, long quantity, String details);
 }

@@ -8,6 +8,7 @@ import com.flufan.service.FileStorageService;
 import com.flufan.service.MailSenderService;
 import com.flufan.service.VerificationTokenService;
 import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -20,10 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/account")
+@RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
     private final VerificationTokenService tokenService;
@@ -33,14 +34,6 @@ public class AccountController {
 
     @Value("${app.base-url}")
     private String baseUrl;
-
-    public AccountController(AccountService accountService, VerificationTokenService tokenService, MailSenderService mailSender, AccountMapper accountMapper, FileStorageService fileStorageService) {
-        this.accountService = accountService;
-        this.tokenService = tokenService;
-        this.mailSender = mailSender;
-        this.accountMapper = accountMapper;
-        this.fileStorageService = fileStorageService;
-    }
 
     @PostMapping(value = "/signup", consumes = "application/json")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
@@ -71,7 +64,7 @@ public class AccountController {
     }
 
     @PostMapping("/update/username")
-    public ResponseEntity<String> updateUsername(@RequestBody UpdateUsernameRequest usernameRequest) {
+    public ResponseEntity<String> updateUsername(@RequestBody UpdateUsernameDto usernameRequest) {
         try {
             accountService.updateUsername(usernameRequest.username());
             return ResponseEntity.ok("Login data updated successfully.");
@@ -82,7 +75,7 @@ public class AccountController {
     }
 
     @PostMapping("/update/password")
-    public ResponseEntity<String> updatePassword(@RequestBody ChangePasswordRequest req) {
+    public ResponseEntity<String> updatePassword(@RequestBody ChangePasswordDto req) {
         try {
             accountService.updatePassword(req.getOldPassword(), req.getNewPassword());
             return ResponseEntity.ok("Login data updated successfully.");
@@ -93,7 +86,7 @@ public class AccountController {
     }
 
     @PostMapping("/request-email-update")
-    public ResponseEntity<String> updateEmail(@RequestBody ChangeEmailRequest req) {
+    public ResponseEntity<String> updateEmail(@RequestBody ChangeEmailDto req) {
         try {
             accountService.verifyEmailUpdateRequest(req.getPassword(), req.getNewEmail());
             String token = tokenService.generateToken(req.getNewEmail(), accountService.getAuthenticatedAccount());
@@ -175,9 +168,9 @@ public class AccountController {
     }
 
     @DeleteMapping("/delete-account")
-    public ResponseEntity<String> deleteAccount(@RequestBody Map<String, String> request) {
+    public ResponseEntity<String> deleteAccount(@RequestBody DeleteAccountDto deleteAccountDto) {
 
-        accountService.deleteAccount(request.get("password"));
+        accountService.deleteAccount(deleteAccountDto.password());
 
         Account account = accountService.getAuthenticatedAccount();
         mailSender.sendAccountDelInfo(account.getEmail(), account.getUsername());

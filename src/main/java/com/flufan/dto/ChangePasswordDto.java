@@ -3,7 +3,7 @@ package com.flufan.dto;
 import lombok.Data;
 
 @Data
-public class ChangePasswordRequest {
+public class ChangePasswordDto {
     private String oldPassword;
     private String newPassword;
 }

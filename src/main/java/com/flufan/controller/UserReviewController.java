@@ -2,25 +2,24 @@ package com.flufan.controller;
 
 import com.flufan.dto.UserReviewDto;
 import com.flufan.service.UserReviewService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/reviews")
+@RequiredArgsConstructor
 public class UserReviewController {
     private final UserReviewService userReviewService;
 
-    public UserReviewController(UserReviewService userReviewService) {
-        this.userReviewService = userReviewService;
-    }
-
-    @GetMapping("/get-profile-reviews/{profileId}")
-    public ResponseEntity<List<UserReviewDto>> getReviewsForProfile(@PathVariable Long profileId) {
-        return ResponseEntity.ok(new ArrayList<>(userReviewService.getReviewsForProfile(profileId)));
+    @GetMapping("/get-profile-reviews/{profilePublicId}")
+    public ResponseEntity<List<UserReviewDto>> getReviewsForProfile(@PathVariable UUID profilePublicId) {
+        return ResponseEntity.ok(new ArrayList<>(userReviewService.getReviewsForProfile(profilePublicId)));
     }
 
     @GetMapping("/get-review/{id}")

@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,6 +18,9 @@ public class Profile {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(unique = true, updatable = false, nullable = false)
+    private UUID publicId = UUID.randomUUID();
 
     @Column(unique = true)
     private String nick;

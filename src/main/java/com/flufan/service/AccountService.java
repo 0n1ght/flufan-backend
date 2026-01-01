@@ -6,6 +6,7 @@ import com.flufan.dto.RegisterDto;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.Map;
+import java.util.UUID;
 
 public interface AccountService extends UserDetailsService {
     Account saveAccount(RegisterDto accountDto);
@@ -13,6 +14,7 @@ public interface AccountService extends UserDetailsService {
     void deleteAccount(String password);
     Map<String, Object> verify(LoginDto loginDto);
     Account findById(Long id);
+    Account findByPublicId(UUID publicId);
     Account findByUsername(String username);
     void updateUsername(String newUsername);
     void updatePassword(String oldPassword, String newPassword);
