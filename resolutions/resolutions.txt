@@ -1,8 +1,10 @@
 app icon and logo
 --
-feat: add device binding security for refresh token system
 feat: refresh token reuse detection
+feat: add device binding security for refresh token system
 feat: add global logout security for refresh token system
+
+todo przy logoucie uniewznienie refresh tokena
 
 fix: access token used to contain info about email address, now it contains account id
 fix: profile_id in account is null after editing profile

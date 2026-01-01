@@ -62,6 +62,10 @@ public class AuthController {
         try {
             Account account = refreshTokenService.validateAndConsume(refreshToken);
 
+            if (account == null) {
+                return ResponseEntity.badRequest().body(Collections.singletonMap("message", "Invalid credentials"));
+            }
+
             return ResponseEntity.ok(Map.of(
                     "accessToken", jwtService.generateToken(account.getEmail()),
                     "refreshToken", refreshTokenService.issueNew(account)

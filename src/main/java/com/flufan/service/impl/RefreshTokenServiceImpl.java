@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     public Account validateAndConsume(String rawToken) {
         String hash = tokenHashUtil.hash(rawToken);
+
+        Optional<RefreshToken> reused = refreshTokenRepo.findByTokenHashAndUsedTrue(hash);
+        if (reused.isPresent()) {
+            Account account = reused.get().getAccount();
+            refreshTokenRepo.deleteAllByAccount_Id(account.getId());
+            return null;
+        }
 
         RefreshToken rt = refreshTokenRepo
                 .findByTokenHashAndUsedFalse(hash)
