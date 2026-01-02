@@ -1,7 +1,7 @@
 app icon and logo
 --
 
-1 {
+{
 - kupowanie i realizacja uslug:
 kupowanie
 przesylanie wiadomosci
@@ -14,18 +14,20 @@ przesylanie zdjec, filmow
 }
 
 
-2 {
+{
 - weryfikacja kont social media, "market profile" kont
 - add algorithm for returning list of profiles
 }
 
-3 {
+
+{
 - wykupienie i zalozenie firmowych domen, kont i maila oraz ich implementacja do kodu
 - Add admin role: assigning admin role, permissions, controller & service
 - roles and permissions
 }
 
-4 {
+
+{
 -wyrzucenie produkcyjnych linijek kodu
 -zmiana bazy danych na PostgreSQL
 -testy
