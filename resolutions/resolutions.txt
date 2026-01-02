@@ -1,10 +1,13 @@
 app icon and logo
 --
 
+refactoring: update fields and methods
+
 1 {
 - kupowanie i realizacja uslug:
 kupowanie
 przesylanie wiadomosci
+-konsument moze wyslac wiadomosc tylko gdy kupi, a kreator zawsze?
 przesylanie zdjec, filmow
 - odpowiadanie na wiadomości w formie głosówek
 - propozycje od konsumentow

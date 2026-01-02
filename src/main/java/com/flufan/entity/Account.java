@@ -23,11 +23,11 @@ public class Account {
     @Column(unique = true, updatable = false, nullable = false)
     private UUID publicId = UUID.randomUUID();
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
     private LocalDateTime lastUsernameChange = null;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
     private boolean verifiedEmail = false;
     private String password;

@@ -22,18 +22,22 @@ public class Profile {
     @Column(unique = true, updatable = false, nullable = false)
     private UUID publicId = UUID.randomUUID();
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String nick;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private boolean verified;
+
+    @Column(nullable = false)
     private boolean active = true;
     private String firstName;
     private String lastName;
-
     private int interactionCounter;
     private double rating;
     private int respondTime;
-
     private long messagePrice;
     private long callPrice;
 

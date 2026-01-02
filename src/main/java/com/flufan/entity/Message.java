@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -26,10 +25,13 @@ public class Message {
     @JoinColumn(name = "receiver_id", nullable = false)
     private Account receiver;
 
+    @Column(nullable = false)
     private String content;
     private boolean readStatus = false;
 
+    @Column(nullable = false)
     private Instant sentAt;
 
+    @Column(nullable = false)
     private MessageType messageType;
 }

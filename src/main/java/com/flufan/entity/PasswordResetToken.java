@@ -3,7 +3,7 @@ package com.flufan.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -23,9 +23,9 @@ public class PasswordResetToken {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    private LocalDateTime expiryDate;
+    private Instant expiryDate = Instant.now().plusSeconds(3600);
 
     public boolean isExpired() {
-        return expiryDate.isBefore(LocalDateTime.now());
+        return expiryDate.isBefore(Instant.now());
     }
 }

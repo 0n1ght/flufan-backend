@@ -3,6 +3,7 @@ package com.flufan.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Duration;
 import java.time.Instant;
 
 @Entity
@@ -27,7 +28,7 @@ public class RefreshToken {
     private String tokenHash;
 
     @Column(nullable = false)
-    private Instant expirationDate;
+    private Instant expirationDate = Instant.now().plus(Duration.ofDays(60));
 
     @Column(nullable = false)
     private boolean used = false;

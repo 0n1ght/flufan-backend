@@ -50,7 +50,7 @@ class ProfileServiceImplTest {
         profileService.createProfile(dto);
 
         assertEquals(profile, account.getProfile());
-        verify(accountService).saveAccount(account);
+        verify(accountService).updateAccount(account);
     }
 
     @Test
@@ -94,7 +94,7 @@ class ProfileServiceImplTest {
         profileService.editProfile(dto);
 
         assertEquals(updatedProfile, account.getProfile());
-        verify(accountService).saveAccount(account);
+        verify(accountService).updateAccount(account);
     }
 
     @Test

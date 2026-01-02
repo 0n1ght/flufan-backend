@@ -67,8 +67,12 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordDto forgotPasswordDto) {
-        accountService.requestPasswordReset(forgotPasswordDto.email());
-        return ResponseEntity.ok("A password reset link has been sent to your email.");
+        String email = accountService.requestPasswordReset(forgotPasswordDto.login());
+
+        int prefixLength = Math.min(2, email.indexOf("@"));
+        String emailSubstring = email.substring(0, prefixLength) + "..." + email.substring(email.indexOf("@") + 1);
+
+        return ResponseEntity.ok("A password reset link has been sent to " + emailSubstring);
     }
 
     @PostMapping("/refresh")

@@ -81,14 +81,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account saveAccount(RegisterDto registerDto) {
         String username = registerDto.getUsername();
-
-        if (username.length() < 4) {
-            throw new IllegalArgumentException("Username must be at least 4 characters long.");
-        }
-
-        if (!username.matches("^[A-Za-z0-9_]+$")) {
-            throw new IllegalArgumentException("Username contains invalid characters. Allowed: letters, digits, underscore.");
-        }
+        validateUsername(username);
 
         if (accountRepo.findByEmailIgnoreCase(registerDto.getEmail()).isPresent() ||
                 suspendedAccountRepo.findByEmailIgnoreCase(registerDto.getEmail()).isPresent()) {
@@ -103,12 +96,6 @@ public class AccountServiceImpl implements AccountService {
                 registerDto.getEmail(),
                 passwordEncoder.encode(registerDto.getPassword())
         ));
-    }
-
-    @Transactional
-    @Override
-    public void saveAccount(Account account) {
-        accountRepo.save(account);
     }
 
     @Override
@@ -171,11 +158,6 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account findById(Long id) {
-        return accountRepo.findById(id).orElseThrow(() -> new AccountNotFoundException("Account not found"));
-    }
-
-    @Override
     public Account findByPublicId(UUID publicId) {
         return accountRepo.findByPublicId(publicId)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
@@ -224,6 +206,7 @@ public class AccountServiceImpl implements AccountService {
         accountRepo.save(authenticatedAccount);
     }
 
+    @Transactional
     @Override
     public void updateAccount(Account account) {
         accountRepo.save(account);
@@ -268,8 +251,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Transactional
     @Override
-    public void requestPasswordReset(String email) {
-        Optional<Account> optionalAccount = accountRepo.findByEmailIgnoreCase(email);
+    public String requestPasswordReset(String login) {
+        Optional<Account> optionalAccount = login.contains("@") ?
+                accountRepo.findByEmailIgnoreCase(login) : accountRepo.findByUsernameIgnoreCase(login);
 
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
@@ -277,7 +261,7 @@ public class AccountServiceImpl implements AccountService {
             tokenRepo.deleteByAccount(account);
 
             PasswordResetToken resetToken =
-                    generatePasswordResetToken(account, LocalDateTime.now().plusHours(1));
+                    generatePasswordResetToken(account);
             tokenRepo.save(resetToken);
 
             try {
@@ -286,9 +270,13 @@ public class AccountServiceImpl implements AccountService {
                         account.getUsername(),
                         resetToken.getToken()
                 );
+                return account.getEmail();
             } catch (Exception e) {
-                log.warn("Failed to send password reset email to {}", email, e);
+                log.warn("Failed to send password reset email to {}", login, e);
+                throw new AccountNotFoundException("Problems appeared during resetting password");
             }
+        } else {
+            throw new AccountNotFoundException("Account not found");
         }
     }
 
@@ -330,7 +318,21 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
-    private PasswordResetToken generatePasswordResetToken(Account account, LocalDateTime expiryDate) {
+    private void validateUsername(String username) {
+        if (username.length() < 3) {
+            throw new IllegalArgumentException("Username must be at least 3 characters long");
+        }
+
+        if (username.length() > 20) {
+            throw new IllegalArgumentException("Username must not exceed 20 characters");
+        }
+
+        if (!username.matches("^[A-Za-z0-9_]+$")) {
+            throw new IllegalArgumentException("Username contains invalid characters. Allowed: letters, digits, underscore");
+        }
+    }
+
+    private PasswordResetToken generatePasswordResetToken(Account account) {
         PasswordResetToken resetToken = new PasswordResetToken();
 
         String token;
@@ -340,7 +342,6 @@ public class AccountServiceImpl implements AccountService {
 
         resetToken.setToken(token);
         resetToken.setAccount(account);
-        resetToken.setExpiryDate(expiryDate);
 
         return resetToken;
     }

@@ -35,7 +35,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
                     Account account = t.getAccount();
                     account.setEmail(t.getEmail());
                     account.setVerifiedEmail(true);
-                    accountService.saveAccount(account);
+                    accountService.updateAccount(account);
 
                     t.setUsedAt(LocalDateTime.now());
                     tokenRepo.save(t);

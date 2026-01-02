@@ -57,7 +57,10 @@ public class MessageServiceImpl implements MessageService {
         message.setSentAt(Instant.now());
         messageRepo.save(message);
 
-        receiver.getNotifications().add(new Notification(NotificationType.NEW_MESSAGE, sender.getUsername()+": "+content));
+        Notification notification = new Notification();
+        notification.setType(NotificationType.NEW_MESSAGE);
+        notification.setContent(sender.getUsername()+": "+content);
+        receiver.getNotifications().add(notification);
         accountService.updateAccount(receiver);
     }
 

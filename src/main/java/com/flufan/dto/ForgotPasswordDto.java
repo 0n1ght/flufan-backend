@@ -1,5 +1,5 @@
 package com.flufan.dto;
 
 public record ForgotPasswordDto(
-        String email
+        String login
 ) {}

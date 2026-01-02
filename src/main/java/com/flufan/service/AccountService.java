@@ -10,10 +10,8 @@ import java.util.UUID;
 
 public interface AccountService extends UserDetailsService {
     Account saveAccount(RegisterDto accountDto);
-    void saveAccount(Account account);
     void deleteAccount(String password);
     Map<String, Object> verify(LoginDto loginDto);
-    Account findById(Long id);
     Account findByPublicId(UUID publicId);
     Account findByUsername(String username);
     void updateUsername(String newUsername);
@@ -21,7 +19,7 @@ public interface AccountService extends UserDetailsService {
     void updateAccount(Account account);
     void verifyEmailUpdateRequest(String password, String newEmail);
     Account loadOrCreateGoogleUser(String email);
-    void requestPasswordReset(String email);
+    String requestPasswordReset(String login);
     void resetPassword(String token, String newPassword);
     boolean verifyPasswordResetToken(String token);
     Account getAuthenticatedAccount();

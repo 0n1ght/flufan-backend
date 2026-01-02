@@ -19,6 +19,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -191,7 +192,6 @@ class AccountServiceImplTest {
         Account account = new Account();
         PasswordResetToken token = new PasswordResetToken();
         token.setAccount(account);
-        token.setExpiryDate(LocalDateTime.now().plusHours(1));
 
         when(tokenRepo.findByToken("token123")).thenReturn(Optional.of(token));
         when(passwordEncoder.encode("newPwd")).thenReturn("encodedPwd");
@@ -214,12 +214,15 @@ class AccountServiceImplTest {
         Account account = new Account();
         PasswordResetToken token = new PasswordResetToken();
         token.setAccount(account);
-        token.setExpiryDate(LocalDateTime.now().minusMinutes(1));
+        token.setExpiryDate(Instant.now().minusSeconds(3600));
 
         when(tokenRepo.findByToken("token123")).thenReturn(Optional.of(token));
 
-        assertThrows(TokenExpiredException.class, () -> accountService.resetPassword("token123", "newPwd"));
+        assertThrows(TokenExpiredException.class, () ->
+                accountService.resetPassword("token123", "newPwd")
+        );
     }
+
 
     @Test
     void authenticatePassword_correct() {

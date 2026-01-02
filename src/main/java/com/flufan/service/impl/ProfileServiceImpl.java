@@ -39,7 +39,7 @@ public class ProfileServiceImpl implements ProfileService {
         profile.setAccount(account);
 
         account.setProfile(profile);
-        accountService.saveAccount(account);
+        accountService.updateAccount(account);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ProfileServiceImpl implements ProfileService {
 
         profile.setAccount(account);
         account.setProfile(profile);
-        accountService.saveAccount(account);
+        accountService.updateAccount(account);
     }
 
     @Override

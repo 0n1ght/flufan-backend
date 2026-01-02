@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Optional;
@@ -22,8 +21,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class RefreshTokenServiceImpl implements RefreshTokenService {
-
-    private static final Duration EXPIRATION = Duration.ofDays(60);
 
     private final RefreshTokenRepo refreshTokenRepo;
     private final TokenHashUtil tokenHashUtil;
@@ -67,7 +64,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             RefreshToken rt = new RefreshToken();
             rt.setAccount(account);
             rt.setTokenHash(hash);
-            rt.setExpirationDate(Instant.now().plus(EXPIRATION));
 
             try {
                 refreshTokenRepo.save(rt);
