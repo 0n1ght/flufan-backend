@@ -105,18 +105,15 @@ public class AccountController {
     @PutMapping("/update-pfp")
     public ResponseEntity<String> updatePfp(@RequestParam("file") MultipartFile file) throws IOException {
         Account account = accountService.getAuthenticatedAccount();
-
-        validateImage(file);
-
-        String filename = fileStorageService.save(file, account.getId() + "_pfp", "profile-pictures");
-        return ResponseEntity.ok(filename);
+        validatePfp(file);
+        return ResponseEntity.ok(fileStorageService.save(file, account.getId() + "_pfp", "profile-pictures"));
     }
 
     @DeleteMapping("/remove-pfp")
     public ResponseEntity<Void> removePfp() throws IOException {
         Account account = accountService.getAuthenticatedAccount();
-        boolean deleted = fileStorageService.delete("profile-pictures", account.getId() + "_pfp");
-        return deleted ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
+        return fileStorageService.delete("profile-pictures", account.getId() + "_pfp") ?
+                ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/profile-pictures/{username}")
@@ -182,7 +179,7 @@ public class AccountController {
         );
     }
 
-    private void validateImage(MultipartFile file) throws IOException {
+    private void validatePfp(MultipartFile file) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("File is empty");
         }

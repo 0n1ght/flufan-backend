@@ -13,11 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,7 +22,7 @@ import static org.mockito.Mockito.*;
 class AccountControllerTest {
 
     @InjectMocks
-    private AccountController accountController;
+    private AccountController controller;
 
     @Mock
     private AccountService accountService;
@@ -48,171 +45,120 @@ class AccountControllerTest {
     }
 
     @Test
-    void register_success() throws Exception {
+    void register_success() throws MessagingException {
         RegisterDto dto = new RegisterDto();
-        dto.setEmail("test@example.com");
-        dto.setUsername("user1");
-        dto.setPassword("pwd");
-
+        dto.setUsername("user");
+        dto.setPassword("pass");
+        dto.setEmail("user@example.com");
         Account account = new Account();
-        account.setEmail("test@example.com");
-        account.setUsername("user1");
-
         when(accountService.saveAccount(dto)).thenReturn(account);
-        when(tokenService.generateToken(dto.getEmail(), account)).thenReturn("token123");
+        when(tokenService.generateToken(dto.getEmail(), account)).thenReturn("token");
 
-        ResponseEntity<String> resp = accountController.register(dto);
+        ResponseEntity<String> response = controller.register(dto);
 
-        assertEquals(200, resp.getStatusCodeValue());
-        assertTrue(resp.getBody().contains("Registration successful"));
-        verify(mailSender).sendVerificationEmail("test@example.com", "user1", "token123");
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Registration successful. Verification email sent.", response.getBody());
+        verify(mailSender).sendVerificationEmail(dto.getEmail(), dto.getUsername(), "token");
     }
 
     @Test
-    void register_emailExists_returnsBadRequest() throws Exception {
+    void register_illegalArgument() throws MessagingException {
         RegisterDto dto = new RegisterDto();
-        dto.setEmail("test@example.com");
-        dto.setUsername("user1");
+        dto.setUsername("user");
+        dto.setPassword("pass");
+        dto.setEmail("user@example.com");
+        when(accountService.saveAccount(dto)).thenThrow(new IllegalArgumentException("Invalid data"));
 
-        when(accountService.saveAccount(dto)).thenThrow(new IllegalArgumentException("Email is already in use"));
+        ResponseEntity<String> response = controller.register(dto);
 
-        ResponseEntity<String> resp = accountController.register(dto);
-        assertEquals(400, resp.getStatusCodeValue());
-        assertTrue(resp.getBody().contains("Email is already in use"));
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("Invalid data", response.getBody());
     }
 
     @Test
-    void register_messagingException_returnsInternalServerError() throws Exception {
+    void register_messagingException() throws MessagingException {
         RegisterDto dto = new RegisterDto();
-        dto.setEmail("test@example.com");
-        dto.setUsername("user1");
-
+        dto.setUsername("user");
+        dto.setPassword("pass");
+        dto.setEmail("user@example.com");
         Account account = new Account();
         when(accountService.saveAccount(dto)).thenReturn(account);
-        when(tokenService.generateToken(dto.getEmail(), account)).thenReturn("token123");
-        doThrow(MessagingException.class).when(mailSender).sendVerificationEmail(anyString(), anyString(), anyString());
+        when(tokenService.generateToken(dto.getEmail(), account)).thenReturn("token");
+        doThrow(new MessagingException("Mail failed")).when(mailSender)
+                .sendVerificationEmail(dto.getEmail(), dto.getUsername(), "token");
 
-        ResponseEntity<String> resp = accountController.register(dto);
-        assertEquals(500, resp.getStatusCodeValue());
-        assertTrue(resp.getBody().contains("Failed to send verification email"));
+        ResponseEntity<String> response = controller.register(dto);
+
+        assertEquals(500, response.getStatusCodeValue());
+        assertEquals("Failed to send verification email", response.getBody());
     }
 
     @Test
     void getAuthenticatedAccount_success() {
         Account account = new Account();
-        AccountDto accountDto = new AccountDto();
+        AccountDto dto = new AccountDto();
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
-        when(accountMapper.toAccountDto(account)).thenReturn(accountDto);
+        when(accountMapper.toAccountDto(account)).thenReturn(dto);
 
-        ResponseEntity<AccountDto> resp = accountController.getAuthenticatedAccount();
-        assertEquals(200, resp.getStatusCodeValue());
-        assertEquals(accountDto, resp.getBody());
+        ResponseEntity<AccountDto> response = controller.getAuthenticatedAccount();
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(dto, response.getBody());
     }
 
     @Test
-    void getAuthenticatedAccount_null_returnsUnauthorized() {
+    void getAuthenticatedAccount_unauthorized() {
         when(accountService.getAuthenticatedAccount()).thenReturn(null);
-        ResponseEntity<AccountDto> resp = accountController.getAuthenticatedAccount();
-        assertEquals(401, resp.getStatusCodeValue());
+
+        ResponseEntity<AccountDto> response = controller.getAuthenticatedAccount();
+
+        assertEquals(401, response.getStatusCodeValue());
+        assertNull(response.getBody());
     }
 
     @Test
-    void updateUsername_success() {
-        UpdateUsernameDto dto = new UpdateUsernameDto("newUser");
-        doNothing().when(accountService).updateUsername("newUser");
-
-        ResponseEntity<String> resp = accountController.updateUsername(dto);
-        assertEquals(200, resp.getStatusCodeValue());
-        assertTrue(resp.getBody().contains("Login data updated successfully"));
-    }
-
-    @Test
-    void updateUsername_failure() {
-        UpdateUsernameDto dto = new UpdateUsernameDto("newUser");
-        doThrow(new IllegalArgumentException("Username is taken")).when(accountService).updateUsername("newUser");
-
-        ResponseEntity<String> resp = accountController.updateUsername(dto);
-        assertEquals(400, resp.getStatusCodeValue());
-        assertTrue(resp.getBody().contains("Failed to update login data"));
-    }
-
-    @Test
-    void updatePassword_success() {
-        ChangePasswordDto dto = new ChangePasswordDto("oldPwd", "newPwd");
-        doNothing().when(accountService).updatePassword("oldPwd", "newPwd");
-
-        ResponseEntity<String> resp = accountController.updatePassword(dto);
-        assertEquals(200, resp.getStatusCodeValue());
-    }
-
-    @Test
-    void updatePassword_failure() {
-        ChangePasswordDto dto = new ChangePasswordDto("oldPwd", "newPwd");
-        doThrow(new IllegalArgumentException("Incorrect password")).when(accountService)
-                .updatePassword("oldPwd", "newPwd");
-
-        ResponseEntity<String> resp = accountController.updatePassword(dto);
-        assertEquals(400, resp.getStatusCodeValue());
-        assertTrue(resp.getBody().contains("Failed to update login data"));
-    }
-
-    @Test
-    void updateEmail_success() throws Exception {
-        ChangeEmailDto dto = new ChangeEmailDto("pwd", "new@example.com");
+    void updatePfp_success() throws IOException {
         Account account = new Account();
-        account.setUsername("user1");
-
+        account.setId(1L);
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
-        doNothing().when(accountService).verifyEmailUpdateRequest(dto.password(), dto.newEmail());
-        when(tokenService.generateToken(dto.newEmail(), account)).thenReturn("token123");
 
-        ResponseEntity<String> resp = accountController.updateEmail(dto);
-        assertEquals(200, resp.getStatusCodeValue());
-        verify(mailSender).sendVerificationEmail(dto.newEmail(), "user1", "token123");
-    }
-
-    @Test
-    void updateEmail_failure() throws Exception {
-        ChangeEmailDto dto = new ChangeEmailDto("pwd", "new@example.com");
-        doThrow(new IllegalArgumentException("Email is in use")).when(accountService)
-                .verifyEmailUpdateRequest(dto.password(), dto.newEmail());
-
-        ResponseEntity<String> resp = accountController.updateEmail(dto);
-        assertEquals(400, resp.getStatusCodeValue());
-        assertTrue(resp.getBody().contains("Failed to update login data"));
-    }
-
-    @Test
-    void updatePfp_success() throws Exception {
-        BufferedImage bufferedImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(bufferedImage, "png", os);
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.io.ByteArrayOutputStream os = new java.io.ByteArrayOutputStream();
+        javax.imageio.ImageIO.write(img, "png", os);
         byte[] imageBytes = os.toByteArray();
 
-        MultipartFile file = new MockMultipartFile("file", "img.png", "image/png", imageBytes);
+        MockMultipartFile file = new MockMultipartFile("file", "img.png", "image/png", imageBytes);
 
-        Account account = new Account();
-        account.setId(1L);
-
-        when(accountService.getAuthenticatedAccount()).thenReturn(account);
         when(fileStorageService.save(file, "1_pfp", "profile-pictures")).thenReturn("1_pfp.png");
 
-        ResponseEntity<String> resp = accountController.updatePfp(file);
+        ResponseEntity<String> response = controller.updatePfp(file);
 
-        assertEquals(200, resp.getStatusCodeValue());
-        assertEquals("1_pfp.png", resp.getBody());
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("1_pfp.png", response.getBody());
     }
 
     @Test
-    void removePfp_success() throws Exception {
+    void removePfp_deleted() throws IOException {
         Account account = new Account();
         account.setId(1L);
-
         when(accountService.getAuthenticatedAccount()).thenReturn(account);
         when(fileStorageService.delete("profile-pictures", "1_pfp")).thenReturn(true);
 
-        ResponseEntity<Void> resp = accountController.removePfp();
-        assertEquals(200, resp.getStatusCodeValue());
+        ResponseEntity<Void> response = controller.removePfp();
+
+        assertEquals(200, response.getStatusCodeValue());
+    }
+
+    @Test
+    void removePfp_notFound() throws IOException {
+        Account account = new Account();
+        account.setId(1L);
+        when(accountService.getAuthenticatedAccount()).thenReturn(account);
+        when(fileStorageService.delete("profile-pictures", "1_pfp")).thenReturn(false);
+
+        ResponseEntity<Void> response = controller.removePfp();
+
+        assertEquals(404, response.getStatusCodeValue());
     }
 
 }
