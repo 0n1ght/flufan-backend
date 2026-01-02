@@ -1,9 +1,6 @@
 app icon and logo
 --
 
-
-feat: change dtos classes into records
-
 1 {
 - kupowanie i realizacja uslug:
 kupowanie

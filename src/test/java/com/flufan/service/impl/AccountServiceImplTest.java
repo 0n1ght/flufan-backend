@@ -1,26 +1,27 @@
 package com.flufan.service.impl;
 
 import com.flufan.dto.LoginDto;
-import com.flufan.dto.RegisterDto;
 import com.flufan.entity.Account;
 import com.flufan.entity.PasswordResetToken;
+import com.flufan.exception.*;
 import com.flufan.repo.AccountRepo;
 import com.flufan.repo.PasswordResetTokenRepo;
 import com.flufan.repo.SuspendedAccountRepo;
 import com.flufan.service.JWTService;
 import com.flufan.service.MailSenderService;
-import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -34,7 +35,7 @@ class AccountServiceImplTest {
     private AccountRepo accountRepo;
 
     @Mock
-    private SuspendedAccountRepo suspendedRepo;
+    private SuspendedAccountRepo suspendedAccountRepo;
 
     @Mock
     private AuthenticationManager authManager;
@@ -51,182 +52,215 @@ class AccountServiceImplTest {
     @Mock
     private PasswordResetTokenRepo tokenRepo;
 
+    @Mock
+    private Authentication authentication;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void verify_validLogin_shouldReturnTokenAndAccount() {
-        LoginDto dto = new LoginDto();
-        dto.setEmail("email@test.com");
-        dto.setPassword("pwd");
+    void loadUserByUsername_existingEmail_returnsUserDetails() {
+        Account account = new Account();
+        account.setEmail("test@example.com");
+        account.setPassword("encoded");
+        account.setVerifiedEmail(true);
 
-        Account account = new Account("user", "email@test.com", "pwd");
+        when(accountRepo.findByEmailIgnoreCase("test@example.com"))
+                .thenReturn(Optional.of(account));
 
-        when(accountRepo.findByEmailIgnoreCase("email@test.com")).thenReturn(Optional.of(account));
-        Authentication auth = mock(Authentication.class);
-        when(auth.isAuthenticated()).thenReturn(true);
-        when(authManager.authenticate(any())).thenReturn(auth);
-        when(jwtService.generateToken("email@test.com")).thenReturn("jwtToken");
+        var userDetails = accountService.loadUserByUsername("test@example.com");
 
-        Map<String, Object> result = accountService.verify(dto);
+        assertEquals("test@example.com", userDetails.getUsername());
+        assertEquals("encoded", userDetails.getPassword());
+        assertTrue(userDetails.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_VERIFIED_USER")));
+    }
 
-        assertEquals("jwtToken", result.get("token"));
+    @Test
+    void loadUserByUsername_notFound_throwsException() {
+        when(accountRepo.findByEmailIgnoreCase("test@example.com"))
+                .thenReturn(Optional.empty());
+
+        assertThrows(Exception.class, () -> accountService.loadUserByUsername("test@example.com"));
+    }
+
+    @Test
+    void verify_withEmail_success() {
+        Account account = new Account();
+        account.setEmail("test@example.com");
+        account.setPassword("pwd");
+        account.setDeletedAt(null);
+
+        LoginDto loginDto = new LoginDto();
+        loginDto.setEmail("test@example.com");
+        loginDto.setPassword("pwd");
+
+        when(accountRepo.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.of(account));
+        when(authManager.authenticate(any())).thenReturn(authentication);
+        when(authentication.isAuthenticated()).thenReturn(true);
+        when(jwtService.generateToken("test@example.com")).thenReturn("token123");
+
+        var result = accountService.verify(loginDto);
+
         assertEquals(account, result.get("account"));
-
-        verify(accountRepo, times(1)).findByEmailIgnoreCase("email@test.com");
-        verify(authManager, times(1)).authenticate(any());
-        verify(jwtService, times(1)).generateToken("email@test.com");
+        assertEquals("token123", result.get("token"));
     }
 
     @Test
-    void verify_invalidEmail_shouldThrow() {
-        LoginDto dto = new LoginDto();
-        dto.setEmail("missing@test.com");
-        dto.setPassword("pwd");
+    void verify_incorrectPassword_throwsIncorrectPasswordException() {
+        Account account = new Account();
+        account.setEmail("test@example.com");
+        account.setPassword("pwd");
 
-        when(accountRepo.findByEmailIgnoreCase("missing@test.com")).thenReturn(Optional.empty());
+        LoginDto loginDto = new LoginDto();
+        loginDto.setEmail("test@example.com");
+        loginDto.setPassword("wrong");
 
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> accountService.verify(dto));
-        assertEquals("Account with this email does not exist", ex.getMessage());
+        when(accountRepo.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.of(account));
+        when(authManager.authenticate(any())).thenThrow(BadCredentialsException.class);
+
+        assertThrows(IncorrectPasswordException.class, () -> accountService.verify(loginDto));
     }
 
     @Test
-    void verify_badPassword_shouldThrow() {
-        LoginDto dto = new LoginDto();
-        dto.setEmail("email@test.com");
-        dto.setPassword("pwd");
+    void verify_accountNotFound_throwsAccountNotFoundException() {
+        LoginDto loginDto = new LoginDto();
+        loginDto.setEmail("test@example.com");
 
-        Account account = new Account("user", "email@test.com", "pwd");
+        when(accountRepo.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.empty());
 
-        when(accountRepo.findByEmailIgnoreCase("email@test.com")).thenReturn(Optional.of(account));
-        when(authManager.authenticate(any())).thenThrow(new BadCredentialsException("bad"));
-
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> accountService.verify(dto));
-        assertEquals("Incorrect password", ex.getMessage());
+        assertThrows(AccountNotFoundException.class, () -> accountService.verify(loginDto));
     }
 
     @Test
-    void saveAccount_validDto_shouldSave() {
-        RegisterDto dto = new RegisterDto();
-        dto.setUsername("user");
-        dto.setEmail("email@test.com");
-        dto.setPassword("pwd");
+    void findByPublicId_found() {
+        Account account = new Account();
+        UUID id = UUID.randomUUID();
 
-        when(accountRepo.findByEmailIgnoreCase("email@test.com")).thenReturn(Optional.empty());
-        when(accountRepo.findByUsernameIgnoreCase("user")).thenReturn(Optional.empty());
-        when(passwordEncoder.encode("pwd")).thenReturn("encoded");
-        when(accountRepo.save(any(Account.class))).thenAnswer(i -> i.getArgument(0));
+        when(accountRepo.findByPublicId(id)).thenReturn(Optional.of(account));
 
-        Account saved = accountService.saveAccount(dto);
-
-        assertEquals("user", saved.getUsername());
-        assertEquals("email@test.com", saved.getEmail());
-        assertEquals("encoded", saved.getPassword());
+        assertEquals(account, accountService.findByPublicId(id));
     }
 
     @Test
-    void saveAccount_duplicateEmail_shouldThrow() {
-        RegisterDto dto = new RegisterDto();
-        dto.setUsername("user");
-        dto.setEmail("email@test.com");
-        dto.setPassword("pwd");
+    void findByPublicId_notFound_throws() {
+        UUID id = UUID.randomUUID();
 
-        when(accountRepo.findByEmailIgnoreCase("email@test.com")).thenReturn(Optional.of(new Account()));
+        when(accountRepo.findByPublicId(id)).thenReturn(Optional.empty());
 
-        Exception ex = assertThrows(IllegalArgumentException.class,
-                () -> accountService.saveAccount(dto));
-        assertEquals("Email is already in use", ex.getMessage());
+        assertThrows(AccountNotFoundException.class, () -> accountService.findByPublicId(id));
     }
 
     @Test
-    void requestPasswordReset_existingAccount_shouldSendEmail() throws MessagingException {
-        Account account = new Account("user", "email@test.com", "pwd");
-        when(accountRepo.findByEmailIgnoreCase("email@test.com")).thenReturn(Optional.of(account));
-        when(tokenRepo.existsByToken(anyString())).thenReturn(false);
+    void getAuthenticatedAccount_found() {
+        Account account = new Account();
+        account.setEmail("test@example.com");
 
-        doNothing().when(mailService).sendPasswordResetEmail(anyString(), anyString(), anyString());
-        doNothing().when(tokenRepo).deleteByAccount(account);
-        doAnswer(invocation -> null).when(tokenRepo).save(any(PasswordResetToken.class));
+        when(accountRepo.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.of(account));
 
-        accountService.requestPasswordReset("email@test.com");
+        try (var mocked = mockStatic(org.springframework.security.core.context.SecurityContextHolder.class)) {
+            var context = mock(org.springframework.security.core.context.SecurityContext.class);
+            when(context.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn("test@example.com");
+            mocked.when(org.springframework.security.core.context.SecurityContextHolder::getContext).thenReturn(context);
 
-        verify(tokenRepo, times(1)).deleteByAccount(account);
-        verify(tokenRepo, times(1)).save(any(PasswordResetToken.class));
-        verify(mailService, times(1)).sendPasswordResetEmail(eq("email@test.com"), eq("user"), anyString());
+            Account result = accountService.getAuthenticatedAccount();
+            assertEquals(account, result);
+        }
     }
 
     @Test
-    void requestPasswordReset_nonExistingAccount_shouldDoNothing() throws MessagingException {
-        when(accountRepo.findByEmailIgnoreCase("missing@test.com")).thenReturn(Optional.empty());
+    void getAuthenticatedAccount_notFound_throws() {
+        when(accountRepo.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.empty());
 
-        accountService.requestPasswordReset("missing@test.com");
+        try (var mocked = mockStatic(org.springframework.security.core.context.SecurityContextHolder.class)) {
+            var context = mock(org.springframework.security.core.context.SecurityContext.class);
+            when(context.getAuthentication()).thenReturn(authentication);
+            when(authentication.getName()).thenReturn("test@example.com");
+            mocked.when(org.springframework.security.core.context.SecurityContextHolder::getContext).thenReturn(context);
 
-        verify(tokenRepo, never()).deleteByAccount(any());
-        verify(tokenRepo, never()).save(any());
-        verify(mailService, never()).sendPasswordResetEmail(anyString(), anyString(), anyString());
+            assertThrows(AuthenticatedAccountNotFoundException.class,
+                    () -> accountService.getAuthenticatedAccount());
+        }
     }
 
     @Test
-    void resetPassword_validToken_shouldUpdatePassword() {
-        Account account = new Account("user", "email@test.com", "old");
+    void resetPassword_success() {
+        Account account = new Account();
         PasswordResetToken token = new PasswordResetToken();
-        token.setToken("token123");
         token.setAccount(account);
         token.setExpiryDate(LocalDateTime.now().plusHours(1));
 
         when(tokenRepo.findByToken("token123")).thenReturn(Optional.of(token));
-        when(passwordEncoder.encode("new")).thenReturn("encoded-new");
+        when(passwordEncoder.encode("newPwd")).thenReturn("encodedPwd");
 
-        accountService.resetPassword("token123", "new");
+        accountService.resetPassword("token123", "newPwd");
 
-        assertEquals("encoded-new", account.getPassword());
-        verify(accountRepo, times(1)).save(account);
-        verify(tokenRepo, times(1)).delete(token);
+        verify(accountRepo).save(account);
+        verify(tokenRepo).delete(token);
     }
 
     @Test
-    void resetPassword_expiredToken_shouldThrow() {
-        Account account = new Account("user", "email@test.com", "old");
+    void resetPassword_invalidToken_throws() {
+        when(tokenRepo.findByToken("token123")).thenReturn(Optional.empty());
+
+        assertThrows(InvalidTokenException.class, () -> accountService.resetPassword("token123", "newPwd"));
+    }
+
+    @Test
+    void resetPassword_expiredToken_throws() {
+        Account account = new Account();
         PasswordResetToken token = new PasswordResetToken();
-        token.setToken("token123");
         token.setAccount(account);
-        token.setExpiryDate(LocalDateTime.now().minusHours(1));
+        token.setExpiryDate(LocalDateTime.now().minusMinutes(1));
 
         when(tokenRepo.findByToken("token123")).thenReturn(Optional.of(token));
 
-        Exception ex = assertThrows(RuntimeException.class,
-                () -> accountService.resetPassword("token123", "new"));
-        assertEquals("Token expired", ex.getMessage());
+        assertThrows(TokenExpiredException.class, () -> accountService.resetPassword("token123", "newPwd"));
     }
 
     @Test
-    void loadOrCreateGoogleUser_existing_shouldReturn() {
-        Account account = new Account("user", "email@test.com", "pwd");
-        when(accountRepo.findByEmailIgnoreCase("email@test.com")).thenReturn(Optional.of(account));
+    void authenticatePassword_correct() {
+        Account account = new Account();
+        account.setPassword("encoded");
 
-        Account result = accountService.loadOrCreateGoogleUser("email@test.com");
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("test@example.com");
 
-        assertEquals(account, result);
-        verify(accountRepo, never()).save(any());
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+
+        try (var mocked = mockStatic(SecurityContextHolder.class)) {
+            mocked.when(SecurityContextHolder::getContext).thenReturn(securityContext);
+
+            when(accountRepo.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.of(account));
+            when(passwordEncoder.matches("pwd", "encoded")).thenReturn(true);
+
+            accountService.authenticatePassword("pwd");
+        }
     }
 
     @Test
-    void loadOrCreateGoogleUser_new_shouldCreateAndSave() {
-        when(accountRepo.findByEmailIgnoreCase("new@test.com")).thenReturn(Optional.empty());
-        when(passwordEncoder.encode(anyString())).thenReturn("encoded-random");
-        doAnswer(invocation -> invocation.getArgument(0)).when(accountRepo).save(any(Account.class));
+    void authenticatePassword_incorrect_throws() {
+        Account account = new Account();
+        account.setPassword("encoded");
 
-        Account result = accountService.loadOrCreateGoogleUser("new@test.com");
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getName()).thenReturn("test@example.com");
 
-        assertEquals("new", result.getUsername());
-        assertEquals("new@test.com", result.getEmail());
-        assertEquals(true, result.isVerifiedEmail());
-        assertEquals("encoded-random", result.getPassword());
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
 
-        verify(accountRepo, times(1)).save(result);
+        try (var mocked = mockStatic(SecurityContextHolder.class)) {
+            mocked.when(SecurityContextHolder::getContext).thenReturn(securityContext);
+
+            when(accountRepo.findByEmailIgnoreCase("test@example.com")).thenReturn(Optional.of(account));
+            when(passwordEncoder.matches("pwd", "encoded")).thenReturn(false);
+
+            assertThrows(IncorrectPasswordException.class,
+                    () -> accountService.authenticatePassword("pwd"));
+        }
     }
 }

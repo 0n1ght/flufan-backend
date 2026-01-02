@@ -3,6 +3,8 @@ package com.flufan.service.impl;
 import com.flufan.config.security.util.TokenHashUtil;
 import com.flufan.entity.Account;
 import com.flufan.entity.RefreshToken;
+import com.flufan.exception.InvalidRefreshTokenException;
+import com.flufan.exception.RefreshTokenExpiredException;
 import com.flufan.repo.RefreshTokenRepo;
 import com.flufan.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
@@ -41,11 +43,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
         RefreshToken rt = refreshTokenRepo
                 .findByTokenHashAndUsedFalse(hash)
-                .orElseThrow(() -> new RuntimeException("Invalid refresh token"));
+                .orElseThrow(InvalidRefreshTokenException::new);
 
         if (rt.getExpirationDate().isBefore(Instant.now())) {
             rt.setUsed(true);
-            throw new RuntimeException("Refresh token expired");
+            throw new RefreshTokenExpiredException();
         }
 
         rt.setUsed(true);

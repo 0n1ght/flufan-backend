@@ -4,6 +4,7 @@ import com.flufan.dto.ProfileDto;
 import com.flufan.dto.ProfileResDto;
 import com.flufan.entity.Account;
 import com.flufan.entity.Profile;
+import com.flufan.exception.ProfileAlreadyExistsException;
 import com.flufan.exception.ProfileNotFoundException;
 import com.flufan.mapper.ProfileMapper;
 import com.flufan.repo.ProfileRepo;
@@ -31,7 +32,7 @@ public class ProfileServiceImpl implements ProfileService {
         Account account = accountService.getAuthenticatedAccount();
 
         if (account.getProfile() != null) {
-            throw new RuntimeException("Your profile is already created");
+            throw new ProfileAlreadyExistsException();
         }
 
         Profile profile = profileMapper.toProfile(profileDto);

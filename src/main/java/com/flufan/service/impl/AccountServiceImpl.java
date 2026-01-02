@@ -3,6 +3,7 @@ package com.flufan.service.impl;
 import com.flufan.dto.LoginDto;
 import com.flufan.entity.Account;
 import com.flufan.entity.PasswordResetToken;
+import com.flufan.exception.*;
 import com.flufan.repo.AccountRepo;
 import com.flufan.repo.PasswordResetTokenRepo;
 import com.flufan.repo.SuspendedAccountRepo;
@@ -130,10 +131,10 @@ public class AccountServiceImpl implements AccountService {
 
             if (loginDto.getEmail() != null) {
                 account = accountRepo.findByEmailIgnoreCase(loginDto.getEmail())
-                        .orElseThrow(() -> new IllegalArgumentException("Account with this email does not exist"));
+                        .orElseThrow(() -> new AccountNotFoundException("Account with this email does not exist"));
             } else {
                 account = accountRepo.findByUsernameIgnoreCase(loginDto.getUsername())
-                        .orElseThrow(() -> new IllegalArgumentException("Account with this username does not exist"));
+                        .orElseThrow(() -> new AccountNotFoundException("Account with this username does not exist"));
             }
 
             Authentication authentication = authManager.authenticate(
@@ -144,7 +145,7 @@ public class AccountServiceImpl implements AccountService {
             );
 
             if (!authentication.isAuthenticated()) {
-                throw new IllegalArgumentException("Incorrect password");
+                throw new IncorrectPasswordException();
             }
 
             if (account.getDeletedAt() != null) {
@@ -161,31 +162,28 @@ public class AccountServiceImpl implements AccountService {
             return response;
 
         } catch (BadCredentialsException e) {
-            throw new IllegalArgumentException("Incorrect password");
-        } catch (IllegalArgumentException e) {
+            throw new IncorrectPasswordException();
+        } catch (AccountNotFoundException | IncorrectPasswordException e) {
             throw e;
         } catch (Exception e) {
-            throw new RuntimeException("An error occurred. Please try again later");
+            throw new GenericServiceException();
         }
     }
 
     @Override
     public Account findById(Long id) {
-        return accountRepo.findById(id).orElseThrow(() -> new RuntimeException("Account not found"));
+        return accountRepo.findById(id).orElseThrow(() -> new AccountNotFoundException("Account not found"));
     }
 
     @Override
     public Account findByPublicId(UUID publicId) {
-        Optional<Account> account = accountRepo.findByPublicId(publicId);
-        if (account.isPresent()) {
-            return account.get();
-        }
-        throw new RuntimeException("Account not found");
+        return accountRepo.findByPublicId(publicId)
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
     }
 
     @Override
     public Account findByUsername(String username) {
-        return accountRepo.findByUsernameIgnoreCase(username).orElseThrow(() -> new RuntimeException("Account not found"));
+        return accountRepo.findByUsernameIgnoreCase(username).orElseThrow(() -> new AccountNotFoundException("Account not found"));
     }
 
     @Override
@@ -297,10 +295,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void resetPassword(String token, String newPassword) {
         PasswordResetToken resetToken = tokenRepo.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid token"));
+                .orElseThrow(InvalidTokenException::new);
 
         if (resetToken.isExpired()) {
-            throw new RuntimeException("Token expired");
+            throw new TokenExpiredException();
         }
 
         Account account = resetToken.getAccount();
@@ -321,14 +319,14 @@ public class AccountServiceImpl implements AccountService {
         String email = authentication.getName();
 
         return accountRepo.findByEmailIgnoreCase(email)
-                .orElseThrow(() -> new RuntimeException("Logged in user not found"));
+                .orElseThrow(AuthenticatedAccountNotFoundException::new);
     }
 
     @Override
     public void authenticatePassword(String password) {
         String authAccPassword = getAuthenticatedAccount().getPassword();
         if (!passwordEncoder.matches(password, authAccPassword)) {
-            throw new RuntimeException("Password is incorrect");
+            throw new IncorrectPasswordException();
         }
     }
 
