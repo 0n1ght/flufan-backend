@@ -9,10 +9,10 @@ import lombok.*;
 import java.time.Instant;
 
 @Embeddable
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Notification {
 
     @Enumerated(EnumType.STRING)
