@@ -33,6 +33,10 @@ przesylanie zdjec, filmow
 -testy
 }
 
+{
+swap from monolitic architecture to microservices
+}
+
 -----------------
 1. Weryfikacja na social mediach podczas zakładania profilu
     -Weryfikacja konta użytkownika poprzez media społecznościowe.
