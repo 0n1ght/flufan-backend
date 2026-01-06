@@ -1,4 +1,4 @@
-package com.flufan.controller.web;
+package com.flufan.common.controller.web;
 
 import com.flufan.modules.user.service.VerificationTokenService;
 import org.springframework.stereotype.Controller;
