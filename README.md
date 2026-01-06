@@ -1,2 +1,2 @@
 # Flufan-Backend
-Backend for Flufan.com
+Backend for Flufan
