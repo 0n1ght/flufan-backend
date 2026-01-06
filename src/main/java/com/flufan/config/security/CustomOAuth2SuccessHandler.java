@@ -1,8 +1,8 @@
 package com.flufan.config.security;
 
-import com.flufan.entity.Account;
-import com.flufan.service.AccountService;
-import com.flufan.service.JWTService;
+import com.flufan.modules.user.entity.Account;
+import com.flufan.modules.user.service.AccountService;
+import com.flufan.modules.user.service.JWTService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.Authentication;

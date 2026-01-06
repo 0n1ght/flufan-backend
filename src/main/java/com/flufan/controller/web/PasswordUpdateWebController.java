@@ -1,6 +1,6 @@
 package com.flufan.controller.web;
 
-import com.flufan.service.AccountService;
+import com.flufan.modules.user.service.AccountService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

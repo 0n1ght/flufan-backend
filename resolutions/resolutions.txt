@@ -1,6 +1,11 @@
 app icon and logo
 --
+separate folders
+separate resolutions file
+add communication between services (folders)
 
+
+notifications: websockets
 {
 - kupowanie i realizacja uslug:
 kupowanie
@@ -12,66 +17,15 @@ przesylanie zdjec, filmow
 - propozycje od konsumentow
 - grupowe składki
 }
-
-
-{
-- weryfikacja kont social media, "market profile" kont
-- add algorithm for returning list of profiles
-}
-
-
-{
-- wykupienie i zalozenie firmowych domen, kont i maila oraz ich implementacja do kodu
-- Add admin role: assigning admin role, permissions, controller & service
-- roles and permissions
-}
-
-
-{
--wyrzucenie produkcyjnych linijek kodu
--zmiana bazy danych na PostgreSQL
--testy
-}
-
-{
-swap from monolitic architecture to microservices
-}
-
------------------
-1. Weryfikacja na social mediach podczas zakładania profilu
-    -Weryfikacja konta użytkownika poprzez media społecznościowe.
-
-    powiazywanie kont jak na discordzie, x, grach
-    z jakimi kontami mozna powiazac? social media, aplikacje
-    porozmawiaj o tym z chatgpt
-    dodawaj po kolei weryfikacje (powiazanie konta z) i dodaj informacje o weryfikacji do profilu:
-
-2. Rezerwacje wideorozmów
-    -Kalendarz dostępności influencera.
-    -Rezerwacja terminu i potwierdzenie płatności.
-    -Link do wideorozmowy (np. integracja z Twilio, Zoom API).
-    -REALIZACJA USŁUG:
-        -Powiadomienia na chacie.
-        -Powiadomienia dla influencera.
-        -Wysłany link/przycisk do połączenia na chacie.
-        -Przypomnienie przed połączeniem.
-        -Automatyczne otwieranie i zamykanie połączenia/licznik.
-
-        ktos wybiera termin,
-        kupuje rozmowe,
-        informacja o terminie leci do influencera,
-        on ja akceptuje, odrzuca, badz sugeruje zmiane
-        jezeli akceptuje-> powiadomienie o zaakceptowaniu, wysylany link do rozmowy, pozniej powiadomienie (przypomnienie o rozmowie 15 minut przed)
-        jezeli odrzuci-> powiadomienie do kupujacego ze zwrotem pieniedzy
-        jezeli zasugeruje zmiane-> powiadomienie do kupujacego zeby zaakceptowal, odrzucil, lub zasugerowal zmiane-> powtorz punkt 1 lub 2
-
--Domena, email, powiązanie kont
-    -Wykupienie domeny i założenie maila firmowego <nazwa>@<nazwa-domeny>.com.
-    -Powiązanie maila firmowego z kontami aplikacji 3rd party (np. Stripe, Google).
--Zmiana bazy danych z H2 na PostgreSQL
-    -Migracja danych.
-    -Optymalizacja bazy danych (indeksy, backupy).
-
--Przygotowanie kodu
-    -Usuniecie produkcyjnych linijek kodu np. ustawień konfiguracyjnych (np. .csrf(AbstractHttpConfigurer::disable), .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))).
-    -Utworzenie firmowych kont i podlaczenie aplikacji 3rd party (np. google,stripe etc.), log, nazw itd.
+add verificaton of social media accounts connected to profiles, and general verification of "market profile"
+add algorithm for returning list of profiles
+roles and permissions
+domains [flufan.com, flufan.pl, flufan.net, flufan.org]
+company's emails [tech@flufan.com, noreply@flufan.com, support@flufan.com]
+create company's accounts [google, apple, faceobok, stripe]
+remove development lines of code (in security, properties, etc.)
+change database from H2 to PostgreSQL
+add features to make database more optimal (create indexes, backups, etc.)
+create unit tests for all app's functionalities
+test API manually
+add logs to app

@@ -1,6 +1,6 @@
 package com.flufan.controller.web;
 
-import com.flufan.service.VerificationTokenService;
+import com.flufan.modules.user.service.VerificationTokenService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

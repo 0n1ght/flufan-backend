@@ -1,7 +1,7 @@
 package com.flufan.config.security;
 
-import com.flufan.service.AccountService;
-import com.flufan.service.JWTService;
+import com.flufan.modules.user.service.AccountService;
+import com.flufan.modules.user.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

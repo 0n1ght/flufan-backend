@@ -1,6 +1,6 @@
 package com.flufan.config.security;
 
-import com.flufan.service.AccountService;
+import com.flufan.modules.user.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
