@@ -2,7 +2,7 @@ package com.flufan.modules.user.controller;
 
 import com.flufan.modules.user.dto.*;
 import com.flufan.modules.user.entity.Account;
-import com.flufan.common.mapper.AccountMapper;
+import com.flufan.modules.user.mapper.AccountMapper;
 import com.flufan.modules.user.service.AccountService;
 import com.flufan.modules.user.service.FileStorageService;
 import com.flufan.modules.notification.service.MailSenderService;

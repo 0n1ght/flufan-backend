@@ -1,7 +1,8 @@
-package com.flufan.common.mapper;
+package com.flufan.modules.chat.mapper;
 
 import com.flufan.modules.chat.dto.MessageDto;
 import com.flufan.modules.chat.entity.Message;
+import com.flufan.modules.user.mapper.AccountMapper;
 import org.springframework.stereotype.Component;
 
 @Component

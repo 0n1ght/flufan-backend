@@ -1,8 +1,7 @@
 package com.flufan.modules.user.controller;
 
-import com.flufan.modules.user.controller.AccountController;
 import com.flufan.modules.user.entity.Account;
-import com.flufan.common.mapper.AccountMapper;
+import com.flufan.modules.user.mapper.AccountMapper;
 import com.flufan.modules.user.dto.AccountDto;
 import com.flufan.modules.user.dto.RegisterDto;
 import com.flufan.modules.user.service.AccountService;

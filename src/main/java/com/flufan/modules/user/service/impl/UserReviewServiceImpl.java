@@ -2,7 +2,7 @@ package com.flufan.modules.user.service.impl;
 
 import com.flufan.modules.user.entity.UserReview;
 import com.flufan.modules.user.dto.UserReviewDto;
-import com.flufan.common.mapper.UserReviewMapper;
+import com.flufan.modules.user.mapper.UserReviewMapper;
 import com.flufan.modules.user.repo.UserReviewRepo;
 import com.flufan.modules.user.service.AccountService;
 import com.flufan.modules.chat.service.MessageService;

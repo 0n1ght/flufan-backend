@@ -8,7 +8,7 @@ import com.flufan.modules.chat.enums.MessageType;
 import com.flufan.common.exception.InsufficientMessagesException;
 import com.flufan.common.exception.MessageDoesNotExist;
 import com.flufan.common.exception.MessageLengthException;
-import com.flufan.common.mapper.MessageMapper;
+import com.flufan.modules.chat.mapper.MessageMapper;
 import com.flufan.modules.chat.repo.MessageRepo;
 import com.flufan.modules.user.service.AccountService;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.flufan.common.mapper;
+package com.flufan.modules.user.mapper;
 
 import com.flufan.modules.user.dto.AccountDto;
 import com.flufan.modules.user.dto.ProfileDto;

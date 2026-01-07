@@ -6,7 +6,7 @@ import com.flufan.modules.user.entity.Account;
 import com.flufan.modules.user.entity.Profile;
 import com.flufan.common.exception.ProfileAlreadyExistsException;
 import com.flufan.common.exception.ProfileNotFoundException;
-import com.flufan.common.mapper.ProfileMapper;
+import com.flufan.modules.user.mapper.ProfileMapper;
 import com.flufan.modules.user.repo.ProfileRepo;
 import com.flufan.modules.user.service.AccountService;
 import com.flufan.modules.user.service.ProfileService;
