@@ -1,6 +1,5 @@
 package com.flufan.common.controller.web;
 
-import com.flufan.common.controller.web.EmailVerificationWebController;
 import com.flufan.modules.user.service.VerificationTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
