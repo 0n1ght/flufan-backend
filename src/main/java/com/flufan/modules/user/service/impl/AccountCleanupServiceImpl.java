@@ -4,6 +4,7 @@ import com.flufan.modules.user.entity.Account;
 import com.flufan.modules.user.repo.AccountRepo;
 import com.flufan.modules.user.service.AccountCleanupService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountCleanupServiceImpl implements AccountCleanupService {
 
     private final AccountRepo accountRepo;
@@ -26,6 +28,11 @@ public class AccountCleanupServiceImpl implements AccountCleanupService {
         List<Account> accounts =
                 accountRepo.findAllByDeletedAtBefore(cutoff);
 
-        accounts.forEach(accountRepo::delete);
+        if (accounts.isEmpty()) {
+            log.info("No accounts to delete.");
+        } else {
+            accounts.forEach(accountRepo::delete);
+            log.info("{} accounts deleted", accounts.size());
+        }
     }
 }

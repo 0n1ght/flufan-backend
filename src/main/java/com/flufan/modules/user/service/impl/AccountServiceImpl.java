@@ -12,7 +12,6 @@ import com.flufan.modules.user.dto.RegisterDto;
 import com.flufan.modules.user.service.JWTService;
 import com.flufan.modules.notification.service.MailSenderService;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,7 +34,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Slf4j
 public class AccountServiceImpl implements AccountService {
     private final AccountRepo accountRepo;
     private final SuspendedAccountRepo suspendedAccountRepo;
@@ -272,7 +270,6 @@ public class AccountServiceImpl implements AccountService {
                 );
                 return account.getEmail();
             } catch (Exception e) {
-                log.warn("Failed to send password reset email to {}", login, e);
                 throw new AccountNotFoundException("Problems appeared during resetting password");
             }
         } else {
