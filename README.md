@@ -1,7 +1,6 @@
 # Flufan-Backend
 ## todo
 ### meanwhile
-- Add logs
 - conversations structure
 - sending messages (voice message option for influ or not only)
 - getting conversations
@@ -19,7 +18,7 @@
   - noreply@flufan.com
   - support@flufan.com
 
-- App icon and logo
+- App logo (connected f and f) and watermark
 - Configure Gmail requirements
   https://support.google.com/mail/answer/13130196
 
