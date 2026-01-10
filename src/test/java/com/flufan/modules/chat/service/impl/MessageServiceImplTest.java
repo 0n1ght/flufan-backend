@@ -1,4 +1,4 @@
-package com.flufan.modules.chat.impl;
+package com.flufan.modules.chat.service.impl;
 
 import com.flufan.modules.chat.service.impl.MessageServiceImpl;
 import com.flufan.modules.chat.dto.MessageDto;
