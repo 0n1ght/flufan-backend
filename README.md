@@ -8,15 +8,11 @@
 - Notifications (WebSockets)
 
 ### main tasks
-- Domains:
-  - flufan.com
-  - flufan.pl
-  - flufan.net
-  - flufan.org
-- Company emails:
-  - tech@flufan.com
+- Configure google workspace and create emails:
+  - admin@flufan.com
   - noreply@flufan.com
   - support@flufan.com
+- Buy additional domains: .pl .net .org
 
 - App logo (connected f and f) and watermark
 - Configure Gmail requirements
