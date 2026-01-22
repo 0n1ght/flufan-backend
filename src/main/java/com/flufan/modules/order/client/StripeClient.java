@@ -1,11 +1,10 @@
-package com.flufan.modules.payment.service.impl;
+package com.flufan.modules.order.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flufan.modules.user.entity.Account;
-import com.flufan.modules.payment.enums.ProductType;
+import com.flufan.modules.order.enums.ProductType;
 import com.flufan.modules.user.service.AccountService;
-import com.flufan.modules.payment.service.StripeService;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -13,14 +12,14 @@ import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.flufan.modules.payment.dto.ProductDto;
-import com.flufan.modules.payment.dto.StripeResponse;
+import com.flufan.modules.order.dto.ProductDto;
+import com.flufan.modules.order.dto.StripeResponse;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class StripeServiceImpl implements StripeService {
+public class StripeClient {
     private final AccountService accountService;
     private final ObjectMapper objectMapper;
 

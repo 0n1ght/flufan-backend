@@ -1,6 +1,6 @@
-package com.flufan.modules.payment.dto;
+package com.flufan.modules.order.dto;
 
-import com.flufan.modules.payment.enums.ProductType;
+import com.flufan.modules.order.enums.ProductType;
 
 import java.util.List;
 import java.util.UUID;

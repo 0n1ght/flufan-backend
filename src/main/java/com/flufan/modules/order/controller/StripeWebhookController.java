@@ -1,4 +1,4 @@
-package com.flufan.modules.payment.controller;
+package com.flufan.modules.order.controller;
 
 import com.flufan.modules.order.service.OrderService;
 import com.stripe.exception.SignatureVerificationException;

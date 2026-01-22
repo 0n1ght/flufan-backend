@@ -1,4 +1,4 @@
-package com.flufan.modules.payment.enums;
+package com.flufan.modules.order.enums;
 
 public enum ProductType {
     MESSAGE, CALL, SERVICE
